@@ -496,12 +496,14 @@ menu :-
     writeln('1. Nueva consulta (sin registrarse)'),
     writeln('2. Recomendar a un estudiante registrado'),
     writeln('3. Ver historial de un estudiante'),
+    writeln('4. Buscar mediante una frase'),
     writeln('0. Salir'),
-    pedir('Elige una opcion: ', ['1', '2', '3', '0'], obligatorio, Opcion),
+    pedir('Elige una opcion: ', ['1', '2', '3', '4', '0'], obligatorio, Opcion),
     ( (Opcion == '0' ; Opcion == salir) -> true
     ; Opcion == '1' -> consulta_rapida, menu
     ; Opcion == '2' -> consulta_registrada, menu
     ; Opcion == '3' -> historial_estudiante, menu
+    ; Opcion == '4' -> consulta_por_frase, menu
     ).
 
 consulta_rapida :-
@@ -525,7 +527,7 @@ pedir_catalogo(Pregunta, Catalogo, Tipo, Respuesta) :-
       pedir_tema(Mensaje, Validos, Respuesta)
     ).
 
-% Admite tanto "matematicas" como "quiero aprender sobre matematicas".
+% La pregunta guiada tambien aprovecha el analizador lexico.
 pedir_tema(Mensaje, Validos, Tema) :-
     repeat,
     write(Mensaje), flush_output,
@@ -533,23 +535,97 @@ pedir_tema(Mensaje, Validos, Tema) :-
     ( Entrada == end_of_file -> Tema = salir
     ; normalize_space(string(Limpia), Entrada),
       string_lower(Limpia, Minuscula),
-      split_string(Minuscula, " ", " ", Palabras),
-      ( Palabras == ["salir"] -> Tema = salir
-      ; frase_tema(Palabras, Nombre),
-        atom_string(Valor, Nombre),
-        memberchk(Valor, Validos) -> Tema = Valor
-      ; writeln('Tema no valido; prueba de nuevo.'), fail
+      ( Minuscula == "salir" -> Tema = salir
+      ; analizar_frase(Limpia, pref(Valor, _, _, _)),
+        memberchk(Valor, Validos) ->
+          Tema = Valor,
+          tema(Tema, Nombre),
+          format('Tema identificado: ~w~n', [Nombre])
+      ; writeln('No pude identificar un unico tema; prueba con uno de la lista.'), fail
       )
     ), !.
 
-frase_tema([Tema], Tema).
-frase_tema(["quiero", "aprender", "sobre", Tema], Tema).
-frase_tema(["quiero", "aprender", Tema], Tema).
-frase_tema(["quiero", "libros", "de", Tema], Tema).
-frase_tema(["quiero", "libros", "sobre", Tema], Tema).
-frase_tema(["quiero", "libros", "sobre", "la", Tema], Tema).
-frase_tema(["quiero", "libros", "sobre", "el", Tema], Tema).
-frase_tema(["busco", "algo", "sobre", Tema], Tema).
+consulta_por_frase :-
+    writeln('Ejemplo: necesito libros basicos digitales que hablen sobre la guerra.'),
+    write('Escribe tu busqueda: '), flush_output,
+    read_line_to_string(user_input, Entrada),
+    ( Entrada == end_of_file -> true
+    ; analizar_frase(Entrada, Perfil) ->
+        format('Preferencias identificadas: ~w~n', [Perfil]),
+        recomendaciones(Perfil, Resultados),
+        mostrar(Resultados)
+    ; writeln('No pude identificar un tema unico o hay filtros contradictorios.'),
+      writeln('Incluye un solo tema y, como maximo, un nivel, genero y formato.')
+    ).
+
+/*
+   Analizador lexico sencillo: no comprende la gramatica de la oracion.
+   Normaliza mayusculas, tildes y signos; despues busca palabras del catalogo.
+*/
+analizar_frase(Texto, pref(Tema, Genero, Nivel, Formato)) :-
+    palabras_normalizadas(Texto, Palabras),
+    valor_en_frase(tema, Palabras, obligatorio, Tema),
+    valor_en_frase(genero, Palabras, opcional, Genero),
+    valor_en_frase(nivel, Palabras, opcional, Nivel),
+    valor_en_frase(formato, Palabras, opcional, Formato).
+
+palabras_normalizadas(Texto, Palabras) :-
+    string_lower(Texto, Minusculas),
+    string_codes(Minusculas, Codigos),
+    maplist(normalizar_codigo, Codigos, Normalizados),
+    string_codes(SinTildes, Normalizados),
+    split_string(SinTildes, " ", " \t\n", Palabras).
+
+normalizar_codigo(225, 97) :- !.
+normalizar_codigo(233, 101) :- !.
+normalizar_codigo(237, 105) :- !.
+normalizar_codigo(243, 111) :- !.
+normalizar_codigo(250, 117) :- !.
+normalizar_codigo(252, 117) :- !.
+normalizar_codigo(Codigo, 32) :-
+    memberchk(Codigo, [44, 46, 59, 58, 33, 63, 191, 161, 40, 41, 91, 93, 123, 125, 34, 39, 45]), !.
+normalizar_codigo(Codigo, Codigo).
+
+valor_en_frase(Catalogo, Palabras, Tipo, Valor) :-
+    findall(Encontrado,
+            (member(Palabra, Palabras), alias_catalogo(Catalogo, Palabra, Encontrado)),
+            Repetidos),
+    sort(Repetidos, Valores),
+    valor_unico(Tipo, Valores, Valor).
+
+valor_unico(obligatorio, [Valor], Valor).
+valor_unico(opcional, [], cualquiera).
+valor_unico(opcional, [Valor], Valor).
+
+alias_catalogo(Catalogo, Palabra, Valor) :-
+    call(Catalogo, Valor, _),
+    atom_string(Valor, Palabra).
+
+% Sinonimos controlados; agregar vocabulario nuevo mantiene la regla visible.
+alias_catalogo(tema, "conflicto", guerra).
+alias_catalogo(tema, "conflictos", guerra).
+alias_catalogo(tema, "belico", guerra).
+alias_catalogo(tema, "belicos", guerra).
+alias_catalogo(genero, "divulgativo", divulgacion).
+alias_catalogo(genero, "divulgativos", divulgacion).
+alias_catalogo(genero, "ensayos", ensayo).
+alias_catalogo(genero, "manuales", manual).
+alias_catalogo(genero, "novelas", novela).
+alias_catalogo(nivel, "basicos", basico).
+alias_catalogo(nivel, "principiante", basico).
+alias_catalogo(nivel, "principiantes", basico).
+alias_catalogo(nivel, "intermedios", intermedio).
+alias_catalogo(nivel, "medio", intermedio).
+alias_catalogo(nivel, "avanzados", avanzado).
+alias_catalogo(nivel, "experto", avanzado).
+alias_catalogo(nivel, "expertos", avanzado).
+alias_catalogo(formato, "ebook", digital).
+alias_catalogo(formato, "electronico", digital).
+alias_catalogo(formato, "electronicos", digital).
+alias_catalogo(formato, "digitales", digital).
+alias_catalogo(formato, "impreso", fisico).
+alias_catalogo(formato, "impresos", fisico).
+alias_catalogo(formato, "fisicos", fisico).
 
 consulta_registrada :-
     pedir_estudiante(IdEstudiante),

@@ -35,9 +35,23 @@ Desde esta carpeta:
 swipl -s biblioteca.pl -g iniciar -t halt
 ```
 
-El menú ofrece **1)** consulta rápida sin registro, **2)** recomendaciones para un estudiante registrado, **3)** historial guardado de un estudiante y **0)** salir. En la consulta rápida se pregunta primero **nivel, género y formato** (pulsa Enter para omitir cada filtro) y al final **qué quieres aprender**. Puedes responder `matematicas` o `quiero aprender sobre matematicas`; la búsqueda devuelve todos los libros de matemáticas ordenados según los filtros elegidos. Se muestran las opciones de los catálogos. Escribe los valores sin tildes.
+El menú ofrece **1)** consulta guiada sin registro, **2)** recomendaciones para un estudiante registrado, **3)** historial guardado, **4)** búsqueda mediante una frase y **0)** salir. En la consulta guiada se pregunta primero **nivel, género y formato** (pulsa Enter para omitir cada filtro) y al final **qué quieres aprender**. Puedes responder `matematicas` o una frase que contenga esa palabra.
 
-También se reconocen frases simples como `quiero libros de guerra`, `quiero libros sobre la guerra` y `busco algo sobre tecnologia`. Se interpreta el tema final de **estos patrones concretos**; el programa no comprende cualquier frase libre. Guerra tiene un libro como tema principal y dos libros de historia marcados explícitamente como relacionados. No se recomienda automáticamente todo el catálogo de historia para una búsqueda de guerra.
+La opción 4 usa un **analizador léxico sencillo**: normaliza mayúsculas, tildes y puntuación, separa la oración en palabras y busca términos conocidos. Por eso acepta distintas estructuras, por ejemplo:
+
+```text
+Quiero libros de guerra
+Necesito libros que hablen sobre la guerra
+Busco un manual avanzado de tecnología
+Prefiero un ebook divulgativo de física
+Necesito libros básicos digitales sobre conflictos bélicos
+```
+
+Puede extraer un tema obligatorio y, si aparecen, un género, nivel y formato. Reconoce las claves de los catálogos, plurales comunes y algunos sinónimos definidos en `alias_catalogo/3`: `principiante`, `medio`, `experto`, `ebook`, `electrónico`, `impreso`, `conflictos` y `bélicos`. Las palabras restantes se ignoran como conectores.
+
+No es inteligencia artificial ni comprende el significado general de cualquier texto. La frase debe incluir **exactamente un tema conocido** y no debe contener valores contradictorios de una misma categoría. Por ejemplo, `quiero historia y guerra` se rechaza por tener dos temas. El vocabulario aceptado puede ampliarse de forma explícita agregando hechos a `alias_catalogo/3`.
+
+Guerra tiene un libro como tema principal y dos libros de historia marcados explícitamente como relacionados. No se recomienda automáticamente todo el catálogo de historia para una búsqueda de guerra.
 
 ## Consultas directas
 
@@ -51,6 +65,7 @@ También se reconocen frases simples como `quiero libros de guerra`, `quiero lib
 ?- coincidencia_total(pref(matematicas, divulgacion, basico, cualquiera), IdLibro).
 ?- recomendaciones(pref(tecnologia, manual, intermedio, cualquiera), Resultados).
 ?- recomendaciones(pref(guerra, cualquiera, basico, cualquiera), Resultados).
+?- analizar_frase("Necesito un manual avanzado de tecnología", Perfil).
 ?- tema_de_libro(IdLibro, guerra, PuntosTema, MotivosTema).
 ?- recomendaciones_estudiante(1, Resultados).
 ?- detalle_recomendacion(1, IdEstudiante, IdLibro, Puntos, Motivos).
