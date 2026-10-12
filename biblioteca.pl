@@ -38,74 +38,74 @@ formato(fisico, 'Físico').
 formato(digital, 'Digital').
 
 % Matematicas
-libro(1, 'El hombre que calculaba', divulgacion, basico, matematicas, fisico, pendiente_de_verificar).
-libro(2, 'El diablo de los numeros', divulgacion, basico, matematicas, digital, pendiente_de_verificar).
-libro(3, 'Una breve historia de las matematicas', divulgacion, intermedio, matematicas, fisico, pendiente_de_verificar).
-libro(4, 'El placer de la x', divulgacion, basico, matematicas, digital, pendiente_de_verificar).
-libro(5, 'Como no equivocarse', ensayo, intermedio, matematicas, fisico, pendiente_de_verificar).
-
+libro(1, 'El hombre que calculaba', divulgacion, basico, matematicas, fisico, 'Limusa').
+libro(2, 'El diablo de los numeros', divulgacion, basico, matematicas, digital, 'Siruela').
+libro(3, 'Una breve historia de las matematicas', divulgacion, intermedio, matematicas, fisico, 'Crítica').
+libro(4, 'El placer de la x', divulgacion, basico, matematicas, digital, 'Debate').
+libro(5, 'Como no equivocarse', ensayo, intermedio, matematicas, fisico, 'Capitán Swing').
+ 
 % Tecnologia
-libro(6, 'Clean Code', manual, intermedio, tecnologia, fisico, pendiente_de_verificar).
-libro(7, 'The Pragmatic Programmer', manual, intermedio, tecnologia, digital, pendiente_de_verificar).
-libro(8, 'Code', divulgacion, basico, tecnologia, fisico, pendiente_de_verificar).
-libro(9, 'Algorithms', manual, avanzado, tecnologia, digital, pendiente_de_verificar).
-libro(10, 'La cuarta revolucion industrial', ensayo, basico, tecnologia, fisico, pendiente_de_verificar).
-
+libro(6, 'Clean Code', manual, intermedio, tecnologia, fisico, 'Prentice Hall').
+libro(7, 'The Pragmatic Programmer', manual, intermedio, tecnologia, digital, 'Addison-Wesley').
+libro(8, 'Code', divulgacion, basico, tecnologia, fisico, 'Microsoft Press').
+libro(9, 'Algorithms', manual, avanzado, tecnologia, digital, 'Addison-Wesley').
+libro(10, 'La cuarta revolucion industrial', ensayo, basico, tecnologia, fisico, 'Debate').
+ 
 % Fisica
-libro(11, 'Breve historia del tiempo', divulgacion, basico, fisica, fisico, pendiente_de_verificar).
-libro(12, 'Siete breves lecciones de fisica', divulgacion, basico, fisica, digital, pendiente_de_verificar).
-libro(13, 'El universo en una cascara de nuez', divulgacion, intermedio, fisica, fisico, pendiente_de_verificar).
-libro(14, 'El tejido del cosmos', divulgacion, intermedio, fisica, digital, pendiente_de_verificar).
-libro(15, 'Fisica universitaria', manual, avanzado, fisica, fisico, pendiente_de_verificar).
-
+libro(11, 'Breve historia del tiempo', divulgacion, basico, fisica, fisico, 'Crítica').
+libro(12, 'Siete breves lecciones de fisica', divulgacion, basico, fisica, digital, 'Anagrama').
+libro(13, 'El universo en una cascara de nuez', divulgacion, intermedio, fisica, fisico, 'Crítica').
+libro(14, 'El tejido del cosmos', divulgacion, intermedio, fisica, digital, 'Crítica').
+libro(15, 'Fisica universitaria', manual, avanzado, fisica, fisico, 'Pearson').
+ 
 % Biologia
-libro(16, 'El gen egoista', divulgacion, intermedio, biologia, fisico, pendiente_de_verificar).
-libro(17, 'El origen de las especies', ensayo, avanzado, biologia, digital, pendiente_de_verificar).
-libro(18, 'La vida maravillosa', divulgacion, intermedio, biologia, fisico, pendiente_de_verificar).
-libro(19, 'La doble helice', divulgacion, basico, biologia, digital, pendiente_de_verificar).
-libro(20, 'Biologia', manual, avanzado, biologia, fisico, pendiente_de_verificar).
-
+libro(16, 'El gen egoista', divulgacion, intermedio, biologia, fisico, 'Salvat').
+libro(17, 'El origen de las especies', ensayo, avanzado, biologia, digital, 'Alianza').
+libro(18, 'La vida maravillosa', divulgacion, intermedio, biologia, fisico, 'Crítica').
+libro(19, 'La doble helice', divulgacion, basico, biologia, digital, 'Alianza').
+libro(20, 'Biologia', manual, avanzado, biologia, fisico, 'Pearson').
+ 
 % Historia
-libro(21, 'Sapiens', divulgacion, basico, historia, fisico, pendiente_de_verificar).
-libro(22, 'Armas, germenes y acero', ensayo, intermedio, historia, digital, pendiente_de_verificar).
-libro(23, 'Historia del siglo XX', ensayo, avanzado, historia, fisico, pendiente_de_verificar).
-libro(24, 'El mundo de ayer', ensayo, intermedio, historia, digital, pendiente_de_verificar).
-libro(25, 'La guerra que salvo mi vida', novela, basico, guerra, fisico, pendiente_de_verificar).
-
+libro(21, 'Sapiens', divulgacion, basico, historia, fisico, 'Debate').
+libro(22, 'Armas, germenes y acero', ensayo, intermedio, historia, digital, 'Debate').
+libro(23, 'Historia del siglo XX', ensayo, avanzado, historia, fisico, 'Crítica').
+libro(24, 'El mundo de ayer', ensayo, intermedio, historia, digital, 'Acantilado').
+libro(25, 'La guerra que salvo mi vida', novela, basico, guerra, fisico, 'Nube de Tinta').
+ 
 % Literatura
-libro(26, 'El principito', novela, basico, literatura, fisico, pendiente_de_verificar).
-libro(27, 'Cien anos de soledad', novela, intermedio, literatura, digital, pendiente_de_verificar).
-libro(28, 'Don Quijote de la Mancha', novela, avanzado, literatura, fisico, pendiente_de_verificar).
-libro(29, 'La metamorfosis', novela, intermedio, literatura, digital, pendiente_de_verificar).
-libro(30, 'La sombra del viento', novela, avanzado, literatura, fisico, pendiente_de_verificar).
-
+libro(26, 'El principito', novela, basico, literatura, fisico, 'Salamandra').
+libro(27, 'Cien anos de soledad', novela, intermedio, literatura, digital, 'Sudamericana').
+libro(28, 'Don Quijote de la Mancha', novela, avanzado, literatura, fisico, 'Alfaguara').
+libro(29, 'La metamorfosis', novela, intermedio, literatura, digital, 'Alianza').
+libro(30, 'La sombra del viento', novela, avanzado, literatura, fisico, 'Planeta').
+ 
 % Filosofia
-libro(31, 'El mundo de Sofia', novela, basico, filosofia, fisico, pendiente_de_verificar).
-libro(32, 'Meditaciones', ensayo, intermedio, filosofia, digital, pendiente_de_verificar).
-libro(33, 'El mito de Sisifo', ensayo, avanzado, filosofia, fisico, pendiente_de_verificar).
-libro(34, 'Etica para Amador', divulgacion, basico, filosofia, digital, pendiente_de_verificar).
-libro(35, 'La republica', ensayo, avanzado, filosofia, fisico, pendiente_de_verificar).
-
+libro(31, 'El mundo de Sofia', novela, basico, filosofia, fisico, 'Siruela').
+libro(32, 'Meditaciones', ensayo, intermedio, filosofia, digital, 'Gredos').
+libro(33, 'El mito de Sisifo', ensayo, avanzado, filosofia, fisico, 'Alianza').
+libro(34, 'Etica para Amador', divulgacion, basico, filosofia, digital, 'Ariel').
+libro(35, 'La republica', ensayo, avanzado, filosofia, fisico, 'Gredos').
+ 
 % Economia
-libro(36, 'Freakonomics', divulgacion, basico, economia, fisico, pendiente_de_verificar).
-libro(37, 'El economista camuflado', divulgacion, basico, economia, digital, pendiente_de_verificar).
-libro(38, 'El capital en el siglo XXI', ensayo, avanzado, economia, fisico, pendiente_de_verificar).
-libro(39, 'Economia', manual, intermedio, economia, digital, pendiente_de_verificar).
-libro(40, 'La riqueza de las naciones', ensayo, avanzado, economia, fisico, pendiente_de_verificar).
-
+libro(36, 'Freakonomics', divulgacion, basico, economia, fisico, 'Ediciones B').
+libro(37, 'El economista camuflado', divulgacion, basico, economia, digital, 'Temas de Hoy').
+libro(38, 'El capital en el siglo XXI', ensayo, avanzado, economia, fisico, 'Fondo de Cultura Económica').
+libro(39, 'Economia', manual, intermedio, economia, digital, 'McGraw-Hill').
+libro(40, 'La riqueza de las naciones', ensayo, avanzado, economia, fisico, 'Alianza').
+ 
 % Psicologia
-libro(41, 'Pensar rapido, pensar despacio', divulgacion, intermedio, psicologia, fisico, pendiente_de_verificar).
-libro(42, 'El hombre en busca de sentido', ensayo, basico, psicologia, digital, pendiente_de_verificar).
-libro(43, 'El error de Descartes', divulgacion, avanzado, psicologia, fisico, pendiente_de_verificar).
-libro(44, 'Inteligencia emocional', divulgacion, basico, psicologia, digital, pendiente_de_verificar).
-libro(45, 'El arte de amar', ensayo, intermedio, psicologia, fisico, pendiente_de_verificar).
-
+libro(41, 'Pensar rapido, pensar despacio', divulgacion, intermedio, psicologia, fisico, 'Debate').
+libro(42, 'El hombre en busca de sentido', ensayo, basico, psicologia, digital, 'Herder').
+libro(43, 'El error de Descartes', divulgacion, avanzado, psicologia, fisico, 'Crítica').
+libro(44, 'Inteligencia emocional', divulgacion, basico, psicologia, digital, 'Kairós').
+libro(45, 'El arte de amar', ensayo, intermedio, psicologia, fisico, 'Paidós').
+ 
 % Arte
-libro(46, 'La historia del arte', divulgacion, basico, arte, fisico, pendiente_de_verificar).
-libro(47, 'Modos de ver', ensayo, intermedio, arte, digital, pendiente_de_verificar).
-libro(48, 'El arte a traves de los tiempos', manual, avanzado, arte, fisico, pendiente_de_verificar).
-libro(49, 'Sobre la fotografia', ensayo, avanzado, arte, digital, pendiente_de_verificar).
-libro(50, 'El sentido del arte', ensayo, intermedio, arte, fisico, pendiente_de_verificar).
+libro(46, 'La historia del arte', divulgacion, basico, arte, fisico, 'Phaidon').
+libro(47, 'Modos de ver', ensayo, intermedio, arte, digital, 'Gustavo Gili').
+libro(48, 'El arte a traves de los tiempos', manual, avanzado, arte, fisico, 'Cengage').
+libro(49, 'Sobre la fotografia', ensayo, avanzado, arte, digital, 'Debolsillo').
+libro(50, 'El sentido del arte', ensayo, intermedio, arte, fisico, 'Paidós').
 
 % autor(IdAutor, Nombre). Hawking aparece en dos libros; seis obras tienen dos autores.
 autor(1, 'Malba Tahan').
@@ -228,56 +228,57 @@ autores_libro(IdLibro, Nombres) :-
     findall(Nombre, (libro_autor(IdLibro, IdAutor), autor(IdAutor, Nombre)), Nombres).
 
 % Estudiantes ficticios: estudiante(IdEstudiante, Nombre).
-estudiante(1, 'Estudiante 01').
-estudiante(2, 'Estudiante 02').
-estudiante(3, 'Estudiante 03').
-estudiante(4, 'Estudiante 04').
-estudiante(5, 'Estudiante 05').
-estudiante(6, 'Estudiante 06').
-estudiante(7, 'Estudiante 07').
-estudiante(8, 'Estudiante 08').
-estudiante(9, 'Estudiante 09').
-estudiante(10, 'Estudiante 10').
-estudiante(11, 'Estudiante 11').
-estudiante(12, 'Estudiante 12').
-estudiante(13, 'Estudiante 13').
-estudiante(14, 'Estudiante 14').
-estudiante(15, 'Estudiante 15').
-estudiante(16, 'Estudiante 16').
-estudiante(17, 'Estudiante 17').
-estudiante(18, 'Estudiante 18').
-estudiante(19, 'Estudiante 19').
-estudiante(20, 'Estudiante 20').
-estudiante(21, 'Estudiante 21').
-estudiante(22, 'Estudiante 22').
-estudiante(23, 'Estudiante 23').
-estudiante(24, 'Estudiante 24').
-estudiante(25, 'Estudiante 25').
-estudiante(26, 'Estudiante 26').
-estudiante(27, 'Estudiante 27').
-estudiante(28, 'Estudiante 28').
-estudiante(29, 'Estudiante 29').
-estudiante(30, 'Estudiante 30').
-estudiante(31, 'Estudiante 31').
-estudiante(32, 'Estudiante 32').
-estudiante(33, 'Estudiante 33').
-estudiante(34, 'Estudiante 34').
-estudiante(35, 'Estudiante 35').
-estudiante(36, 'Estudiante 36').
-estudiante(37, 'Estudiante 37').
-estudiante(38, 'Estudiante 38').
-estudiante(39, 'Estudiante 39').
-estudiante(40, 'Estudiante 40').
-estudiante(41, 'Estudiante 41').
-estudiante(42, 'Estudiante 42').
-estudiante(43, 'Estudiante 43').
-estudiante(44, 'Estudiante 44').
-estudiante(45, 'Estudiante 45').
-estudiante(46, 'Estudiante 46').
-estudiante(47, 'Estudiante 47').
-estudiante(48, 'Estudiante 48').
-estudiante(49, 'Estudiante 49').
-estudiante(50, 'Estudiante 50').
+% Estudiantes registrados: estudiante(IdEstudiante, Nombre).
+estudiante(1, 'Alejandro Morales Mendoza').
+estudiante(2, 'Valeria Cruz Santiago').
+estudiante(3, 'Mateo Hernández Ruiz').
+estudiante(4, 'Camila López Martínez').
+estudiante(5, 'Diego Ramírez Reyes').
+estudiante(6, 'Sofía García Bautista').
+estudiante(7, 'Sebastián Ortiz Vázquez').
+estudiante(8, 'Mariana Gómez Aguilar').
+estudiante(9, 'Emiliano Pérez Gómez').
+estudiante(10, 'Daniela Torres Domínguez').
+estudiante(11, 'Leonardo Flores Castro').
+estudiante(12, 'Ximena Rivera Castillo').
+estudiante(13, 'Nicolás Romero Delgado').
+estudiante(14, 'Renata Díaz Estrada').
+estudiante(15, 'Joaquín Mendoza Vega').
+estudiante(16, 'Natalia Ramos Navarro').
+estudiante(17, 'Gabriel Aguilar León').
+estudiante(18, 'Paulina Silva Peña').
+estudiante(19, 'Santiago Vargas Rojas').
+estudiante(20, 'Andrea Medina Serrano').
+estudiante(21, 'Javier Castro Solís').
+estudiante(22, 'Fernanda Cabrera Soto').
+estudiante(23, 'Rodrigo Delgado Valdés').
+estudiante(24, 'Lucía Ríos Camacho').
+estudiante(25, 'Mauricio Vega Pacheco').
+estudiante(26, 'Carolina Soto Cervantes').
+estudiante(27, 'Bruno Guerrero Miranda').
+estudiante(28, 'Elena Lara Fuentes').
+estudiante(29, 'Ángel Paredes Montes').
+estudiante(30, 'Paola Salazar Espinoza').
+estudiante(31, 'Manuel Cortés Andrade').
+estudiante(32, 'Adriana Méndez Rangel').
+estudiante(33, 'David Figueroa Luna').
+estudiante(34, 'Regina Pacheco Rosas').
+estudiante(35, 'Isaac Zamora Meza').
+estudiante(36, 'Claudia Orozco Gallegos').
+estudiante(37, 'Samuel Rocha Armenta').
+estudiante(38, 'Tania Barrientos Saucedo').
+estudiante(39, 'Héctor Trejo Cárdenas').
+estudiante(40, 'Sara Benítez Olvera').
+estudiante(41, 'Óscar Salgado Leyva').
+estudiante(42, 'Monserrat Espinoza Pineda').
+estudiante(43, 'Alan Cárdenas Becerra').
+estudiante(44, 'Karla Corona Ibarra').
+estudiante(45, 'Iván Ponce Rivas').
+estudiante(46, 'Jimena Arenas Macías').
+estudiante(47, 'Hugo Valencia Villegas').
+estudiante(48, 'Diana Godínez Juárez').
+estudiante(49, 'Guillermo Tapia Franco').
+estudiante(50, 'Miriam Osorio Vilchis').
 
 % preferencia(IdPreferencia, IdEstudiante, Tema, Genero, Nivel, Formato).
 % Una persona puede tener varias preferencias; los 50 ejemplos tienen una cada uno.
