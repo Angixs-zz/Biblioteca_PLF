@@ -107,7 +107,69 @@ libro(48, 'El arte a traves de los tiempos', manual, avanzado, arte, fisico, pen
 libro(49, 'Sobre la fotografia', ensayo, avanzado, arte, digital, pendiente_de_verificar).
 libro(50, 'El sentido del arte', ensayo, intermedio, arte, fisico, pendiente_de_verificar).
 
-% autor(IdAutor, Nombre). Hawking aparece en dos libros; seis obras tienen dos autores.
+% Ampliacion del catalogo: libros 51 a 100.
+libro(51, 'El enigma de Fermat', divulgacion, intermedio, matematicas, fisico, pendiente_de_verificar).
+libro(52, 'El hombre anumérico', divulgacion, basico, matematicas, digital, pendiente_de_verificar).
+libro(53, 'Alex en el pais de los numeros', divulgacion, basico, matematicas, fisico, pendiente_de_verificar).
+libro(54, 'Como plantear y resolver problemas', manual, intermedio, matematicas, digital, pendiente_de_verificar).
+libro(55, 'Festival magico-matematico', divulgacion, intermedio, matematicas, fisico, pendiente_de_verificar).
+
+libro(56, 'Python Crash Course', manual, basico, tecnologia, digital, pendiente_de_verificar).
+libro(57, 'Fluent Python', manual, avanzado, tecnologia, fisico, pendiente_de_verificar).
+libro(58, 'Head First Design Patterns', manual, intermedio, tecnologia, digital, pendiente_de_verificar).
+libro(59, 'Refactoring', manual, avanzado, tecnologia, fisico, pendiente_de_verificar).
+libro(60, 'Introduction to Algorithms', manual, avanzado, tecnologia, digital, pendiente_de_verificar).
+
+libro(61, 'Seis piezas faciles', divulgacion, basico, fisica, fisico, pendiente_de_verificar).
+libro(62, 'La fisica de lo imposible', divulgacion, basico, fisica, digital, pendiente_de_verificar).
+libro(63, 'Astrofisica para gente con prisas', divulgacion, basico, fisica, fisico, pendiente_de_verificar).
+libro(64, 'Universos ocultos', divulgacion, intermedio, fisica, digital, pendiente_de_verificar).
+libro(65, 'Agujeros negros y tiempo curvo', divulgacion, avanzado, fisica, fisico, pendiente_de_verificar).
+
+libro(66, 'El gen', divulgacion, intermedio, biologia, fisico, pendiente_de_verificar).
+libro(67, 'La vida inmortal de Henrietta Lacks', divulgacion, basico, biologia, digital, pendiente_de_verificar).
+libro(68, 'El cuerpo humano', divulgacion, basico, biologia, fisico, pendiente_de_verificar).
+libro(69, 'El cerebro', divulgacion, intermedio, biologia, digital, pendiente_de_verificar).
+libro(70, 'La sexta extincion', divulgacion, intermedio, biologia, fisico, pendiente_de_verificar).
+
+libro(71, 'Sin novedad en el frente', novela, intermedio, guerra, digital, pendiente_de_verificar).
+libro(72, 'Los canones de agosto', ensayo, avanzado, guerra, fisico, pendiente_de_verificar).
+libro(73, 'La Segunda Guerra Mundial', ensayo, intermedio, guerra, digital, pendiente_de_verificar).
+libro(74, 'SPQR', divulgacion, intermedio, historia, fisico, pendiente_de_verificar).
+libro(75, 'Biografia del poder', ensayo, avanzado, historia, digital, pendiente_de_verificar).
+
+libro(76, '1984', novela, intermedio, literatura, fisico, pendiente_de_verificar).
+libro(77, 'Orgullo y prejuicio', novela, intermedio, literatura, digital, pendiente_de_verificar).
+libro(78, 'Cronica de una muerte anunciada', novela, basico, literatura, fisico, pendiente_de_verificar).
+libro(79, 'Pedro Paramo', novela, intermedio, literatura, digital, pendiente_de_verificar).
+libro(80, 'Rayuela', novela, avanzado, literatura, fisico, pendiente_de_verificar).
+
+libro(81, 'Apologia de Socrates', ensayo, basico, filosofia, digital, pendiente_de_verificar).
+libro(82, 'El banquete', ensayo, intermedio, filosofia, fisico, pendiente_de_verificar).
+libro(83, 'El segundo sexo', ensayo, avanzado, filosofia, digital, pendiente_de_verificar).
+libro(84, 'Asi hablo Zaratustra', ensayo, avanzado, filosofia, fisico, pendiente_de_verificar).
+libro(85, 'El existencialismo es un humanismo', ensayo, intermedio, filosofia, digital, pendiente_de_verificar).
+
+libro(86, 'Economia en una leccion', divulgacion, basico, economia, fisico, pendiente_de_verificar).
+libro(87, 'Capitalismo y libertad', ensayo, intermedio, economia, digital, pendiente_de_verificar).
+libro(88, 'El cisne negro', ensayo, intermedio, economia, fisico, pendiente_de_verificar).
+libro(89, 'Deuda: los primeros 5000 anos', ensayo, avanzado, economia, digital, pendiente_de_verificar).
+libro(90, 'La economia del bien comun', ensayo, avanzado, economia, fisico, pendiente_de_verificar).
+
+libro(91, 'El poder de los habitos', divulgacion, basico, psicologia, digital, pendiente_de_verificar).
+libro(92, 'Influencia', divulgacion, intermedio, psicologia, fisico, pendiente_de_verificar).
+libro(93, 'El animal social', manual, intermedio, psicologia, digital, pendiente_de_verificar).
+libro(94, 'La interpretacion de los suenos', ensayo, avanzado, psicologia, fisico, pendiente_de_verificar).
+libro(95, 'Fluir', divulgacion, basico, psicologia, digital, pendiente_de_verificar).
+
+libro(96, 'El arte moderno', ensayo, avanzado, arte, fisico, pendiente_de_verificar).
+libro(97, 'Despues del fin del arte', ensayo, avanzado, arte, digital, pendiente_de_verificar).
+libro(98, 'El arte de mirar', divulgacion, basico, arte, fisico, pendiente_de_verificar).
+libro(99, 'La camara lucida', ensayo, intermedio, arte, digital, pendiente_de_verificar).
+libro(100, 'Arte y percepcion visual', manual, intermedio, arte, fisico, pendiente_de_verificar).
+
+% autor(IdAutor, Nombre). Un autor puede aparecer en varios libros;
+% algunas obras tienen dos autores y el libro 60 tiene cuatro.
 autor(1, 'Malba Tahan').
 autor(2, 'Hans Magnus Enzensberger').
 autor(3, 'Ian Stewart').
@@ -163,6 +225,57 @@ autor(53, 'Roger A. Freedman').
 autor(54, 'Jane B. Reece').
 autor(55, 'Stephen J. Dubner').
 autor(56, 'William D. Nordhaus').
+autor(57, 'Simon Singh').
+autor(58, 'John Allen Paulos').
+autor(59, 'Alex Bellos').
+autor(60, 'George Polya').
+autor(61, 'Martin Gardner').
+autor(62, 'Eric Matthes').
+autor(63, 'Luciano Ramalho').
+autor(64, 'Eric Freeman').
+autor(65, 'Elisabeth Robson').
+autor(66, 'Martin Fowler').
+autor(67, 'Thomas H. Cormen').
+autor(68, 'Charles E. Leiserson').
+autor(69, 'Ronald L. Rivest').
+autor(70, 'Clifford Stein').
+autor(71, 'Richard Feynman').
+autor(72, 'Michio Kaku').
+autor(73, 'Neil deGrasse Tyson').
+autor(74, 'Lisa Randall').
+autor(75, 'Kip S. Thorne').
+autor(76, 'Siddhartha Mukherjee').
+autor(77, 'Rebecca Skloot').
+autor(78, 'Bill Bryson').
+autor(79, 'David Eagleman').
+autor(80, 'Elizabeth Kolbert').
+autor(81, 'Erich Maria Remarque').
+autor(82, 'Barbara W. Tuchman').
+autor(83, 'Antony Beevor').
+autor(84, 'Mary Beard').
+autor(85, 'Enrique Krauze').
+autor(86, 'George Orwell').
+autor(87, 'Jane Austen').
+autor(88, 'Juan Rulfo').
+autor(89, 'Julio Cortazar').
+autor(90, 'Simone de Beauvoir').
+autor(91, 'Friedrich Nietzsche').
+autor(92, 'Jean-Paul Sartre').
+autor(93, 'Henry Hazlitt').
+autor(94, 'Milton Friedman').
+autor(95, 'Nassim Nicholas Taleb').
+autor(96, 'David Graeber').
+autor(97, 'Jean Tirole').
+autor(98, 'Charles Duhigg').
+autor(99, 'Robert B. Cialdini').
+autor(100, 'Elliot Aronson').
+autor(101, 'Sigmund Freud').
+autor(102, 'Mihaly Csikszentmihalyi').
+autor(103, 'Giulio Carlo Argan').
+autor(104, 'Arthur C. Danto').
+autor(105, 'Lance Esplund').
+autor(106, 'Roland Barthes').
+autor(107, 'Rudolf Arnheim').
 
 % libro_autor(IdLibro, IdAutor): tabla puente para la relacion N:M.
 libro_autor(1, 1).
@@ -221,6 +334,60 @@ libro_autor(47, 47).
 libro_autor(48, 48).
 libro_autor(49, 49).
 libro_autor(50, 50).
+libro_autor(51, 57).
+libro_autor(52, 58).
+libro_autor(53, 59).
+libro_autor(54, 60).
+libro_autor(55, 61).
+libro_autor(56, 62).
+libro_autor(57, 63).
+libro_autor(58, 64).
+libro_autor(58, 65).
+libro_autor(59, 66).
+libro_autor(60, 67).
+libro_autor(60, 68).
+libro_autor(60, 69).
+libro_autor(60, 70).
+libro_autor(61, 71).
+libro_autor(62, 72).
+libro_autor(63, 73).
+libro_autor(64, 74).
+libro_autor(65, 75).
+libro_autor(66, 76).
+libro_autor(67, 77).
+libro_autor(68, 78).
+libro_autor(69, 79).
+libro_autor(70, 80).
+libro_autor(71, 81).
+libro_autor(72, 82).
+libro_autor(73, 83).
+libro_autor(74, 84).
+libro_autor(75, 85).
+libro_autor(76, 86).
+libro_autor(77, 87).
+libro_autor(78, 27).
+libro_autor(79, 88).
+libro_autor(80, 89).
+libro_autor(81, 35).
+libro_autor(82, 35).
+libro_autor(83, 90).
+libro_autor(84, 91).
+libro_autor(85, 92).
+libro_autor(86, 93).
+libro_autor(87, 94).
+libro_autor(88, 95).
+libro_autor(89, 96).
+libro_autor(90, 97).
+libro_autor(91, 98).
+libro_autor(92, 99).
+libro_autor(93, 100).
+libro_autor(94, 101).
+libro_autor(95, 102).
+libro_autor(96, 103).
+libro_autor(97, 104).
+libro_autor(98, 105).
+libro_autor(99, 106).
+libro_autor(100, 107).
 
 % Vista de los autores de un libro (los nombres no se duplican en libro/7).
 autores_libro(IdLibro, Nombres) :-
@@ -409,6 +576,9 @@ tema_de_libro(Id, Tema, 2, [Tema]) :-
 tema_de_libro(23, guerra, 1, [tema_secundario(guerra)]). % Historia del siglo XX
 tema_de_libro(24, guerra, 1, [tema_secundario(guerra)]). % El mundo de ayer: Primera Guerra Mundial
 tema_de_libro(25, literatura, 1, [tema_secundario(literatura)]). % Novela historica
+tema_de_libro(71, literatura, 1, [tema_secundario(literatura)]). % Novela belica
+tema_de_libro(72, historia, 1, [tema_secundario(historia)]). % Primera Guerra Mundial
+tema_de_libro(73, historia, 1, [tema_secundario(historia)]). % Segunda Guerra Mundial
 
 % Regla experta: la divulgacion de nivel intermedio puede servir como
 % alternativa introductoria al nivel basico, pero puntua menos que el basico.

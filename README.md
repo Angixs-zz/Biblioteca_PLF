@@ -6,9 +6,9 @@ Implementación del caso práctico en SWI-Prolog. El modelo tiene **seis tablas 
 | --- | --- | ---: |
 | Estudiante `estudiante/2` | ID, nombre | 50 |
 | Preferencia `preferencia/6` | ID de preferencia, ID de estudiante, tema, género, nivel, formato | 50 |
-| Libro `libro/7` | ID, título, género, nivel, tema, formato, editorial | 50 |
-| Autor `autor/2` | ID, nombre | 55 |
-| LibroAutor `libro_autor/2` | ID de libro, ID de autor (clave compuesta) | 56 |
+| Libro `libro/7` | ID, título, género, nivel, tema, formato, editorial | 100 |
+| Autor `autor/2` | ID, nombre | 106 |
+| LibroAutor `libro_autor/2` | ID de libro, ID de autor (clave compuesta) | 110 |
 | Recomendación `recomendacion_guardada/3` | ID, ID de preferencia, ID de libro | 50 |
 | Nivel `nivel/2` | Clave, nombre | 3 |
 | Género `genero/2` | Clave, nombre | 4 |
@@ -21,7 +21,7 @@ Estudiante 1 ─── N Preferencia 1 ─── N Recomendación N ─── 1 
 Preferencia N ─── 1 Nivel/Género/Tema/Formato 1 ─── N Libro
 ```
 
-Cada recomendación guardada refiere a una preferencia y un libro. `recomendar/4` calcula la coincidencia entre ellos; `detalle_recomendacion/5` recupera el estudiante, puntaje y motivos de un registro guardado. Las recomendaciones guardadas son una muestra del historial: la primera opción del ranking de cada una de las 50 preferencias. Las consultas interactivas **no se guardan automáticamente**. Los estudiantes, sus preferencias y el historial son datos de ejemplo; el formato del libro no representa existencias reales de la biblioteca.
+Cada recomendación guardada refiere a una preferencia y un libro. `recomendar/4` calcula la coincidencia entre ellos; `detalle_recomendacion/5` recupera el estudiante, puntaje y motivos según las reglas actuales. Las 50 recomendaciones son una muestra de historial creada cuando el catálogo tenía 50 libros: **no se reescribe el historial al añadir libros nuevos** y la primera opción del ranking actual puede ser distinta. Las consultas interactivas **no se guardan automáticamente**. Los estudiantes, sus preferencias y el historial son datos de ejemplo; el formato del libro no representa existencias reales de la biblioteca.
 
 La tabla Estudiante es útil para conservar perfiles y consultar el historial de cada persona. **No hace falta ser estudiante registrado para pedir una recomendación**: la consulta rápida toma las respuestas del menú como variables y calcula el resultado sin guardarlas. La editorial depende de la edición concreta; el PDF no especifica ediciones, por lo que el campo tiene el valor `pendiente_de_verificar` hasta disponer de esos datos. No se presenta como una editorial real.
 
@@ -51,7 +51,7 @@ Puede extraer un tema obligatorio y, si aparecen, un género, nivel y formato. R
 
 No es inteligencia artificial ni comprende el significado general de cualquier texto. La frase debe incluir **exactamente un tema conocido** y no debe contener valores contradictorios de una misma categoría. Por ejemplo, `quiero historia y guerra` se rechaza por tener dos temas. El vocabulario aceptado puede ampliarse de forma explícita agregando hechos a `alias_catalogo/3`.
 
-Guerra tiene un libro como tema principal y dos libros de historia marcados explícitamente como relacionados. No se recomienda automáticamente todo el catálogo de historia para una búsqueda de guerra.
+Guerra tiene cuatro libros con ese tema principal y dos libros de historia marcados explícitamente como relacionados. No se recomienda automáticamente todo el catálogo de historia para una búsqueda de guerra. Hay diez libros con tema principal matemáticas.
 
 ## Consultas directas
 
