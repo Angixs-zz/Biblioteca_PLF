@@ -7,7 +7,7 @@
    Las personas, sus perfiles y recomendaciones guardadas son datos de ejemplo.
    libro(Id, Titulo, Genero, Nivel, Tema, Formato, Editorial).
    El formato es un dato de ejemplo para el ejercicio, no disponibilidad real.
-   La editorial depende de la edicion; pendiente_de_verificar no es un nombre editorial.
+   La editorial corresponde a la edicion enlazada en fuentes_editoriales.md.
 */
 
 :- encoding(utf8).
@@ -33,140 +33,141 @@ tema(economia, 'Economía').
 tema(psicologia, 'Psicología').
 tema(arte, 'Arte').
 tema(guerra, 'Guerra y conflictos').
+tema(amor, 'Amor y relaciones').
 
 formato(fisico, 'Físico').
 formato(digital, 'Digital').
 
 % Matematicas
-libro(1, 'El hombre que calculaba', divulgacion, basico, matematicas, fisico, pendiente_de_verificar).
-libro(2, 'El diablo de los numeros', divulgacion, basico, matematicas, digital, pendiente_de_verificar).
-libro(3, 'Una breve historia de las matematicas', divulgacion, intermedio, matematicas, fisico, pendiente_de_verificar).
-libro(4, 'El placer de la x', divulgacion, basico, matematicas, digital, pendiente_de_verificar).
-libro(5, 'Como no equivocarse', ensayo, intermedio, matematicas, fisico, pendiente_de_verificar).
+libro(1, 'El hombre que calculaba', divulgacion, basico, matematicas, fisico, 'RBA Libros').
+libro(2, 'El diablo de los numeros', divulgacion, basico, matematicas, digital, 'Siruela').
+libro(3, 'Historia de las matematicas', divulgacion, intermedio, matematicas, fisico, 'Editorial Crítica').
+libro(4, 'El placer de la x', divulgacion, basico, matematicas, digital, 'Taurus').
+libro(5, 'How Not to Be Wrong', ensayo, intermedio, matematicas, fisico, 'Penguin Books').
 
 % Tecnologia
-libro(6, 'Clean Code', manual, intermedio, tecnologia, fisico, pendiente_de_verificar).
-libro(7, 'The Pragmatic Programmer', manual, intermedio, tecnologia, digital, pendiente_de_verificar).
-libro(8, 'Code', divulgacion, basico, tecnologia, fisico, pendiente_de_verificar).
-libro(9, 'Algorithms', manual, avanzado, tecnologia, digital, pendiente_de_verificar).
-libro(10, 'La cuarta revolucion industrial', ensayo, basico, tecnologia, fisico, pendiente_de_verificar).
+libro(6, 'Clean Code', manual, intermedio, tecnologia, fisico, 'Prentice Hall').
+libro(7, 'The Pragmatic Programmer', manual, intermedio, tecnologia, digital, 'Pragmatic Programmer').
+libro(8, 'Code', divulgacion, basico, tecnologia, fisico, 'Microsoft Press').
+libro(9, 'Algorithms', manual, avanzado, tecnologia, digital, 'Addison-Wesley').
+libro(10, 'La cuarta revolucion industrial', ensayo, basico, tecnologia, fisico, 'Debate').
 
 % Fisica
-libro(11, 'Breve historia del tiempo', divulgacion, basico, fisica, fisico, pendiente_de_verificar).
-libro(12, 'Siete breves lecciones de fisica', divulgacion, basico, fisica, digital, pendiente_de_verificar).
-libro(13, 'El universo en una cascara de nuez', divulgacion, intermedio, fisica, fisico, pendiente_de_verificar).
-libro(14, 'El tejido del cosmos', divulgacion, intermedio, fisica, digital, pendiente_de_verificar).
-libro(15, 'Fisica universitaria', manual, avanzado, fisica, fisico, pendiente_de_verificar).
+libro(11, 'A Brief History of Time', divulgacion, basico, fisica, fisico, 'Transworld Publishers').
+libro(12, 'Siete breves lecciones de fisica', divulgacion, basico, fisica, digital, 'Anagrama').
+libro(13, 'El universo en una cascara de nuez', divulgacion, intermedio, fisica, fisico, 'Crítica').
+libro(14, 'El tejido del cosmos', divulgacion, intermedio, fisica, digital, 'Crítica').
+libro(15, 'Fisica universitaria', manual, avanzado, fisica, fisico, 'Pearson').
 
 % Biologia
-libro(16, 'El gen egoista', divulgacion, intermedio, biologia, fisico, pendiente_de_verificar).
-libro(17, 'El origen de las especies', ensayo, avanzado, biologia, digital, pendiente_de_verificar).
-libro(18, 'La vida maravillosa', divulgacion, intermedio, biologia, fisico, pendiente_de_verificar).
-libro(19, 'La doble helice', divulgacion, basico, biologia, digital, pendiente_de_verificar).
-libro(20, 'Biologia', manual, avanzado, biologia, fisico, pendiente_de_verificar).
+libro(16, 'El gen egoista', divulgacion, intermedio, biologia, fisico, 'Salvat').
+libro(17, 'El origen de las especies', ensayo, avanzado, biologia, digital, 'Espasa').
+libro(18, 'La vida maravillosa', divulgacion, intermedio, biologia, fisico, 'Booket').
+libro(19, 'La doble helice', divulgacion, basico, biologia, digital, 'Salvat').
+libro(20, 'Campbell Biology', manual, avanzado, biologia, fisico, 'Benjamin Cummings').
 
 % Historia
-libro(21, 'Sapiens', divulgacion, basico, historia, fisico, pendiente_de_verificar).
-libro(22, 'Armas, germenes y acero', ensayo, intermedio, historia, digital, pendiente_de_verificar).
-libro(23, 'Historia del siglo XX', ensayo, avanzado, historia, fisico, pendiente_de_verificar).
-libro(24, 'El mundo de ayer', ensayo, intermedio, historia, digital, pendiente_de_verificar).
-libro(25, 'La guerra que salvo mi vida', novela, basico, guerra, fisico, pendiente_de_verificar).
+libro(21, 'Sapiens', divulgacion, basico, historia, fisico, 'Debolsillo').
+libro(22, 'Armas, germenes y acero', ensayo, intermedio, historia, digital, 'Debolsillo').
+libro(23, 'Historia del siglo XX', ensayo, avanzado, historia, fisico, 'Critica').
+libro(24, 'El mundo de ayer', ensayo, intermedio, historia, digital, 'Editorial Claridad').
+libro(25, 'La guerra que salvo mi vida', novela, basico, guerra, fisico, 'Turtleback').
 
 % Literatura
-libro(26, 'El principito', novela, basico, literatura, fisico, pendiente_de_verificar).
-libro(27, 'Cien anos de soledad', novela, intermedio, literatura, digital, pendiente_de_verificar).
-libro(28, 'Don Quijote de la Mancha', novela, avanzado, literatura, fisico, pendiente_de_verificar).
-libro(29, 'La metamorfosis', novela, intermedio, literatura, digital, pendiente_de_verificar).
-libro(30, 'La sombra del viento', novela, avanzado, literatura, fisico, pendiente_de_verificar).
+libro(26, 'El principito', novela, basico, literatura, fisico, 'Plutón Ediciones').
+libro(27, 'Cien anos de soledad', novela, intermedio, literatura, digital, 'Grijalbo Mondadori').
+libro(28, 'Don Quixote', novela, avanzado, literatura, fisico, 'Open Road Integrated Media').
+libro(29, 'La metamorfosis', novela, intermedio, literatura, digital, 'Editorial Octaedro').
+libro(30, 'La sombra del viento', novela, avanzado, literatura, fisico, 'Planeta').
 
 % Filosofia
-libro(31, 'El mundo de Sofia', novela, basico, filosofia, fisico, pendiente_de_verificar).
-libro(32, 'Meditaciones', ensayo, intermedio, filosofia, digital, pendiente_de_verificar).
-libro(33, 'El mito de Sisifo', ensayo, avanzado, filosofia, fisico, pendiente_de_verificar).
-libro(34, 'Etica para Amador', divulgacion, basico, filosofia, digital, pendiente_de_verificar).
-libro(35, 'La republica', ensayo, avanzado, filosofia, fisico, pendiente_de_verificar).
+libro(31, 'El mundo de Sofia', novela, basico, filosofia, fisico, 'Círculo de Lectores').
+libro(32, 'Meditaciones', ensayo, intermedio, filosofia, digital, 'La Otra H').
+libro(33, 'El mito de Sisifo', ensayo, avanzado, filosofia, fisico, 'Penguin').
+libro(34, 'Etica para Amador', divulgacion, basico, filosofia, digital, 'Ariel').
+libro(35, 'The Republic', ensayo, avanzado, filosofia, fisico, 'Penguin Classics').
 
 % Economia
-libro(36, 'Freakonomics', divulgacion, basico, economia, fisico, pendiente_de_verificar).
-libro(37, 'El economista camuflado', divulgacion, basico, economia, digital, pendiente_de_verificar).
-libro(38, 'El capital en el siglo XXI', ensayo, avanzado, economia, fisico, pendiente_de_verificar).
-libro(39, 'Economia', manual, intermedio, economia, digital, pendiente_de_verificar).
-libro(40, 'La riqueza de las naciones', ensayo, avanzado, economia, fisico, pendiente_de_verificar).
+libro(36, 'Freakonomics', divulgacion, basico, economia, fisico, 'ZETA BOLSILLO').
+libro(37, 'El economista camuflado', divulgacion, basico, economia, digital, 'Ediciones Temas de Hoy').
+libro(38, 'El capital en el siglo XXI', ensayo, avanzado, economia, fisico, 'Fondo de Cultura Económica').
+libro(39, 'Economics', manual, intermedio, economia, digital, 'McGraw Hill').
+libro(40, 'La riqueza de las naciones', ensayo, avanzado, economia, fisico, 'Perfil').
 
 % Psicologia
-libro(41, 'Pensar rapido, pensar despacio', divulgacion, intermedio, psicologia, fisico, pendiente_de_verificar).
-libro(42, 'El hombre en busca de sentido', ensayo, basico, psicologia, digital, pendiente_de_verificar).
-libro(43, 'El error de Descartes', divulgacion, avanzado, psicologia, fisico, pendiente_de_verificar).
-libro(44, 'Inteligencia emocional', divulgacion, basico, psicologia, digital, pendiente_de_verificar).
-libro(45, 'El arte de amar', ensayo, intermedio, psicologia, fisico, pendiente_de_verificar).
+libro(41, 'Pensar rapido, pensar despacio', divulgacion, intermedio, psicologia, fisico, 'Debate').
+libro(42, 'Man\'s Search for Meaning', ensayo, basico, psicologia, digital, 'Beacon Press').
+libro(43, 'El error de Descartes', divulgacion, avanzado, psicologia, fisico, 'Booket').
+libro(44, 'Inteligencia emocional', divulgacion, basico, psicologia, digital, 'Salvat').
+libro(45, 'El arte de amar', ensayo, intermedio, psicologia, fisico, 'Planeta Publishing').
 
 % Arte
-libro(46, 'La historia del arte', divulgacion, basico, arte, fisico, pendiente_de_verificar).
-libro(47, 'Modos de ver', ensayo, intermedio, arte, digital, pendiente_de_verificar).
-libro(48, 'El arte a traves de los tiempos', manual, avanzado, arte, fisico, pendiente_de_verificar).
-libro(49, 'Sobre la fotografia', ensayo, avanzado, arte, digital, pendiente_de_verificar).
-libro(50, 'El sentido del arte', ensayo, intermedio, arte, fisico, pendiente_de_verificar).
+libro(46, 'La historia del arte', divulgacion, basico, arte, fisico, 'Círculo de Lectores').
+libro(47, 'Modos de ver', ensayo, intermedio, arte, digital, 'Editorial Gustavo Gili').
+libro(48, 'Art Through the Ages', manual, avanzado, arte, fisico, 'Harcourt, Brace').
+libro(49, 'Sobre la fotografia', ensayo, avanzado, arte, digital, 'Alfaguara').
+libro(50, 'The Meaning of Art', ensayo, intermedio, arte, fisico, 'Faber').
 
 % Ampliacion del catalogo: libros 51 a 100.
-libro(51, 'El enigma de Fermat', divulgacion, intermedio, matematicas, fisico, pendiente_de_verificar).
-libro(52, 'El hombre anumérico', divulgacion, basico, matematicas, digital, pendiente_de_verificar).
-libro(53, 'Alex en el pais de los numeros', divulgacion, basico, matematicas, fisico, pendiente_de_verificar).
-libro(54, 'Como plantear y resolver problemas', manual, intermedio, matematicas, digital, pendiente_de_verificar).
-libro(55, 'Festival magico-matematico', divulgacion, intermedio, matematicas, fisico, pendiente_de_verificar).
+libro(51, 'El enigma de Fermat', divulgacion, intermedio, matematicas, fisico, 'Booket').
+libro(52, 'El hombre anumérico', divulgacion, basico, matematicas, digital, 'Tusquets Editores').
+libro(53, 'Alex\'s Adventures in Numberland', divulgacion, basico, matematicas, fisico, 'Bloomsbury UK').
+libro(54, 'Como plantear y resolver problemas', manual, intermedio, matematicas, digital, 'Trillas').
+libro(55, 'Mathematical Magic Show', divulgacion, intermedio, matematicas, fisico, 'The Mathematical Association of America').
 
-libro(56, 'Python Crash Course', manual, basico, tecnologia, digital, pendiente_de_verificar).
-libro(57, 'Fluent Python', manual, avanzado, tecnologia, fisico, pendiente_de_verificar).
-libro(58, 'Head First Design Patterns', manual, intermedio, tecnologia, digital, pendiente_de_verificar).
-libro(59, 'Refactoring', manual, avanzado, tecnologia, fisico, pendiente_de_verificar).
-libro(60, 'Introduction to Algorithms', manual, avanzado, tecnologia, digital, pendiente_de_verificar).
+libro(56, 'Python Crash Course', manual, basico, tecnologia, digital, 'No Starch Press').
+libro(57, 'Fluent Python', manual, avanzado, tecnologia, fisico, 'O\'Reilly Media').
+libro(58, 'Head First Design Patterns', manual, intermedio, tecnologia, digital, 'O\'Reilly Media').
+libro(59, 'Refactoring', manual, avanzado, tecnologia, fisico, 'Addison-Wesley Professional').
+libro(60, 'Introduction to Algorithms', manual, avanzado, tecnologia, digital, 'MIT Press').
 
-libro(61, 'Seis piezas faciles', divulgacion, basico, fisica, fisico, pendiente_de_verificar).
-libro(62, 'La fisica de lo imposible', divulgacion, basico, fisica, digital, pendiente_de_verificar).
-libro(63, 'Astrofisica para gente con prisas', divulgacion, basico, fisica, fisico, pendiente_de_verificar).
-libro(64, 'Universos ocultos', divulgacion, intermedio, fisica, digital, pendiente_de_verificar).
-libro(65, 'Agujeros negros y tiempo curvo', divulgacion, avanzado, fisica, fisico, pendiente_de_verificar).
+libro(61, 'Seis piezas faciles', divulgacion, basico, fisica, fisico, 'Booket Planeta').
+libro(62, 'Physics of the Impossible', divulgacion, basico, fisica, digital, 'Allen Lane').
+libro(63, 'Astrofisica para gente con prisas', divulgacion, basico, fisica, fisico, 'Paidós México').
+libro(64, 'Warped Passages', divulgacion, intermedio, fisica, digital, 'Harper Perennial').
+libro(65, 'Agujeros negros y tiempo curvo', divulgacion, avanzado, fisica, fisico, 'Crítica').
 
-libro(66, 'El gen', divulgacion, intermedio, biologia, fisico, pendiente_de_verificar).
-libro(67, 'La vida inmortal de Henrietta Lacks', divulgacion, basico, biologia, digital, pendiente_de_verificar).
-libro(68, 'El cuerpo humano', divulgacion, basico, biologia, fisico, pendiente_de_verificar).
-libro(69, 'El cerebro', divulgacion, intermedio, biologia, digital, pendiente_de_verificar).
-libro(70, 'La sexta extincion', divulgacion, intermedio, biologia, fisico, pendiente_de_verificar).
+libro(66, 'El gen', divulgacion, intermedio, biologia, fisico, 'Penguin Random House').
+libro(67, 'La vida inmortal de Henrietta Lacks', divulgacion, basico, biologia, digital, 'Booket').
+libro(68, 'El cuerpo humano', divulgacion, basico, biologia, fisico, 'RBA').
+libro(69, 'The Brain: The Story of You', divulgacion, intermedio, biologia, digital, 'Canongate Books').
+libro(70, 'La sexta extincion', divulgacion, intermedio, biologia, fisico, 'Critica').
 
-libro(71, 'Sin novedad en el frente', novela, intermedio, guerra, digital, pendiente_de_verificar).
-libro(72, 'Los canones de agosto', ensayo, avanzado, guerra, fisico, pendiente_de_verificar).
-libro(73, 'La Segunda Guerra Mundial', ensayo, intermedio, guerra, digital, pendiente_de_verificar).
-libro(74, 'SPQR', divulgacion, intermedio, historia, fisico, pendiente_de_verificar).
-libro(75, 'Biografia del poder', ensayo, avanzado, historia, digital, pendiente_de_verificar).
+libro(71, 'Sin novedad en el frente', novela, intermedio, guerra, digital, 'Navona Editorial').
+libro(72, 'The Guns of August', ensayo, avanzado, guerra, fisico, 'Presidio Press').
+libro(73, 'La Segunda Guerra Mundial', ensayo, intermedio, guerra, digital, 'Editorial Pasado y Presente').
+libro(74, 'SPQR', divulgacion, intermedio, historia, fisico, 'Booket').
+libro(75, 'Biografia del poder', ensayo, avanzado, historia, digital, 'Tusquets Editores').
 
-libro(76, '1984', novela, intermedio, literatura, fisico, pendiente_de_verificar).
-libro(77, 'Orgullo y prejuicio', novela, intermedio, literatura, digital, pendiente_de_verificar).
-libro(78, 'Cronica de una muerte anunciada', novela, basico, literatura, fisico, pendiente_de_verificar).
-libro(79, 'Pedro Paramo', novela, intermedio, literatura, digital, pendiente_de_verificar).
-libro(80, 'Rayuela', novela, avanzado, literatura, fisico, pendiente_de_verificar).
+libro(76, 'Nineteen Eighty-Four', novela, intermedio, literatura, fisico, 'Penguin Books').
+libro(77, 'Orgullo y prejuicio', novela, intermedio, literatura, digital, 'ANAYA INFANTIL Y JUVENIL').
+libro(78, 'Cronica de una muerte anunciada', novela, basico, literatura, fisico, 'Seix Barral').
+libro(79, 'Pedro Paramo', novela, intermedio, literatura, digital, 'Fondo de Cultura Económica').
+libro(80, 'Rayuela', novela, avanzado, literatura, fisico, 'Casa de las Américas').
 
-libro(81, 'Apologia de Socrates', ensayo, basico, filosofia, digital, pendiente_de_verificar).
-libro(82, 'El banquete', ensayo, intermedio, filosofia, fisico, pendiente_de_verificar).
-libro(83, 'El segundo sexo', ensayo, avanzado, filosofia, digital, pendiente_de_verificar).
-libro(84, 'Asi hablo Zaratustra', ensayo, avanzado, filosofia, fisico, pendiente_de_verificar).
-libro(85, 'El existencialismo es un humanismo', ensayo, intermedio, filosofia, digital, pendiente_de_verificar).
+libro(81, 'Apologia de Socrates', ensayo, basico, filosofia, digital, 'CreateSpace Independent Publishing Platform').
+libro(82, 'The Symposium', ensayo, intermedio, filosofia, fisico, 'Penguin Books').
+libro(83, 'El segundo sexo', ensayo, avanzado, filosofia, digital, 'Ediciones Siglo Veinte').
+libro(84, 'Asi hablo Zaratustra', ensayo, avanzado, filosofia, fisico, 'El Ateneo').
+libro(85, 'El existencialismo es un humanismo', ensayo, intermedio, filosofia, digital, 'Edhasa').
 
-libro(86, 'Economia en una leccion', divulgacion, basico, economia, fisico, pendiente_de_verificar).
-libro(87, 'Capitalismo y libertad', ensayo, intermedio, economia, digital, pendiente_de_verificar).
-libro(88, 'El cisne negro', ensayo, intermedio, economia, fisico, pendiente_de_verificar).
-libro(89, 'Deuda: los primeros 5000 anos', ensayo, avanzado, economia, digital, pendiente_de_verificar).
-libro(90, 'La economia del bien comun', ensayo, avanzado, economia, fisico, pendiente_de_verificar).
+libro(86, 'Economia en una leccion', divulgacion, basico, economia, fisico, 'Unión Editorial').
+libro(87, 'Capitalism and Freedom', ensayo, intermedio, economia, digital, 'University of Chicago Press').
+libro(88, 'El cisne negro', ensayo, intermedio, economia, fisico, 'Paidós').
+libro(89, 'Debt: The First 5,000 Years', ensayo, avanzado, economia, digital, 'Melville House').
+libro(90, 'La economia del bien comun', ensayo, avanzado, economia, fisico, 'Taurus').
 
-libro(91, 'El poder de los habitos', divulgacion, basico, psicologia, digital, pendiente_de_verificar).
-libro(92, 'Influencia', divulgacion, intermedio, psicologia, fisico, pendiente_de_verificar).
-libro(93, 'El animal social', manual, intermedio, psicologia, digital, pendiente_de_verificar).
-libro(94, 'La interpretacion de los suenos', ensayo, avanzado, psicologia, fisico, pendiente_de_verificar).
-libro(95, 'Fluir', divulgacion, basico, psicologia, digital, pendiente_de_verificar).
+libro(91, 'El poder de los habitos', divulgacion, basico, psicologia, digital, 'Vergara').
+libro(92, 'Influencia', divulgacion, intermedio, psicologia, fisico, 'HarperCollins Publishers').
+libro(93, 'The Social Animal', manual, intermedio, psicologia, digital, 'W. H. Freeman').
+libro(94, 'La interpretacion de los suenos', ensayo, avanzado, psicologia, fisico, 'Ediciones Portenas').
+libro(95, 'Fluir', divulgacion, basico, psicologia, digital, 'Debolsillo').
 
-libro(96, 'El arte moderno', ensayo, avanzado, arte, fisico, pendiente_de_verificar).
-libro(97, 'Despues del fin del arte', ensayo, avanzado, arte, digital, pendiente_de_verificar).
-libro(98, 'El arte de mirar', divulgacion, basico, arte, fisico, pendiente_de_verificar).
-libro(99, 'La camara lucida', ensayo, intermedio, arte, digital, pendiente_de_verificar).
-libro(100, 'Arte y percepcion visual', manual, intermedio, arte, fisico, pendiente_de_verificar).
+libro(96, 'El arte moderno', ensayo, avanzado, arte, fisico, 'Akal Ediciones').
+libro(97, 'Despues del fin del arte', ensayo, avanzado, arte, digital, 'Ediciones Paidós Ibérica').
+libro(98, 'El arte de mirar', divulgacion, basico, arte, fisico, 'Blume').
+libro(99, 'La camara lucida', ensayo, intermedio, arte, digital, 'Ediciones Paidós Ibérica').
+libro(100, 'Arte y percepcion visual', manual, intermedio, arte, fisico, 'Alianza').
 
 % autor(IdAutor, Nombre). Un autor puede aparecer en varios libros;
 % algunas obras tienen dos autores y el libro 60 tiene cuatro.
@@ -273,7 +274,7 @@ autor(101, 'Sigmund Freud').
 autor(102, 'Mihaly Csikszentmihalyi').
 autor(103, 'Giulio Carlo Argan').
 autor(104, 'Arthur C. Danto').
-autor(105, 'Lance Esplund').
+autor(105, 'Susan Woodford').
 autor(106, 'Roland Barthes').
 autor(107, 'Rudolf Arnheim').
 
@@ -525,7 +526,7 @@ recomendacion_guardada(21, 21, 21).
 recomendacion_guardada(22, 22, 23).
 recomendacion_guardada(23, 23, 22).
 recomendacion_guardada(24, 24, 21).
-recomendacion_guardada(25, 25, 22).
+recomendacion_guardada(25, 25, 74).
 recomendacion_guardada(26, 26, 26).
 recomendacion_guardada(27, 27, 27).
 recomendacion_guardada(28, 28, 28).
@@ -579,6 +580,9 @@ tema_de_libro(25, literatura, 1, [tema_secundario(literatura)]). % Novela histor
 tema_de_libro(71, literatura, 1, [tema_secundario(literatura)]). % Novela belica
 tema_de_libro(72, historia, 1, [tema_secundario(historia)]). % Primera Guerra Mundial
 tema_de_libro(73, historia, 1, [tema_secundario(historia)]). % Segunda Guerra Mundial
+tema_de_libro(77, amor, 1, [tema_secundario(amor)]). % Orgullo y prejuicio
+tema_de_libro(27, amor, 1, [tema_secundario(amor)]). % Cien anos de soledad
+tema_de_libro(45, amor, 1, [tema_secundario(amor)]). % El arte de amar
 
 % Regla experta: la divulgacion de nivel intermedio puede servir como
 % alternativa introductoria al nivel basico, pero puntua menos que el basico.
@@ -588,7 +592,7 @@ adecuacion_nivel(basico, intermedio, divulgacion, 1,
                  [nivel_intermedio_accesible_por_divulgacion]) :- !.
 adecuacion_nivel(_, _, _, 0, []).
 
-% El tema sigue siendo obligatorio; nunca se infiere guerra de toda la historia.
+% Tema y genero son condiciones estrictas; nivel y formato ordenan alternativas.
 recomendar(pref(Tema, Genero, Nivel, Formato), Id, Puntos, Motivos) :-
     nonvar(Tema),
     tema(Tema, _),
@@ -597,6 +601,7 @@ recomendar(pref(Tema, Genero, Nivel, Formato), Id, Puntos, Motivos) :-
     opcion_catalogo(formato, Formato),
     tema_de_libro(Id, Tema, PT, MT),
     libro(Id, _, GeneroLibro, NivelLibro, _, FormatoLibro, _),
+    opcion_estricta(Genero, GeneroLibro),
     opcion(Genero, GeneroLibro, PG, MG),
     adecuacion_nivel(Nivel, NivelLibro, GeneroLibro, PN, MN),
     opcion(Formato, FormatoLibro, PF, MF),
@@ -619,6 +624,33 @@ coincidencia_total(Perfil, Id) :-
 
 opcion_estricta(cualquiera, _).
 opcion_estricta(Valor, Valor).
+
+% Opciones del menu derivadas de libros existentes, no combinaciones inventadas.
+generos_disponibles(Generos) :-
+    findall(Genero, libro(_, _, Genero, _, _, _, _), Hallados),
+    sort(Hallados, Generos).
+
+temas_disponibles(Genero, Temas) :-
+    findall(Tema,
+            (tema_de_libro(Id, Tema, _, _),
+             libro(Id, _, GeneroLibro, _, _, _, _),
+             opcion_estricta(Genero, GeneroLibro)), Hallados),
+    sort(Hallados, Temas).
+
+niveles_disponibles(Genero, Tema, Niveles) :-
+    findall(Nivel,
+            (tema_de_libro(Id, Tema, _, _),
+             libro(Id, _, GeneroLibro, Nivel, _, _, _),
+             opcion_estricta(Genero, GeneroLibro)), Hallados),
+    sort(Hallados, Niveles).
+
+formatos_disponibles(Genero, Tema, Nivel, Formatos) :-
+    findall(Formato,
+            (tema_de_libro(Id, Tema, _, _),
+             libro(Id, _, GeneroLibro, NivelLibro, _, Formato, _),
+             opcion_estricta(Genero, GeneroLibro),
+             opcion_estricta(Nivel, NivelLibro)), Hallados),
+    sort(Hallados, Formatos).
 
 % Lista ordenada por puntos descendentes e ID ascendente para desempatar.
 recomendaciones(Perfil, Resultados) :-
@@ -658,12 +690,12 @@ detalle_recomendacion(IdRecomendacion, IdEstudiante, IdLibro, Puntos, Motivos) :
 % Interfaz de consola: se puede consultar sin registro o usar datos guardados.
 iniciar :-
     writeln('=== Recomendador de libros ==='),
-    writeln('Escribe los valores sin tildes; deja en blanco los filtros opcionales.'),
+    writeln('Puedes usar tildes en las frases; Enter omite preferencias opcionales.'),
     menu.
 
 menu :-
     nl,
-    writeln('1. Nueva consulta (sin registrarse)'),
+    writeln('1. Consulta guiada con filtros contextuales'),
     writeln('2. Recomendar a un estudiante registrado'),
     writeln('3. Ver historial de un estudiante'),
     writeln('4. Buscar mediante una frase'),
@@ -677,18 +709,29 @@ menu :-
     ).
 
 consulta_rapida :-
-    writeln('Elige tus filtros (Enter para omitir cada uno):'),
-    pedir_catalogo('¿Que nivel prefieres?', nivel, opcional, Nivel),
-    pedir_catalogo('¿Que genero prefieres?', genero, opcional, Genero),
-    pedir_catalogo('¿Que formato prefieres?', formato, opcional, Formato),
-    pedir_catalogo('¿Que quieres aprender?', tema, tema, Tema),
+    writeln('Las opciones cambian segun el catalogo. Enter omite genero, nivel o formato.'),
+    generos_disponibles(Generos),
+    pedir_opciones('¿Que genero prefieres?', Generos, opcional, Genero),
+    temas_disponibles(Genero, Temas),
+    pedir_opciones('¿Que tema quieres leer o aprender?', Temas, tema, Tema),
     ( Tema == salir -> true
-    ; recomendaciones(pref(Tema, Genero, Nivel, Formato), Resultados),
-      mostrar(Resultados)
+    ; niveles_disponibles(Genero, Tema, Niveles),
+      writeln('Nivel = dificultad de lectura (tambien para novelas).'),
+      pedir_si_hay_variedad('nivel', '¿Que nivel prefieres?', Niveles, Nivel),
+      formatos_disponibles(Genero, Tema, Nivel, Formatos),
+      pedir_si_hay_variedad('formato', '¿Que formato prefieres?', Formatos, Formato),
+      Perfil = pref(Tema, Genero, Nivel, Formato),
+      recomendaciones(Perfil, Resultados),
+      mostrar(Perfil, Resultados)
     ).
 
-pedir_catalogo(Pregunta, Catalogo, Tipo, Respuesta) :-
-    findall(Clave, call(Catalogo, Clave, _), Validos),
+pedir_si_hay_variedad(Nombre, _, [Unico], cualquiera) :-
+    format('Solo hay ~w ~w para esta seleccion; omito la pregunta.~n',
+           [Nombre, Unico]), !.
+pedir_si_hay_variedad(_, Pregunta, Valores, Respuesta) :-
+    pedir_opciones(Pregunta, Valores, opcional, Respuesta).
+
+pedir_opciones(Pregunta, Validos, Tipo, Respuesta) :-
     atomic_list_concat(Validos, ', ', Opciones),
     ( Tipo == opcional ->
         format(atom(Mensaje), '~w (~w; Enter = cualquiera): ', [Pregunta, Opciones]),
@@ -723,7 +766,11 @@ consulta_por_frase :-
     ; analizar_frase(Entrada, Perfil) ->
         format('Preferencias identificadas: ~w~n', [Perfil]),
         recomendaciones(Perfil, Resultados),
-        mostrar(Resultados)
+        ( Resultados == [], Perfil = pref(_, Genero, _, _), Genero \== cualquiera ->
+            temas_disponibles(Genero, Temas),
+            format('Temas disponibles para ~w: ~w~n', [Genero, Temas])
+        ; true ),
+        mostrar(Perfil, Resultados)
     ; writeln('No pude identificar un tema unico o hay filtros contradictorios.'),
       writeln('Incluye un solo tema y, como maximo, un nivel, genero y formato.')
     ).
@@ -776,17 +823,28 @@ alias_catalogo(tema, "conflicto", guerra).
 alias_catalogo(tema, "conflictos", guerra).
 alias_catalogo(tema, "belico", guerra).
 alias_catalogo(tema, "belicos", guerra).
+alias_catalogo(tema, "romance", amor).
+alias_catalogo(tema, "romantico", amor).
+alias_catalogo(tema, "romantica", amor).
+alias_catalogo(tema, "romanticos", amor).
+alias_catalogo(tema, "romanticas", amor).
 alias_catalogo(genero, "divulgativo", divulgacion).
 alias_catalogo(genero, "divulgativos", divulgacion).
 alias_catalogo(genero, "ensayos", ensayo).
 alias_catalogo(genero, "manuales", manual).
 alias_catalogo(genero, "novelas", novela).
 alias_catalogo(nivel, "basicos", basico).
+alias_catalogo(nivel, "basica", basico).
+alias_catalogo(nivel, "basicas", basico).
 alias_catalogo(nivel, "principiante", basico).
 alias_catalogo(nivel, "principiantes", basico).
 alias_catalogo(nivel, "intermedios", intermedio).
+alias_catalogo(nivel, "intermedia", intermedio).
+alias_catalogo(nivel, "intermedias", intermedio).
 alias_catalogo(nivel, "medio", intermedio).
 alias_catalogo(nivel, "avanzados", avanzado).
+alias_catalogo(nivel, "avanzada", avanzado).
+alias_catalogo(nivel, "avanzadas", avanzado).
 alias_catalogo(nivel, "experto", avanzado).
 alias_catalogo(nivel, "expertos", avanzado).
 alias_catalogo(formato, "ebook", digital).
@@ -803,23 +861,23 @@ consulta_registrada :-
     format('Recomendaciones para ~w:~n', [Nombre]),
     forall(preferencia(IdPreferencia, IdEstudiante, _, _, _, _),
            (perfil_preferencia(IdPreferencia, Perfil),
-            format('Preferencia ~d: ~w~n', [IdPreferencia, Perfil]),
-            recomendaciones(Perfil, Resultados),
-            mostrar(Resultados))).
+             format('Preferencia ~d: ~w~n', [IdPreferencia, Perfil]),
+             recomendaciones(Perfil, Resultados),
+             mostrar(Perfil, Resultados))).
 
 historial_estudiante :-
     pedir_estudiante(IdEstudiante),
     estudiante(IdEstudiante, Nombre),
     format('Historial de ~w:~n', [Nombre]),
-    findall(registro(IdRec, Titulo, Puntos, Motivos),
-            (detalle_recomendacion(IdRec, IdEstudiante, IdLibro, Puntos, Motivos),
+    findall(registro(IdRec, Titulo, Motivos),
+            (detalle_recomendacion(IdRec, IdEstudiante, IdLibro, _, Motivos),
              libro(IdLibro, Titulo, _, _, _, _, _)),
             Historial),
     ( Historial == [] -> writeln('Todavia no hay recomendaciones guardadas.')
-    ; forall(member(registro(IdRec, Titulo, Puntos, Motivos), Historial),
+    ; forall(member(registro(IdRec, Titulo, Motivos), Historial),
              (texto_motivos(Motivos, Explicacion),
-              format('Registro ~d: ~w | puntuacion: ~d | ~w~n',
-                     [IdRec, Titulo, Puntos, Explicacion])))
+              format('Registro ~d: ~w | ~w~n',
+                     [IdRec, Titulo, Explicacion])))
     ).
 
 pedir_estudiante(IdEstudiante) :-
@@ -847,16 +905,56 @@ pedir(Mensaje, Validos, Tipo, Respuesta) :-
       )
     ), !.
 
-mostrar([]) :- writeln('No se encontraron libros para ese tema.').
-mostrar(Resultados) :-
+mostrar(_, []) :-
+    writeln('No hay libros con esa combinacion de genero y tema.'),
+    writeln('Prueba otra combinacion en la consulta guiada (opcion 1).').
+mostrar(Perfil, Resultados) :-
     Resultados \== [],
-    nl, writeln('Recomendaciones (ordenadas por coincidencias):'),
-    forall(member(recomendacion(Id, Titulo, Autores, Puntos, Motivos), Resultados),
-           (atomic_list_concat(Autores, ', ', Nombres),
-            texto_motivos(Motivos, Explicacion),
-            format('~d. ~w - ~w | puntuacion: ~d | ~w~n',
-                   [Id, Titulo, Nombres, Puntos, Explicacion]))),
+    include(exacta(Perfil), Resultados, Exactas),
+    exclude(exacta(Perfil), Resultados, Aproximadas),
+    nl,
+    ( Exactas == [] -> writeln('No hay coincidencias exactas con todos los filtros.')
+    ; writeln('=== Coincidencias exactas ==='),
+      forall(member(Resultado, Exactas), mostrar_exacta(Resultado))
+    ),
+    ( Aproximadas == [] -> true
+    ; nl, writeln('=== Posibles recomendaciones (no cumplen todos los filtros) ==='),
+      forall(member(Resultado, Aproximadas), mostrar_aproximada(Perfil, Resultado))
+    ),
     nl.
+
+exacta(Perfil, recomendacion(Id, _, _, _, _)) :-
+    coincidencia_total(Perfil, Id).
+
+mostrar_exacta(recomendacion(Id, Titulo, Autores, _, Motivos)) :-
+    atomic_list_concat(Autores, ', ', Nombres),
+    texto_motivos(Motivos, Explicacion),
+    editorial_visible(Id, Editorial),
+    format('~d. ~w - ~w | editorial: ~w | ~w~n',
+           [Id, Titulo, Nombres, Editorial, Explicacion]).
+
+mostrar_aproximada(Perfil, recomendacion(Id, Titulo, Autores, Puntos, Motivos)) :-
+    atomic_list_concat(Autores, ', ', Nombres),
+    texto_motivos(Motivos, Explicacion),
+    diferencias(Perfil, Id, Faltantes),
+    editorial_visible(Id, Editorial),
+    format('~d. ~w - ~w | editorial: ~w | cercania: ~d | ~w | difiere en: ~w~n',
+           [Id, Titulo, Nombres, Editorial, Puntos, Explicacion, Faltantes]).
+
+editorial_visible(Id, Editorial) :-
+    libro(Id, _, _, _, _, _, Dato),
+    ( Dato == pendiente_de_verificar -> Editorial = 'por verificar'
+    ; Editorial = Dato ).
+
+diferencias(pref(_, _, Nivel, Formato), Id, Texto) :-
+    libro(Id, _, _, NivelLibro, _, FormatoLibro, _),
+    findall(Diferencia,
+            ( (Nivel \== cualquiera, Nivel \== NivelLibro,
+               format(atom(Diferencia), 'nivel ~w (pediste ~w)', [NivelLibro, Nivel]))
+            ; (Formato \== cualquiera, Formato \== FormatoLibro,
+               format(atom(Diferencia), 'formato ~w (pediste ~w)', [FormatoLibro, Formato]))
+            ), Faltantes),
+    atomic_list_concat(Faltantes, '; ', Texto).
 
 texto_motivos(Motivos, Explicacion) :-
     maplist(descripcion_motivo, Motivos, Descripciones),
