@@ -780,7 +780,8 @@ detalle_recomendacion(IdRecomendacion, IdEstudiante, IdLibro, Puntos, Motivos) :
 % Interfaz de consola: se puede consultar sin registro o usar datos guardados.
 iniciar :-
     writeln('=== Recomendador de libros ==='),
-    writeln('Puedes usar tildes en las frases; Enter omite preferencias opcionales.'),
+    writeln('Puedes usar tildes; Enter omite preferencias opcionales; salir cancela.'),
+    ( catalogo_valido -> true ; writeln('Aviso: ejecuta validar_catalogo(E).') ),
     menu.
 
 menu :-
@@ -799,20 +800,27 @@ menu :-
     ).
 
 consulta_rapida :-
-    writeln('Las opciones cambian segun el catalogo. Enter omite genero, nivel o formato.'),
+    writeln('Las opciones cambian segun el catalogo. Enter omite preferencias opcionales.'),
+    writeln('Formato didactico: no garantiza disponibilidad real.'),
     generos_disponibles(Generos),
     pedir_opciones('¿Que genero prefieres?', Generos, opcional, Genero),
-    temas_disponibles(Genero, Temas),
-    pedir_opciones('¿Que tema quieres leer o aprender?', Temas, tema, Tema),
-    ( Tema == salir -> true
-    ; niveles_disponibles(Genero, Tema, Niveles),
-      writeln('Nivel = dificultad de lectura (tambien para novelas).'),
-      pedir_si_hay_variedad('nivel', '¿Que nivel prefieres?', Niveles, Nivel),
-      formatos_disponibles(Genero, Tema, Nivel, Formatos),
-      pedir_si_hay_variedad('formato', '¿Que formato prefieres?', Formatos, Formato),
-      Perfil = pref(Tema, Genero, Nivel, Formato),
-      recomendaciones(Perfil, Resultados),
-      mostrar(Perfil, Resultados)
+    ( Genero == salir -> true
+    ; temas_disponibles(Genero, Temas),
+      pedir_opciones('¿Que tema quieres leer o aprender?', Temas, tema, Tema),
+      ( Tema == salir -> true
+      ; niveles_disponibles(Genero, Tema, Niveles),
+        writeln('Nivel = dificultad de lectura, tambien para novelas.'),
+        pedir_si_hay_variedad('nivel', '¿Que nivel prefieres?', Niveles, Nivel),
+        ( Nivel == salir -> true
+        ; formatos_disponibles(Genero, Tema, Nivel, Formatos),
+          pedir_si_hay_variedad('formato', '¿Que formato prefieres?', Formatos, Formato),
+          ( Formato == salir -> true
+          ; Perfil = pref(Tema, Genero, Nivel, Formato),
+            recomendaciones(Perfil, Resultados),
+            mostrar(Perfil, Resultados)
+          )
+        )
+      )
     ).
 
 pedir_si_hay_variedad(Nombre, _, [Unico], cualquiera) :-
@@ -850,6 +858,7 @@ pedir_tema(Mensaje, Validos, Tema) :-
 
 consulta_por_frase :-
     writeln('Ejemplo: necesito libros basicos digitales que hablen sobre la guerra.'),
+    writeln('Formato didactico: no representa disponibilidad real.'),
     write('Escribe tu busqueda: '), flush_output,
     read_line_to_string(user_input, Entrada),
     ( Entrada == end_of_file -> true
@@ -889,6 +898,7 @@ normalizar_codigo(237, 105) :- !.
 normalizar_codigo(243, 111) :- !.
 normalizar_codigo(250, 117) :- !.
 normalizar_codigo(252, 117) :- !.
+normalizar_codigo(241, 110) :- !.
 normalizar_codigo(Codigo, 32) :-
     memberchk(Codigo, [44, 46, 59, 58, 33, 63, 191, 161, 40, 41, 91, 93, 123, 125, 34, 39, 45]), !.
 normalizar_codigo(Codigo, Codigo).
@@ -914,6 +924,11 @@ alias_catalogo(tema, "conflictos", guerra).
 alias_catalogo(tema, "belico", guerra).
 alias_catalogo(tema, "belicos", guerra).
 alias_catalogo(tema, "romance", amor).
+alias_catalogo(tema, "romances", amor).
+alias_catalogo(tema, "amoroso", amor).
+alias_catalogo(tema, "amorosa", amor).
+alias_catalogo(tema, "historico", historia).
+alias_catalogo(tema, "historica", historia).
 alias_catalogo(tema, "romantico", amor).
 alias_catalogo(tema, "romantica", amor).
 alias_catalogo(tema, "romanticos", amor).
@@ -938,10 +953,13 @@ alias_catalogo(nivel, "avanzadas", avanzado).
 alias_catalogo(nivel, "experto", avanzado).
 alias_catalogo(nivel, "expertos", avanzado).
 alias_catalogo(formato, "ebook", digital).
+alias_catalogo(formato, "ebooks", digital).
+alias_catalogo(formato, "epub", digital).
 alias_catalogo(formato, "electronico", digital).
 alias_catalogo(formato, "electronicos", digital).
 alias_catalogo(formato, "digitales", digital).
 alias_catalogo(formato, "impreso", fisico).
+alias_catalogo(formato, "papel", fisico).
 alias_catalogo(formato, "impresos", fisico).
 alias_catalogo(formato, "fisicos", fisico).
 
@@ -988,9 +1006,11 @@ pedir(Mensaje, Validos, Tipo, Respuesta) :-
     ; normalize_space(string(Limpia), Entrada),
       string_lower(Limpia, Minuscula),
       atom_string(Valor, Minuscula),
-      ( Tipo == obligatorio, Valor == salir -> Respuesta = salir
+      ( Valor == salir -> Respuesta = salir
       ; Tipo == opcional, Valor == '' -> Respuesta = cualquiera
-      ; memberchk(Valor, Validos) -> Respuesta = Valor
+      ; palabras_normalizadas(Minuscula, [Palabra]),
+        atom_string(Clave, Palabra),
+        memberchk(Clave, Validos) -> Respuesta = Clave
       ; writeln('Valor no valido; prueba de nuevo.'), fail
       )
     ), !.
@@ -1050,6 +1070,9 @@ texto_motivos(Motivos, Explicacion) :-
     maplist(descripcion_motivo, Motivos, Descripciones),
     atomic_list_concat(Descripciones, '; ', Explicacion).
 
+descripcion_motivo(tema_secundario(Tema, Justificacion), Texto) :-
+    tema(Tema, Nombre),
+    format(atom(Texto), 'tema relacionado: ~w (~w)', [Nombre, Justificacion]).
 descripcion_motivo(tema_secundario(Tema, Justificacion), Texto) :-
     tema(Tema, Nombre),
     format(atom(Texto), 'tema relacionado: ~w (~w)', [Nombre, Justificacion]).
