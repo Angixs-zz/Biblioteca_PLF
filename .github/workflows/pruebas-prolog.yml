@@ -1,0 +1,18 @@
+name: Pruebas SWI-Prolog
+on:
+  push:
+    branches: [main, sushi]
+  pull_request:
+    branches: [main]
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+      - name: Instalar SWI-Prolog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y swi-prolog-nox
+      - name: Validar datos y ejecutar pruebas
+        run: swipl -q -s pruebas_biblioteca.pl -g run_tests -t halt
