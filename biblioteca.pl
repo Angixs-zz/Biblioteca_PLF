@@ -702,6 +702,21 @@ problema_catalogo(libro_invalido(Id)) :-
     ; \+ formato(Formato, _)
     ; Editorial == ''
     ).
+problema_catalogo(autor_id_duplicado(Id)) :-
+    autor(Id, _),
+    aggregate_all(count, autor(Id, _), N), N > 1.
+problema_catalogo(estudiante_id_duplicado(Id)) :-
+    estudiante(Id, _),
+    aggregate_all(count, estudiante(Id, _), N), N > 1.
+problema_catalogo(preferencia_id_duplicado(Id)) :-
+    preferencia(Id, _, _, _, _, _),
+    aggregate_all(count, preferencia(Id, _, _, _, _, _), N), N > 1.
+problema_catalogo(recomendacion_id_duplicado(Id)) :-
+    recomendacion_guardada(Id, _, _),
+    aggregate_all(count, recomendacion_guardada(Id, _, _), N), N > 1.
+problema_catalogo(relacion_autor_duplicada(IdLibro, IdAutor)) :-
+    libro_autor(IdLibro, IdAutor),
+    aggregate_all(count, libro_autor(IdLibro, IdAutor), N), N > 1.
 problema_catalogo(libro_id_duplicado(Id)) :-
     libro(Id, _, _, _, _, _, _),
     aggregate_all(count, libro(Id, _, _, _, _, _, _), N),
@@ -862,6 +877,7 @@ consulta_por_frase :-
     write('Escribe tu busqueda: '), flush_output,
     read_line_to_string(user_input, Entrada),
     ( Entrada == end_of_file -> true
+    ; normalize_space(string(Limpia), Entrada), string_lower(Limpia, "salir") -> true
     ; analizar_frase(Entrada, Perfil) ->
         format('Preferencias identificadas: ~w~n', [Perfil]),
         recomendaciones(Perfil, Resultados),
@@ -964,7 +980,9 @@ alias_catalogo(formato, "impresos", fisico).
 alias_catalogo(formato, "fisicos", fisico).
 
 consulta_registrada :-
-    pedir_estudiante(IdEstudiante),
+    ( pedir_estudiante(IdEstudiante) -> consulta_registrada_id(IdEstudiante) ; true ).
+
+consulta_registrada_id(IdEstudiante) :-
     estudiante(IdEstudiante, Nombre),
     format('Recomendaciones para ~w:~n', [Nombre]),
     forall(preferencia(IdPreferencia, IdEstudiante, _, _, _, _),
@@ -974,7 +992,9 @@ consulta_registrada :-
              mostrar(Perfil, Resultados))).
 
 historial_estudiante :-
-    pedir_estudiante(IdEstudiante),
+    ( pedir_estudiante(IdEstudiante) -> historial_estudiante_id(IdEstudiante) ; true ).
+
+historial_estudiante_id(IdEstudiante) :-
     estudiante(IdEstudiante, Nombre),
     format('Historial de ~w:~n', [Nombre]),
     findall(registro(IdRec, Titulo, Motivos),
@@ -993,7 +1013,9 @@ pedir_estudiante(IdEstudiante) :-
     write('ID del estudiante (1 a 50): '), flush_output,
     read_line_to_string(user_input, Texto),
     ( Texto == end_of_file -> !, fail
-    ; catch(number_string(Valor, Texto), _, fail),
+    ; normalize_space(string(Limpia), Texto),
+      ( Limpia == "salir" -> !, fail ; true ),
+      catch(number_string(Valor, Limpia), _, fail),
       integer(Valor), estudiante(Valor, _) -> IdEstudiante = Valor, !
     ; writeln('Estudiante no encontrado; prueba de nuevo.'), fail
     ).
@@ -1040,16 +1062,26 @@ mostrar_exacta(recomendacion(Id, Titulo, Autores, _, Motivos)) :-
     atomic_list_concat(Autores, ', ', Nombres),
     texto_motivos(Motivos, Explicacion),
     editorial_visible(Id, Editorial),
-    format('~d. ~w - ~w | editorial: ~w | ~w~n',
-           [Id, Titulo, Nombres, Editorial, Explicacion]).
+    informacion_dificultad(Id, Nota),
+    format('~d. ~w - ~w | editorial: ~w | ~w~w~n',
+           [Id, Titulo, Nombres, Editorial, Explicacion, Nota]).
 
 mostrar_aproximada(Perfil, recomendacion(Id, Titulo, Autores, Puntos, Motivos)) :-
     atomic_list_concat(Autores, ', ', Nombres),
     texto_motivos(Motivos, Explicacion),
     diferencias(Perfil, Id, Faltantes),
     editorial_visible(Id, Editorial),
-    format('~d. ~w - ~w | editorial: ~w | cercania: ~d | ~w | difiere en: ~w~n',
-           [Id, Titulo, Nombres, Editorial, Puntos, Explicacion, Faltantes]).
+    informacion_dificultad(Id, Nota),
+    format('~d. ~w - ~w | editorial: ~w | cercania: ~d | ~w | difiere en: ~w~w~n',
+           [Id, Titulo, Nombres, Editorial, Puntos, Explicacion, Faltantes, Nota]).
+
+% Expone al lector el criterio de dificultad cuando se recomienda una novela.
+informacion_dificultad(Id, Nota) :-
+    libro(Id, _, novela, Nivel, _, _, _),
+    justificacion_dificultad(Id, Motivo),
+    nivel(Nivel, Nombre),
+    format(atom(Nota), ' | dificultad lectora: ~w (~w)', [Nombre, Motivo]), !.
+informacion_dificultad(_, '').
 
 editorial_visible(Id, Editorial) :-
     libro(Id, _, _, _, _, _, Dato),
