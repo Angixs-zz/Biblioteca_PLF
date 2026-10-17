@@ -78,7 +78,7 @@ libro(26, 'El principito', novela, basico, literatura, fisico, 'Plutón Edicione
 libro(27, 'Cien anos de soledad', novela, intermedio, literatura, digital, 'Grijalbo Mondadori').
 libro(28, 'Don Quixote', novela, avanzado, literatura, fisico, 'Open Road Integrated Media').
 libro(29, 'La metamorfosis', novela, intermedio, literatura, digital, 'Editorial Octaedro').
-libro(30, 'La sombra del viento', novela, avanzado, literatura, fisico, 'Planeta').
+libro(30, 'La sombra del viento', novela, intermedio, literatura, fisico, 'Planeta').
 
 % Filosofia
 libro(31, 'El mundo de Sofia', novela, basico, filosofia, fisico, 'Círculo de Lectores').
@@ -141,7 +141,7 @@ libro(75, 'Biografia del poder', ensayo, avanzado, historia, digital, 'Tusquets 
 
 libro(76, 'Nineteen Eighty-Four', novela, intermedio, literatura, fisico, 'Penguin Books').
 libro(77, 'Orgullo y prejuicio', novela, intermedio, literatura, digital, 'ANAYA INFANTIL Y JUVENIL').
-libro(78, 'Cronica de una muerte anunciada', novela, basico, literatura, fisico, 'Seix Barral').
+libro(78, 'Cronica de una muerte anunciada', novela, intermedio, literatura, fisico, 'Seix Barral').
 libro(79, 'Pedro Paramo', novela, intermedio, literatura, digital, 'Fondo de Cultura Económica').
 libro(80, 'Rayuela', novela, avanzado, literatura, fisico, 'Casa de las Américas').
 
@@ -571,18 +571,46 @@ opcion(Valor, ValorLibro, 0, []) :-
 
 etiqueta(Valor, Valor).
 
-% Un libro se encuentra por su tema principal o por temas secundarios documentados.
+% Un libro se recomienda por tema principal o relacion secundaria justificada.
 tema_de_libro(Id, Tema, 2, [Tema]) :-
     libro(Id, _, _, _, Tema, _, _).
-tema_de_libro(23, guerra, 1, [tema_secundario(guerra)]). % Historia del siglo XX
-tema_de_libro(24, guerra, 1, [tema_secundario(guerra)]). % El mundo de ayer: Primera Guerra Mundial
-tema_de_libro(25, literatura, 1, [tema_secundario(literatura)]). % Novela historica
-tema_de_libro(71, literatura, 1, [tema_secundario(literatura)]). % Novela belica
-tema_de_libro(72, historia, 1, [tema_secundario(historia)]). % Primera Guerra Mundial
-tema_de_libro(73, historia, 1, [tema_secundario(historia)]). % Segunda Guerra Mundial
-tema_de_libro(77, amor, 1, [tema_secundario(amor)]). % Orgullo y prejuicio
-tema_de_libro(27, amor, 1, [tema_secundario(amor)]). % Cien anos de soledad
-tema_de_libro(45, amor, 1, [tema_secundario(amor)]). % El arte de amar
+tema_de_libro(Id, Tema, 1, [tema_secundario(Tema, Justificacion)]) :-
+    relacion_tematica(Id, Tema, Justificacion).
+% Toda novela tambien pertenece a literatura, sin duplicar su tema principal.
+tema_de_libro(Id, literatura, 1,
+              [tema_secundario(literatura, 'Es una obra narrativa de ficcion')]) :-
+    libro(Id, _, novela, _, TemaPrincipal, _, _),
+    TemaPrincipal \== literatura.
+
+% Historia como tema de una novela indica ambientacion historica,
+% NO implica que la ficcion constituya una fuente academica de historia.
+relacion_tematica(23, guerra, 'Estudia las guerras del siglo XX').
+relacion_tematica(24, guerra, 'Incluye la experiencia europea de la Primera Guerra Mundial').
+relacion_tematica(25, historia, 'Novela ambientada durante la Segunda Guerra Mundial').
+relacion_tematica(71, historia, 'Novela ambientada durante la Primera Guerra Mundial').
+relacion_tematica(72, historia, 'Estudio del inicio de la Primera Guerra Mundial').
+relacion_tematica(73, historia, 'Analisis de la Segunda Guerra Mundial').
+relacion_tematica(77, amor, 'El cortejo y las relaciones son centrales en la trama').
+relacion_tematica(27, amor, 'Incluye las relaciones amorosas de varias generaciones').
+relacion_tematica(45, amor, 'Estudia el amor desde la psicologia').
+relacion_tematica(29, filosofia, 'Explora identidad, alienacion y condicion humana').
+relacion_tematica(76, filosofia, 'Plantea preguntas sobre verdad, libertad y poder').
+
+% Niveles de novelas: dificultad de lectura, no dificultad academica.
+% Clasificacion humana ORIENTATIVA: lenguaje, narrativa y contexto.
+justificacion_dificultad(25, 'Basico: narracion juvenil y vocabulario accesible').
+justificacion_dificultad(26, 'Basico: relato breve y claro, aunque tiene simbolismo').
+justificacion_dificultad(27, 'Intermedio: generaciones, personajes y saltos temporales').
+justificacion_dificultad(28, 'Avanzado: lenguaje historico, referencias culturales y extension').
+justificacion_dificultad(29, 'Intermedio: simbolismo y conflicto existencial').
+justificacion_dificultad(30, 'Intermedio: tramas y personajes entrelazados').
+justificacion_dificultad(31, 'Basico: introduccion narrativa accesible a ideas filosoficas').
+justificacion_dificultad(71, 'Intermedio: contexto belico y carga emocional').
+justificacion_dificultad(76, 'Intermedio: distopia con contenido politico y simbolico').
+justificacion_dificultad(77, 'Intermedio: convenciones sociales y lenguaje de epoca').
+justificacion_dificultad(78, 'Intermedio: estructura retrospectiva y multiples testimonios').
+justificacion_dificultad(79, 'Intermedio: saltos de tiempo y voces narrativas').
+justificacion_dificultad(80, 'Avanzado: estructura experimental y lectura no lineal').
 
 % Regla experta: la divulgacion de nivel intermedio puede servir como
 % alternativa introductoria al nivel basico, pero puntua menos que el basico.
@@ -651,6 +679,68 @@ formatos_disponibles(Genero, Tema, Nivel, Formatos) :-
              opcion_estricta(Genero, GeneroLibro),
              opcion_estricta(Nivel, NivelLibro)), Hallados),
     sort(Hallados, Formatos).
+
+% Auditoria de integridad; [] indica que no se detectaron errores.
+validar_catalogo(Errores) :-
+    findall(Error, problema_catalogo(Error), Hallados),
+    sort(Hallados, Errores).
+
+catalogo_valido :-
+    validar_catalogo([]).
+
+problema_catalogo(libro_sin_autor(Id)) :-
+    libro(Id, _, _, _, _, _, _),
+    \+ libro_autor(Id, _).
+problema_catalogo(autor_sin_libro(Id)) :-
+    autor(Id, _),
+    \+ libro_autor(_, Id).
+problema_catalogo(libro_invalido(Id)) :-
+    libro(Id, _, Genero, Nivel, Tema, Formato, Editorial),
+    ( \+ genero(Genero, _)
+    ; \+ nivel(Nivel, _)
+    ; \+ tema(Tema, _)
+    ; \+ formato(Formato, _)
+    ; Editorial == ''
+    ).
+problema_catalogo(libro_id_duplicado(Id)) :-
+    libro(Id, _, _, _, _, _, _),
+    aggregate_all(count, libro(Id, _, _, _, _, _, _), N),
+    N > 1.
+problema_catalogo(relacion_autor_huerfana(IdLibro, IdAutor)) :-
+    libro_autor(IdLibro, IdAutor),
+    ( \+ libro(IdLibro, _, _, _, _, _, _)
+    ; \+ autor(IdAutor, _)
+    ).
+problema_catalogo(relacion_tematica_invalida(IdLibro, Tema)) :-
+    relacion_tematica(IdLibro, Tema, _),
+    ( \+ libro(IdLibro, _, _, _, _, _, _)
+    ; \+ tema(Tema, _)
+    ; libro(IdLibro, _, _, _, Tema, _, _)
+    ).
+problema_catalogo(novela_sin_justificacion(IdLibro)) :-
+    libro(IdLibro, _, novela, _, _, _, _),
+    \+ justificacion_dificultad(IdLibro, _).
+problema_catalogo(justificacion_sin_novela(IdLibro)) :-
+    justificacion_dificultad(IdLibro, _),
+    \+ libro(IdLibro, _, novela, _, _, _, _).
+problema_catalogo(preferencia_invalida(IdPreferencia)) :-
+    preferencia(IdPreferencia, IdEstudiante, Tema, Genero, Nivel, Formato),
+    ( \+ estudiante(IdEstudiante, _)
+    ; \+ tema(Tema, _)
+    ; \+ opcion_catalogo(genero, Genero)
+    ; \+ opcion_catalogo(nivel, Nivel)
+    ; \+ opcion_catalogo(formato, Formato)
+    ).
+problema_catalogo(preferencia_sin_libros(IdPreferencia)) :-
+    perfil_preferencia(IdPreferencia, Perfil),
+    \+ recomendar(Perfil, _, _, _).
+problema_catalogo(recomendacion_guardada_invalida(IdRecomendacion)) :-
+    recomendacion_guardada(IdRecomendacion, IdPreferencia, IdLibro),
+    ( \+ perfil_preferencia(IdPreferencia, _)
+    ; \+ libro(IdLibro, _, _, _, _, _, _)
+    ; ( perfil_preferencia(IdPreferencia, Perfil),
+        \+ recomendar(Perfil, IdLibro, _, _) )
+    ).
 
 % Lista ordenada por puntos descendentes e ID ascendente para desempatar.
 recomendaciones(Perfil, Resultados) :-
@@ -960,6 +1050,9 @@ texto_motivos(Motivos, Explicacion) :-
     maplist(descripcion_motivo, Motivos, Descripciones),
     atomic_list_concat(Descripciones, '; ', Explicacion).
 
+descripcion_motivo(tema_secundario(Tema, Justificacion), Texto) :-
+    tema(Tema, Nombre),
+    format(atom(Texto), 'tema relacionado: ~w (~w)', [Nombre, Justificacion]).
 descripcion_motivo(tema_secundario(Tema), Texto) :-
     tema(Tema, Nombre),
     format(atom(Texto), 'tema relacionado: ~w', [Nombre]).
