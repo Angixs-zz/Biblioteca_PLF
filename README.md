@@ -6,13 +6,13 @@ Implementación del caso práctico en SWI-Prolog. El modelo tiene **seis tablas 
 | --- | --- | ---: |
 | Estudiante `estudiante/2` | ID, nombre | 50 |
 | Preferencia `preferencia/6` | ID de preferencia, ID de estudiante, tema, género, nivel, formato | 50 |
-| Libro `libro/7` | ID, título, género, nivel, tema, formato, editorial | 100 |
-| Autor `autor/2` | ID, nombre | 106 |
-| LibroAutor `libro_autor/2` | ID de libro, ID de autor (clave compuesta) | 110 |
+| Libro `libro/7` | ID, título, género, nivel, tema, formato, editorial | 112 |
+| Autor `autor/2` | ID, nombre | 117 |
+| LibroAutor `libro_autor/2` | ID de libro, ID de autor (clave compuesta) | 123 |
 | Recomendación `recomendacion_guardada/3` | ID, ID de preferencia, ID de libro | 50 |
 | Nivel `nivel/2` | Clave, nombre | 3 |
-| Género `genero/2` | Clave, nombre | 4 |
-| Tema `tema/2` | Clave, nombre | 12 |
+| Género `genero/2` | Clave, nombre | 7 |
+| Tema `tema/2` | Clave, nombre | 18 |
 | Formato `formato/2` | Clave, nombre | 2 |
 
 ```text
@@ -23,7 +23,7 @@ Preferencia N ─── 1 Nivel/Género/Tema/Formato 1 ─── N Libro
 
 Cada recomendación guardada refiere a una preferencia y un libro. `recomendar/4` calcula la coincidencia entre ellos; `detalle_recomendacion/5` recupera el estudiante y los motivos según las reglas actuales. Las 50 recomendaciones son una **muestra ilustrativa de historial**: son compatibles con género y tema, pero la primera opción del ranking actual puede ser distinta. Las consultas interactivas **no se guardan automáticamente**. Los estudiantes, sus preferencias y el historial son datos de ejemplo; el formato del libro no representa existencias reales de la biblioteca.
 
-La tabla Estudiante es útil para conservar perfiles y consultar el historial de cada persona. **No hace falta ser estudiante registrado para pedir una recomendación**: la consulta rápida toma las respuestas del menú como variables y calcula el resultado sin guardarlas. **Los 100 libros tienen editorial y enlace a una edición concreta** en [`fuentes_editoriales.md`](fuentes_editoriales.md). Cuando no se encontró una edición española verificable se conservó el título original de la edición citada; por eso hay títulos en inglés y en español. Se corrigió la atribución de `El arte de mirar` a Susan Woodford. El formato y el nivel asignados son clasificaciones didácticas, no atributos comprobados de un ejemplar real.
+La tabla Estudiante es útil para conservar perfiles y consultar el historial de cada persona. **No hace falta ser estudiante registrado para pedir una recomendación**: la consulta rápida toma las respuestas del menú como variables y calcula el resultado sin guardarlas. **Los 112 libros tienen editorial y referencia a una edición en español** en [`fuentes_editoriales.md`](fuentes_editoriales.md). Se sustituyeron las ediciones inglesas por traducciones verificables o por otros libros en español del mismo tema, actualizando sus autores. Nombres como *Python*, *UML* o *Freakonomics* forman parte de títulos de ediciones españolas. El formato y el nivel asignados son clasificaciones didácticas, no atributos comprobados de un ejemplar real.
 
 Nivel (`basico`, `intermedio`, `avanzado`), género, tema y formato tienen su propio catálogo. Libro y Preferencia guardan la **clave** de cada categoría; por ejemplo, el valor `basico` referencia el hecho `nivel(basico, 'Básico')`. Las reglas validan las categorías al recomendar. No se crean niveles artificiales para completar 50 filas.
 
@@ -37,7 +37,22 @@ swipl -s biblioteca.pl -g iniciar -t halt
 
 El menú ofrece **1)** consulta guiada sin registro, **2)** recomendaciones para un estudiante registrado, **3)** historial guardado, **4)** búsqueda mediante una frase y **0)** salir. La consulta guiada pregunta primero el **género**, después **solo temas con libros de ese género**, luego los **niveles disponibles** en esa combinación y finalmente los **formatos presentes** para el nivel elegido. Género, nivel y formato pueden omitirse con Enter; si solo hay una opción de nivel o formato, no se hace una pregunta innecesaria. Puedes responder `matematicas` o una frase que contenga esa palabra al preguntar por tema.
 
-El nivel significa **dificultad de lectura**, también para novelas: `basico` puede ser una lectura introductoria, `intermedio` una que requiere más contexto y `avanzado` una más exigente. Las clasificaciones son orientativas para este ejercicio, no una afirmación de que todas las novelas sean sencillas. Por ejemplo, después de escoger `novela`, los temas ofrecidos son `amor`, `filosofia`, `guerra` y `literatura`; `matematicas` no aparece porque no hay novelas matemáticas clasificadas como tales en el catálogo actual. No se prohíbe que existan en general: al incorporar una, la opción aparecería automáticamente.
+El nivel significa **dificultad de lectura**, también para novelas: `basico` puede ser una lectura introductoria, `intermedio` una que requiere más contexto y `avanzado` una más exigente. Las clasificaciones son orientativas para este ejercicio. Después de escoger `novela` se ofrecen solo sus temas disponibles, entre ellos `amor`, `historia`, `guerra`, `aventura`, `fantasia`, `misterio` y `ciencia_ficcion`; `matematicas` no aparece porque no hay novelas matemáticas clasificadas como tales en el catálogo actual. Al incorporar una, esa opción aparecería automáticamente.
+
+### Resultados por etapas
+
+Primero se muestran únicamente las **coincidencias exactas**, sin puntuación. Si hay alternativas, el programa pregunta:
+
+```text
+1. Mostrar coincidencias posibles
+0. Salir de esta busqueda y volver al menu
+```
+
+Solo `1` muestra el segundo bloque, con la cercanía y los filtros que no se cumplen. `0`, `salir` o el fin de entrada lo omiten. Si no hay resultados exactos, se informa de ello y se ofrece la misma elección. Si todos los resultados son exactos, se vuelve al menú sin preguntar por alternativas inexistentes. Para terminar el programa, elige `0` en el menú principal. Esta presentación también se usa al consultar un estudiante registrado.
+
+### Nuevas lecturas
+
+Se agregaron los géneros `cuento`, `poesia` y `teatro`, además de los temas `naturaleza`, `aventura`, `fantasia`, `misterio`, `ciencia_ficcion` y `sociedad`. Entre las incorporaciones están *El llano en llamas*, *Ficciones*, *Cuentos de la selva*, *Rimas*, *La casa de Bernarda Alba*, *La isla del tesoro*, *El hobbit* y *Fahrenheit 451*.
 
 La opción 4 usa un **analizador léxico sencillo**: normaliza mayúsculas, tildes y puntuación, separa la oración en palabras y busca términos conocidos. Por eso acepta distintas estructuras, por ejemplo:
 
@@ -48,6 +63,9 @@ Busco un manual avanzado de tecnología
 Prefiero un ebook divulgativo de física
 Necesito libros básicos digitales sobre conflictos bélicos
 Busco novelas románticas de nivel intermedio
+Quiero cuentos de fantasía
+Busco poemas de amor
+Quiero novelas de ciencia ficción
 ```
 
 Puede extraer un tema obligatorio y, si aparecen, un género, nivel y formato. Reconoce las claves de los catálogos, plurales comunes y algunos sinónimos definidos en `alias_catalogo/3`: `principiante`, `medio`, `experto`, `ebook`, `electrónico`, `impreso`, `conflictos` y `bélicos`. Las palabras restantes se ignoran como conectores.
@@ -87,4 +105,12 @@ Guerra tiene cuatro libros con ese tema principal y dos libros de historia marca
 ?- aggregate_all(count, recomendacion_guardada(_, _, _), Total).
 ```
 
-El tema es obligatorio: debe ser el tema principal del libro o uno secundario documentado en `tema_de_libro/4`. **Tema y género elegido son requisitos estrictos**; si no existen libros con esa combinación, la búsqueda por frase lo explica y la consulta guiada no la ofrece. Nivel y formato son preferencias: los resultados se dividen en **Coincidencias exactas** (cumplen todos los filtros solicitados, sin mostrar puntuación) y **Posibles recomendaciones** (libros del mismo tema y género que no cumplen nivel o formato; muestran cercanía y en qué difieren). El principal aporta 2 puntos y el secundario 1. Género o formato coincidente aporta 1 punto; nivel exactamente igual, 2. La regla `adecuacion_nivel/5` considera un libro **intermedio de divulgación** como alternativa para alguien que pidió **básico**: aporta 1 punto y explica la inferencia, pero no cuenta como coincidencia exacta.
+El tema es obligatorio: debe ser el tema principal del libro o uno secundario documentado en `tema_de_libro/4`. **Tema y género elegido son requisitos estrictos**; si no existen libros con esa combinación, la búsqueda por frase lo explica y la consulta guiada no la ofrece. Nivel y formato son preferencias: los resultados se dividen en **Coincidencias exactas** (cumplen todos los filtros solicitados, sin mostrar puntuación) y **Posibles recomendaciones** (se muestran solo al aceptar; libros del mismo tema y género que no cumplen nivel o formato). El principal aporta 2 puntos y el secundario 1. Género o formato coincidente aporta 1 punto; nivel exactamente igual, 2. La regla `adecuacion_nivel/5` considera un libro **intermedio de divulgación** como alternativa para alguien que pidió **básico**: aporta 1 punto y explica la inferencia, pero no cuenta como coincidencia exacta.
+
+## Verificación
+
+```sh
+swipl -q -s pruebas_biblioteca.pl -g run_tests -t halt
+```
+
+Las pruebas comprueban integridad del catálogo, referencias bibliográficas de todos los IDs, filtros contextuales, frases, coincidencias exactas y el diálogo de aceptación/rechazo de alternativas (incluido fin de entrada).

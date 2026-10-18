@@ -21,6 +21,9 @@ genero(divulgacion, 'Divulgación').
 genero(ensayo, 'Ensayo').
 genero(manual, 'Manual').
 genero(novela, 'Novela').
+genero(cuento, 'Cuento').
+genero(poesia, 'Poesía').
+genero(teatro, 'Teatro').
 
 tema(matematicas, 'Matemáticas').
 tema(tecnologia, 'Tecnología').
@@ -34,6 +37,12 @@ tema(psicologia, 'Psicología').
 tema(arte, 'Arte').
 tema(guerra, 'Guerra y conflictos').
 tema(amor, 'Amor y relaciones').
+tema(naturaleza, 'Naturaleza').
+tema(aventura, 'Aventura').
+tema(fantasia, 'Fantasía').
+tema(misterio, 'Misterio').
+tema(ciencia_ficcion, 'Ciencia ficción').
+tema(sociedad, 'Sociedad').
 
 formato(fisico, 'Físico').
 formato(digital, 'Digital').
@@ -43,17 +52,17 @@ libro(1, 'El hombre que calculaba', divulgacion, basico, matematicas, fisico, 'R
 libro(2, 'El diablo de los numeros', divulgacion, basico, matematicas, digital, 'Siruela').
 libro(3, 'Historia de las matematicas', divulgacion, intermedio, matematicas, fisico, 'Editorial Crítica').
 libro(4, 'El placer de la x', divulgacion, basico, matematicas, digital, 'Taurus').
-libro(5, 'How Not to Be Wrong', ensayo, intermedio, matematicas, fisico, 'Penguin Books').
+libro(5, 'Apología de un matemático', ensayo, intermedio, matematicas, fisico, 'Capitán Swing').
 
 % Tecnologia
-libro(6, 'Clean Code', manual, intermedio, tecnologia, fisico, 'Prentice Hall').
-libro(7, 'The Pragmatic Programmer', manual, intermedio, tecnologia, digital, 'Pragmatic Programmer').
-libro(8, 'Code', divulgacion, basico, tecnologia, fisico, 'Microsoft Press').
-libro(9, 'Algorithms', manual, avanzado, tecnologia, digital, 'Addison-Wesley').
+libro(6, 'Código limpio', manual, intermedio, tecnologia, fisico, 'Anaya Multimedia').
+libro(7, 'El programador pragmático', manual, intermedio, tecnologia, digital, 'Anaya Multimedia').
+libro(8, 'Código: el lenguaje oculto del hardware y el software', divulgacion, basico, tecnologia, fisico, 'Anaya Multimedia').
+libro(9, 'Algoritmos en C++', manual, avanzado, tecnologia, digital, 'Addison-Wesley Longman').
 libro(10, 'La cuarta revolucion industrial', ensayo, basico, tecnologia, fisico, 'Debate').
 
 % Fisica
-libro(11, 'A Brief History of Time', divulgacion, basico, fisica, fisico, 'Transworld Publishers').
+libro(11, 'Historia del tiempo', divulgacion, basico, fisica, fisico, 'Booket').
 libro(12, 'Siete breves lecciones de fisica', divulgacion, basico, fisica, digital, 'Anagrama').
 libro(13, 'El universo en una cascara de nuez', divulgacion, intermedio, fisica, fisico, 'Crítica').
 libro(14, 'El tejido del cosmos', divulgacion, intermedio, fisica, digital, 'Crítica').
@@ -64,7 +73,7 @@ libro(16, 'El gen egoista', divulgacion, intermedio, biologia, fisico, 'Salvat')
 libro(17, 'El origen de las especies', ensayo, avanzado, biologia, digital, 'Espasa').
 libro(18, 'La vida maravillosa', divulgacion, intermedio, biologia, fisico, 'Booket').
 libro(19, 'La doble helice', divulgacion, basico, biologia, digital, 'Salvat').
-libro(20, 'Campbell Biology', manual, avanzado, biologia, fisico, 'Benjamin Cummings').
+libro(20, 'Biología', manual, avanzado, biologia, fisico, 'Editorial Médica Panamericana').
 
 % Historia
 libro(21, 'Sapiens', divulgacion, basico, historia, fisico, 'Debolsillo').
@@ -76,7 +85,7 @@ libro(25, 'La guerra que salvo mi vida', novela, basico, guerra, fisico, 'Turtle
 % Literatura
 libro(26, 'El principito', novela, basico, literatura, fisico, 'Plutón Ediciones').
 libro(27, 'Cien anos de soledad', novela, intermedio, literatura, digital, 'Grijalbo Mondadori').
-libro(28, 'Don Quixote', novela, avanzado, literatura, fisico, 'Open Road Integrated Media').
+libro(28, 'Don Quijote de la Mancha', novela, avanzado, literatura, fisico, 'Cátedra').
 libro(29, 'La metamorfosis', novela, intermedio, literatura, digital, 'Editorial Octaedro').
 libro(30, 'La sombra del viento', novela, intermedio, literatura, fisico, 'Planeta').
 
@@ -85,18 +94,18 @@ libro(31, 'El mundo de Sofia', novela, basico, filosofia, fisico, 'Círculo de L
 libro(32, 'Meditaciones', ensayo, intermedio, filosofia, digital, 'La Otra H').
 libro(33, 'El mito de Sisifo', ensayo, avanzado, filosofia, fisico, 'Penguin').
 libro(34, 'Etica para Amador', divulgacion, basico, filosofia, digital, 'Ariel').
-libro(35, 'The Republic', ensayo, avanzado, filosofia, fisico, 'Penguin Classics').
+libro(35, 'La república', ensayo, avanzado, filosofia, fisico, 'Alianza Editorial').
 
 % Economia
 libro(36, 'Freakonomics', divulgacion, basico, economia, fisico, 'ZETA BOLSILLO').
 libro(37, 'El economista camuflado', divulgacion, basico, economia, digital, 'Ediciones Temas de Hoy').
 libro(38, 'El capital en el siglo XXI', ensayo, avanzado, economia, fisico, 'Fondo de Cultura Económica').
-libro(39, 'Economics', manual, intermedio, economia, digital, 'McGraw Hill').
+libro(39, 'Economía con aplicaciones a Latinoamérica', manual, intermedio, economia, digital, 'McGraw-Hill').
 libro(40, 'La riqueza de las naciones', ensayo, avanzado, economia, fisico, 'Perfil').
 
 % Psicologia
 libro(41, 'Pensar rapido, pensar despacio', divulgacion, intermedio, psicologia, fisico, 'Debate').
-libro(42, 'Man\'s Search for Meaning', ensayo, basico, psicologia, digital, 'Beacon Press').
+libro(42, 'El hombre en busca de sentido', ensayo, basico, psicologia, digital, 'Herder Editorial').
 libro(43, 'El error de Descartes', divulgacion, avanzado, psicologia, fisico, 'Booket').
 libro(44, 'Inteligencia emocional', divulgacion, basico, psicologia, digital, 'Salvat').
 libro(45, 'El arte de amar', ensayo, intermedio, psicologia, fisico, 'Planeta Publishing').
@@ -104,62 +113,62 @@ libro(45, 'El arte de amar', ensayo, intermedio, psicologia, fisico, 'Planeta Pu
 % Arte
 libro(46, 'La historia del arte', divulgacion, basico, arte, fisico, 'Círculo de Lectores').
 libro(47, 'Modos de ver', ensayo, intermedio, arte, digital, 'Editorial Gustavo Gili').
-libro(48, 'Art Through the Ages', manual, avanzado, arte, fisico, 'Harcourt, Brace').
+libro(48, 'Historia general del arte, 1: El mundo antiguo', manual, avanzado, arte, fisico, 'Alianza Editorial').
 libro(49, 'Sobre la fotografia', ensayo, avanzado, arte, digital, 'Alfaguara').
-libro(50, 'The Meaning of Art', ensayo, intermedio, arte, fisico, 'Faber').
+libro(50, 'El significado del arte', ensayo, intermedio, arte, fisico, 'Losada').
 
 % Ampliacion del catalogo: libros 51 a 100.
 libro(51, 'El enigma de Fermat', divulgacion, intermedio, matematicas, fisico, 'Booket').
 libro(52, 'El hombre anumérico', divulgacion, basico, matematicas, digital, 'Tusquets Editores').
-libro(53, 'Alex\'s Adventures in Numberland', divulgacion, basico, matematicas, fisico, 'Bloomsbury UK').
+libro(53, 'Cartas a una joven matemática', divulgacion, basico, matematicas, fisico, 'Booket').
 libro(54, 'Como plantear y resolver problemas', manual, intermedio, matematicas, digital, 'Trillas').
-libro(55, 'Mathematical Magic Show', divulgacion, intermedio, matematicas, fisico, 'The Mathematical Association of America').
+libro(55, 'Festival mágico-matemático', divulgacion, intermedio, matematicas, fisico, 'Alianza Editorial').
 
-libro(56, 'Python Crash Course', manual, basico, tecnologia, digital, 'No Starch Press').
-libro(57, 'Fluent Python', manual, avanzado, tecnologia, fisico, 'O\'Reilly Media').
-libro(58, 'Head First Design Patterns', manual, intermedio, tecnologia, digital, 'O\'Reilly Media').
-libro(59, 'Refactoring', manual, avanzado, tecnologia, fisico, 'Addison-Wesley Professional').
-libro(60, 'Introduction to Algorithms', manual, avanzado, tecnologia, digital, 'MIT Press').
+libro(56, 'Curso intensivo de Python', manual, basico, tecnologia, digital, 'Anaya Multimedia').
+libro(57, 'Inteligencia artificial: un enfoque moderno', manual, avanzado, tecnologia, fisico, 'Pearson Prentice Hall').
+libro(58, 'Patrones de diseño', manual, intermedio, tecnologia, digital, 'Addison-Wesley').
+libro(59, 'UML gota a gota', manual, intermedio, tecnologia, fisico, 'Addison-Wesley Longman').
+libro(60, 'Fundamentos de programación', manual, intermedio, tecnologia, digital, 'McGraw-Hill').
 
 libro(61, 'Seis piezas faciles', divulgacion, basico, fisica, fisico, 'Booket Planeta').
-libro(62, 'Physics of the Impossible', divulgacion, basico, fisica, digital, 'Allen Lane').
+libro(62, 'La física de lo imposible', divulgacion, basico, fisica, digital, 'Debolsillo').
 libro(63, 'Astrofisica para gente con prisas', divulgacion, basico, fisica, fisico, 'Paidós México').
-libro(64, 'Warped Passages', divulgacion, intermedio, fisica, digital, 'Harper Perennial').
+libro(64, 'Universos ocultos', divulgacion, intermedio, fisica, digital, 'Acantilado').
 libro(65, 'Agujeros negros y tiempo curvo', divulgacion, avanzado, fisica, fisico, 'Crítica').
 
 libro(66, 'El gen', divulgacion, intermedio, biologia, fisico, 'Penguin Random House').
 libro(67, 'La vida inmortal de Henrietta Lacks', divulgacion, basico, biologia, digital, 'Booket').
 libro(68, 'El cuerpo humano', divulgacion, basico, biologia, fisico, 'RBA').
-libro(69, 'The Brain: The Story of You', divulgacion, intermedio, biologia, digital, 'Canongate Books').
+libro(69, 'El cerebro. Nuestra historia', divulgacion, intermedio, biologia, digital, 'Anagrama').
 libro(70, 'La sexta extincion', divulgacion, intermedio, biologia, fisico, 'Critica').
 
 libro(71, 'Sin novedad en el frente', novela, intermedio, guerra, digital, 'Navona Editorial').
-libro(72, 'The Guns of August', ensayo, avanzado, guerra, fisico, 'Presidio Press').
+libro(72, 'Los cañones de agosto', ensayo, avanzado, guerra, fisico, 'RBA Libros').
 libro(73, 'La Segunda Guerra Mundial', ensayo, intermedio, guerra, digital, 'Editorial Pasado y Presente').
 libro(74, 'SPQR', divulgacion, intermedio, historia, fisico, 'Booket').
 libro(75, 'Biografia del poder', ensayo, avanzado, historia, digital, 'Tusquets Editores').
 
-libro(76, 'Nineteen Eighty-Four', novela, intermedio, literatura, fisico, 'Penguin Books').
+libro(76, '1984', novela, intermedio, literatura, fisico, 'Debolsillo').
 libro(77, 'Orgullo y prejuicio', novela, intermedio, literatura, digital, 'ANAYA INFANTIL Y JUVENIL').
 libro(78, 'Cronica de una muerte anunciada', novela, intermedio, literatura, fisico, 'Seix Barral').
 libro(79, 'Pedro Paramo', novela, intermedio, literatura, digital, 'Fondo de Cultura Económica').
 libro(80, 'Rayuela', novela, avanzado, literatura, fisico, 'Casa de las Américas').
 
 libro(81, 'Apologia de Socrates', ensayo, basico, filosofia, digital, 'CreateSpace Independent Publishing Platform').
-libro(82, 'The Symposium', ensayo, intermedio, filosofia, fisico, 'Penguin Books').
+libro(82, 'Banquete', ensayo, intermedio, filosofia, fisico, 'Ediciones Lea').
 libro(83, 'El segundo sexo', ensayo, avanzado, filosofia, digital, 'Ediciones Siglo Veinte').
 libro(84, 'Asi hablo Zaratustra', ensayo, avanzado, filosofia, fisico, 'El Ateneo').
 libro(85, 'El existencialismo es un humanismo', ensayo, intermedio, filosofia, digital, 'Edhasa').
 
 libro(86, 'Economia en una leccion', divulgacion, basico, economia, fisico, 'Unión Editorial').
-libro(87, 'Capitalism and Freedom', ensayo, intermedio, economia, digital, 'University of Chicago Press').
+libro(87, 'Libertad de elegir: una declaración personal', ensayo, intermedio, economia, digital, 'Deusto').
 libro(88, 'El cisne negro', ensayo, intermedio, economia, fisico, 'Paidós').
-libro(89, 'Debt: The First 5,000 Years', ensayo, avanzado, economia, digital, 'Melville House').
+libro(89, 'En deuda: una historia alternativa de la economía', ensayo, avanzado, economia, digital, 'Ariel').
 libro(90, 'La economia del bien comun', ensayo, avanzado, economia, fisico, 'Taurus').
 
 libro(91, 'El poder de los habitos', divulgacion, basico, psicologia, digital, 'Vergara').
 libro(92, 'Influencia', divulgacion, intermedio, psicologia, fisico, 'HarperCollins Publishers').
-libro(93, 'The Social Animal', manual, intermedio, psicologia, digital, 'W. H. Freeman').
+libro(93, 'El animal social', manual, intermedio, psicologia, digital, 'Alianza Editorial').
 libro(94, 'La interpretacion de los suenos', ensayo, avanzado, psicologia, fisico, 'Ediciones Portenas').
 libro(95, 'Fluir', divulgacion, basico, psicologia, digital, 'Debolsillo').
 
@@ -169,13 +178,27 @@ libro(98, 'El arte de mirar', divulgacion, basico, arte, fisico, 'Blume').
 libro(99, 'La camara lucida', ensayo, intermedio, arte, digital, 'Ediciones Paidós Ibérica').
 libro(100, 'Arte y percepcion visual', manual, intermedio, arte, fisico, 'Alianza').
 
+% Nuevas lecturas en espanol: narrativa breve, poesia, teatro y novelas.
+libro(101, 'El llano en llamas', cuento, intermedio, literatura, fisico, 'Cátedra').
+libro(102, 'Ficciones', cuento, avanzado, fantasia, digital, 'Emecé').
+libro(103, 'Cuentos de la selva', cuento, basico, naturaleza, fisico, 'Santiago Rueda').
+libro(104, 'Veinte poemas de amor y una canción desesperada', poesia, intermedio, amor, fisico, 'Editores Mexicanos Unidos').
+libro(105, 'Rimas', poesia, intermedio, amor, digital, 'Cátedra').
+libro(106, 'La casa de Bernarda Alba', teatro, intermedio, sociedad, fisico, 'Alfaguara').
+libro(107, 'La vida es sueño', teatro, avanzado, filosofia, digital, 'Debolsillo').
+libro(108, 'La isla del tesoro', novela, basico, aventura, fisico, 'Austral').
+libro(109, 'El hobbit', novela, intermedio, fantasia, fisico, 'Booket').
+libro(110, 'Estudio en escarlata', novela, intermedio, misterio, digital, 'Anaya Infantil y Juvenil').
+libro(111, 'Viaje al centro de la Tierra', novela, intermedio, ciencia_ficcion, fisico, 'Porrúa').
+libro(112, 'Fahrenheit 451', novela, intermedio, ciencia_ficcion, digital, 'Booket').
+
 % autor(IdAutor, Nombre). Un autor puede aparecer en varios libros;
-% algunas obras tienen dos autores y el libro 60 tiene cuatro.
+% algunas obras tienen dos autores y el libro 58 tiene cuatro.
 autor(1, 'Malba Tahan').
 autor(2, 'Hans Magnus Enzensberger').
 autor(3, 'Ian Stewart').
 autor(4, 'Steven Strogatz').
-autor(5, 'Jordan Ellenberg').
+autor(5, 'G. H. Hardy').
 autor(6, 'Robert C. Martin').
 autor(7, 'Andrew Hunt').
 autor(8, 'Charles Petzold').
@@ -217,29 +240,24 @@ autor(44, 'Daniel Goleman').
 autor(45, 'Erich Fromm').
 autor(46, 'E. H. Gombrich').
 autor(47, 'John Berger').
-autor(48, 'Helen Gardner').
+autor(48, 'H. W. Janson').
 autor(49, 'Susan Sontag').
 autor(50, 'Herbert Read').
 autor(51, 'David Thomas').
-autor(52, 'Kevin Wayne').
 autor(53, 'Roger A. Freedman').
 autor(54, 'Jane B. Reece').
 autor(55, 'Stephen J. Dubner').
 autor(56, 'William D. Nordhaus').
 autor(57, 'Simon Singh').
 autor(58, 'John Allen Paulos').
-autor(59, 'Alex Bellos').
 autor(60, 'George Polya').
 autor(61, 'Martin Gardner').
 autor(62, 'Eric Matthes').
-autor(63, 'Luciano Ramalho').
-autor(64, 'Eric Freeman').
-autor(65, 'Elisabeth Robson').
+autor(63, 'Stuart J. Russell').
+autor(64, 'Erich Gamma').
+autor(65, 'Richard Helm').
 autor(66, 'Martin Fowler').
-autor(67, 'Thomas H. Cormen').
-autor(68, 'Charles E. Leiserson').
-autor(69, 'Ronald L. Rivest').
-autor(70, 'Clifford Stein').
+autor(67, 'Luis Joyanes Aguilar').
 autor(71, 'Richard Feynman').
 autor(72, 'Michio Kaku').
 autor(73, 'Neil deGrasse Tyson').
@@ -277,6 +295,22 @@ autor(104, 'Arthur C. Danto').
 autor(105, 'Susan Woodford').
 autor(106, 'Roland Barthes').
 autor(107, 'Rudolf Arnheim').
+autor(108, 'Peter Norvig').
+autor(109, 'Ralph Johnson').
+autor(110, 'John Vlissides').
+autor(111, 'Rose D. Friedman').
+autor(112, 'Jorge Luis Borges').
+autor(113, 'Horacio Quiroga').
+autor(114, 'Pablo Neruda').
+autor(115, 'Gustavo Adolfo Bécquer').
+autor(116, 'Federico García Lorca').
+autor(117, 'Pedro Calderón de la Barca').
+autor(118, 'Robert Louis Stevenson').
+autor(119, 'J. R. R. Tolkien').
+autor(120, 'Arthur Conan Doyle').
+autor(121, 'Julio Verne').
+autor(122, 'Ray Bradbury').
+autor(123, 'Kendall Scott').
 
 % libro_autor(IdLibro, IdAutor): tabla puente para la relacion N:M.
 libro_autor(1, 1).
@@ -289,7 +323,6 @@ libro_autor(7, 7).
 libro_autor(7, 51).
 libro_autor(8, 8).
 libro_autor(9, 9).
-libro_autor(9, 52).
 libro_autor(10, 10).
 libro_autor(11, 11).
 libro_autor(12, 12).
@@ -337,18 +370,19 @@ libro_autor(49, 49).
 libro_autor(50, 50).
 libro_autor(51, 57).
 libro_autor(52, 58).
-libro_autor(53, 59).
+libro_autor(53, 3).
 libro_autor(54, 60).
 libro_autor(55, 61).
 libro_autor(56, 62).
 libro_autor(57, 63).
+libro_autor(57, 108).
 libro_autor(58, 64).
 libro_autor(58, 65).
+libro_autor(58, 109).
+libro_autor(58, 110).
 libro_autor(59, 66).
+libro_autor(59, 123).
 libro_autor(60, 67).
-libro_autor(60, 68).
-libro_autor(60, 69).
-libro_autor(60, 70).
 libro_autor(61, 71).
 libro_autor(62, 72).
 libro_autor(63, 73).
@@ -376,6 +410,7 @@ libro_autor(84, 91).
 libro_autor(85, 92).
 libro_autor(86, 93).
 libro_autor(87, 94).
+libro_autor(87, 111).
 libro_autor(88, 95).
 libro_autor(89, 96).
 libro_autor(90, 97).
@@ -389,6 +424,18 @@ libro_autor(97, 104).
 libro_autor(98, 105).
 libro_autor(99, 106).
 libro_autor(100, 107).
+libro_autor(101, 88).
+libro_autor(102, 112).
+libro_autor(103, 113).
+libro_autor(104, 114).
+libro_autor(105, 115).
+libro_autor(106, 116).
+libro_autor(107, 117).
+libro_autor(108, 118).
+libro_autor(109, 119).
+libro_autor(110, 120).
+libro_autor(111, 121).
+libro_autor(112, 122).
 
 % Vista de los autores de un libro (los nombres no se duplican en libro/7).
 autores_libro(IdLibro, Nombres) :-
@@ -576,10 +623,11 @@ tema_de_libro(Id, Tema, 2, [Tema]) :-
     libro(Id, _, _, _, Tema, _, _).
 tema_de_libro(Id, Tema, 1, [tema_secundario(Tema, Justificacion)]) :-
     relacion_tematica(Id, Tema, Justificacion).
-% Toda novela tambien pertenece a literatura, sin duplicar su tema principal.
+% Narrativa, poesia y teatro tambien pertenecen a literatura.
 tema_de_libro(Id, literatura, 1,
-              [tema_secundario(literatura, 'Es una obra narrativa de ficcion')]) :-
-    libro(Id, _, novela, _, TemaPrincipal, _, _),
+               [tema_secundario(literatura, 'Es una obra literaria')]) :-
+    libro(Id, _, Genero, _, TemaPrincipal, _, _),
+    memberchk(Genero, [novela, cuento, poesia, teatro]),
     TemaPrincipal \== literatura.
 
 % Historia como tema de una novela indica ambientacion historica,
@@ -595,6 +643,10 @@ relacion_tematica(27, amor, 'Incluye las relaciones amorosas de varias generacio
 relacion_tematica(45, amor, 'Estudia el amor desde la psicologia').
 relacion_tematica(29, filosofia, 'Explora identidad, alienacion y condicion humana').
 relacion_tematica(76, filosofia, 'Plantea preguntas sobre verdad, libertad y poder').
+relacion_tematica(108, misterio, 'La busqueda de un tesoro incluye secretos y traiciones').
+relacion_tematica(109, aventura, 'El viaje de Bilbo articula una aventura en un mundo fantastico').
+relacion_tematica(111, aventura, 'Expedicion imaginaria al interior de la Tierra').
+relacion_tematica(112, sociedad, 'Distopia sobre censura, lectura y control social').
 
 % Niveles de novelas: dificultad de lectura, no dificultad academica.
 % Clasificacion humana ORIENTATIVA: lenguaje, narrativa y contexto.
@@ -611,6 +663,11 @@ justificacion_dificultad(77, 'Intermedio: convenciones sociales y lenguaje de ep
 justificacion_dificultad(78, 'Intermedio: estructura retrospectiva y multiples testimonios').
 justificacion_dificultad(79, 'Intermedio: saltos de tiempo y voces narrativas').
 justificacion_dificultad(80, 'Avanzado: estructura experimental y lectura no lineal').
+justificacion_dificultad(108, 'Basico: aventura de progresion lineal; algunos terminos marineros').
+justificacion_dificultad(109, 'Intermedio: vocabulario y personajes de un mundo fantastico').
+justificacion_dificultad(110, 'Intermedio: deduccion policial y cambio de escenario narrativo').
+justificacion_dificultad(111, 'Intermedio: relato de aventuras con vocabulario cientifico de epoca').
+justificacion_dificultad(112, 'Intermedio: distopia con simbolismo y critica social').
 
 % Regla experta: la divulgacion de nivel intermedio puede servir como
 % alternativa introductoria al nivel basico, pero puntua menos que el basico.
@@ -921,10 +978,16 @@ normalizar_codigo(Codigo, Codigo).
 
 valor_en_frase(Catalogo, Palabras, Tipo, Valor) :-
     findall(Encontrado,
-            (member(Palabra, Palabras), alias_catalogo(Catalogo, Palabra, Encontrado)),
+            termino_en_frase(Catalogo, Palabras, Encontrado),
             Repetidos),
     sort(Repetidos, Valores),
     valor_unico(Tipo, Valores, Valor).
+
+termino_en_frase(Catalogo, Palabras, Valor) :-
+    member(Palabra, Palabras),
+    alias_catalogo(Catalogo, Palabra, Valor).
+termino_en_frase(tema, Palabras, ciencia_ficcion) :-
+    append(_, ["ciencia", "ficcion"|_], Palabras).
 
 valor_unico(obligatorio, [Valor], Valor).
 valor_unico(opcional, [], cualquiera).
@@ -949,11 +1012,19 @@ alias_catalogo(tema, "romantico", amor).
 alias_catalogo(tema, "romantica", amor).
 alias_catalogo(tema, "romanticos", amor).
 alias_catalogo(tema, "romanticas", amor).
+alias_catalogo(tema, "aventuras", aventura).
+alias_catalogo(tema, "fantastico", fantasia).
+alias_catalogo(tema, "fantastica", fantasia).
+alias_catalogo(tema, "policiaco", misterio).
+alias_catalogo(tema, "policiaca", misterio).
 alias_catalogo(genero, "divulgativo", divulgacion).
 alias_catalogo(genero, "divulgativos", divulgacion).
 alias_catalogo(genero, "ensayos", ensayo).
 alias_catalogo(genero, "manuales", manual).
 alias_catalogo(genero, "novelas", novela).
+alias_catalogo(genero, "cuentos", cuento).
+alias_catalogo(genero, "poema", poesia).
+alias_catalogo(genero, "poemas", poesia).
 alias_catalogo(nivel, "basicos", basico).
 alias_catalogo(nivel, "basica", basico).
 alias_catalogo(nivel, "basicas", basico).
@@ -1049,11 +1120,23 @@ mostrar(Perfil, Resultados) :-
     ; writeln('=== Coincidencias exactas ==='),
       forall(member(Resultado, Exactas), mostrar_exacta(Resultado))
     ),
-    ( Aproximadas == [] -> true
-    ; nl, writeln('=== Posibles recomendaciones (no cumplen todos los filtros) ==='),
-      forall(member(Resultado, Aproximadas), mostrar_aproximada(Perfil, Resultado))
-    ),
+    ofrecer_alternativas(Perfil, Aproximadas),
     nl.
+
+% Salir termina esta busqueda y regresa al menu; EOF tambien cancela.
+ofrecer_alternativas(_, []) :-
+    writeln('No hay coincidencias posibles adicionales. Regresando al menu.').
+ofrecer_alternativas(Perfil, Aproximadas) :-
+    Aproximadas \== [],
+    length(Aproximadas, Cantidad),
+    format('Posibles recomendaciones adicionales: ~d.~n', [Cantidad]),
+    writeln('1. Mostrar coincidencias posibles'),
+    writeln('0. Salir de esta busqueda y volver al menu'),
+    pedir('Elige una opcion: ', ['1', '0'], obligatorio, Opcion),
+    ( Opcion == '1' ->
+        nl, writeln('=== Posibles recomendaciones (no cumplen todos los filtros) ==='),
+        forall(member(Resultado, Aproximadas), mostrar_aproximada(Perfil, Resultado))
+    ; true ).
 
 exacta(Perfil, recomendacion(Id, _, _, _, _)) :-
     coincidencia_total(Perfil, Id).
