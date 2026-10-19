@@ -6,9 +6,9 @@ Implementación del caso práctico en SWI-Prolog. El modelo tiene **seis tablas 
 | --- | --- | ---: |
 | Estudiante `estudiante/2` | ID, nombre | 50 |
 | Preferencia `preferencia/6` | ID de preferencia, ID de estudiante, tema, género, nivel, formato | 50 |
-| Libro `libro/7` | ID, título, género, nivel, tema, formato, editorial | 112 |
-| Autor `autor/2` | ID, nombre | 117 |
-| LibroAutor `libro_autor/2` | ID de libro, ID de autor (clave compuesta) | 123 |
+| Libro `libro/7` | ID, título, género, nivel, tema, formato, editorial | 132 |
+| Autor `autor/2` | ID, nombre | 127 |
+| LibroAutor `libro_autor/2` | ID de libro, ID de autor (clave compuesta) | 143 |
 | Recomendación `recomendacion_guardada/3` | ID, ID de preferencia, ID de libro | 50 |
 | Nivel `nivel/2` | Clave, nombre | 3 |
 | Género `genero/2` | Clave, nombre | 7 |
@@ -23,7 +23,7 @@ Preferencia N ─── 1 Nivel/Género/Tema/Formato 1 ─── N Libro
 
 Cada recomendación guardada refiere a una preferencia y un libro. `recomendar/4` calcula la coincidencia entre ellos; `detalle_recomendacion/5` recupera el estudiante y los motivos según las reglas actuales. Las 50 recomendaciones son una **muestra ilustrativa de historial**: son compatibles con género y tema, pero la primera opción del ranking actual puede ser distinta. Las consultas interactivas **no se guardan automáticamente**. Los estudiantes, sus preferencias y el historial son datos de ejemplo; el formato del libro no representa existencias reales de la biblioteca.
 
-La tabla Estudiante es útil para conservar perfiles y consultar el historial de cada persona. **No hace falta ser estudiante registrado para pedir una recomendación**: la consulta rápida toma las respuestas del menú como variables y calcula el resultado sin guardarlas. **Los 112 libros tienen editorial y referencia a una edición en español** en [`fuentes_editoriales.md`](fuentes_editoriales.md). Se sustituyeron las ediciones inglesas por traducciones verificables o por otros libros en español del mismo tema, actualizando sus autores. Nombres como *Python*, *UML* o *Freakonomics* forman parte de títulos de ediciones españolas. El formato y el nivel asignados son clasificaciones didácticas, no atributos comprobados de un ejemplar real.
+La tabla Estudiante es útil para conservar perfiles y consultar el historial de cada persona. **No hace falta ser estudiante registrado para pedir una recomendación**: la consulta rápida toma las respuestas del menú como variables y calcula el resultado sin guardarlas. **Los 132 libros tienen editorial y referencia a una edición en español** en [`fuentes_editoriales.md`](fuentes_editoriales.md). Por ejemplo, *Caperucita Roja* corresponde a una edición de la versión de Charles Perrault. Nombres como *Python*, *UML* o *Freakonomics* forman parte de títulos de ediciones españolas. El formato y el nivel asignados son clasificaciones didácticas, no atributos comprobados de un ejemplar real.
 
 Nivel (`basico`, `intermedio`, `avanzado`), género, tema y formato tienen su propio catálogo. Libro y Preferencia guardan la **clave** de cada categoría; por ejemplo, el valor `basico` referencia el hecho `nivel(basico, 'Básico')`. Las reglas validan las categorías al recomendar. No se crean niveles artificiales para completar 50 filas.
 
@@ -35,7 +35,9 @@ Desde esta carpeta:
 swipl -s biblioteca.pl -g iniciar -t halt
 ```
 
-El menú ofrece **1)** consulta guiada sin registro, **2)** recomendaciones para un estudiante registrado, **3)** historial guardado, **4)** búsqueda mediante una frase y **0)** salir. La consulta guiada pregunta primero el **género**, después **solo temas con libros de ese género**, luego los **niveles disponibles** en esa combinación y finalmente los **formatos presentes** para el nivel elegido. Género, nivel y formato pueden omitirse con Enter; si solo hay una opción de nivel o formato, no se hace una pregunta innecesaria. Puedes responder `matematicas` o una frase que contenga esa palabra al preguntar por tema.
+El mismo comando aparece en un comentario al principio de `biblioteca.pl`.
+
+El menú ofrece **1)** consulta guiada sin registro, **2)** recomendaciones para un estudiante registrado, **3)** historial guardado, **4)** búsqueda mediante una frase y **0)** salir. Está dividido con separadores; la consulta guiada presenta los pasos **GÉNERO → TEMA → NIVEL → FORMATO** y las opciones en filas de tres para que se lean mejor. Muestra solo temas que tienen libros del género seleccionado y niveles y formatos disponibles para la combinación. Género, nivel y formato pueden omitirse con Enter; si solo hay una opción de nivel o formato, no se hace una pregunta innecesaria.
 
 El nivel significa **dificultad de lectura**, también para novelas: `basico` puede ser una lectura introductoria, `intermedio` una que requiere más contexto y `avanzado` una más exigente. Las clasificaciones son orientativas para este ejercicio. Después de escoger `novela` se ofrecen solo sus temas disponibles, entre ellos `amor`, `historia`, `guerra`, `aventura`, `fantasia`, `misterio` y `ciencia_ficcion`; `matematicas` no aparece porque no hay novelas matemáticas clasificadas como tales en el catálogo actual. Al incorporar una, esa opción aparecería automáticamente.
 
@@ -52,7 +54,7 @@ Solo `1` muestra el segundo bloque, con la cercanía y los filtros que no se cum
 
 ### Nuevas lecturas
 
-Se agregaron los géneros `cuento`, `poesia` y `teatro`, además de los temas `naturaleza`, `aventura`, `fantasia`, `misterio`, `ciencia_ficcion` y `sociedad`. Entre las incorporaciones están *El llano en llamas*, *Ficciones*, *Cuentos de la selva*, *Rimas*, *La casa de Bernarda Alba*, *La isla del tesoro*, *El hobbit* y *Fahrenheit 451*.
+Los géneros `cuento`, `poesia` y `teatro` incluyen obras sobre `naturaleza`, `aventura`, `fantasia`, `misterio`, `ciencia_ficcion` y `sociedad`. Se sumaron veinte títulos, entre ellos *Caperucita Roja*, *La Cenicienta*, *Hansel y Gretel*, *El patito feo*, *Alicia en el país de las maravillas*, *El Aleph*, *Bestiario*, *Las aventuras de Pinocho*, *Bodas de sangre* y *Antígona*. La búsqueda `cuento` + `fantasia` pasó de **1 a 10 libros** (7 básicos y 3 avanzados); `cuento` + `naturaleza` tiene **3** y `novela` + `fantasia`, **6** (3 básicos y 3 intermedios). Se pueden combinar con niveles opcionales: si alguno no coincide aparece, con explicación, solo al pedir las recomendaciones posibles.
 
 La opción 4 usa un **analizador léxico sencillo**: normaliza mayúsculas, tildes y puntuación, separa la oración en palabras y busca términos conocidos. Por eso acepta distintas estructuras, por ejemplo:
 
@@ -72,7 +74,7 @@ Puede extraer un tema obligatorio y, si aparecen, un género, nivel y formato. R
 
 No es inteligencia artificial ni comprende el significado general de cualquier texto. La frase debe incluir **exactamente un tema conocido** y no debe contener valores contradictorios de una misma categoría. Por ejemplo, `quiero historia y guerra` se rechaza por tener dos temas. El vocabulario aceptado puede ampliarse de forma explícita agregando hechos a `alias_catalogo/3`.
 
-Guerra tiene cuatro libros con ese tema principal y dos libros de historia marcados explícitamente como relacionados. El tema `amor` se registra como secundario en dos novelas y un ensayo sobre relaciones. No se recomienda automáticamente todo el catálogo de historia para una búsqueda de guerra. Hay diez libros con tema principal matemáticas.
+Guerra tiene cuatro libros con ese tema principal y dos libros de historia marcados explícitamente como relacionados. El tema `amor` aparece en novelas, poesía y teatro, y también como secundario en un ensayo de psicología. No se recomienda automáticamente todo el catálogo de historia para una búsqueda de guerra. Hay diez libros con tema principal matemáticas.
 
 ## Consultas directas
 

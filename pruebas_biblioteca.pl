@@ -7,7 +7,7 @@
 :- begin_tests(biblioteca).
 
 test(catalogo_ampliado) :-
-    aggregate_all(count, libro(_, _, _, _, _, _, _), 112).
+    aggregate_all(count, libro(_, _, _, _, _, _, _), 132).
 
 test(catalogo_integro) :-
     validar_catalogo([]).
@@ -15,7 +15,33 @@ test(catalogo_integro) :-
 test(todas_las_novelas_tienen_justificacion) :-
     forall(libro(Id, _, novela, _, _, _, _),
            (justificacion_dificultad(Id, Explicacion), atom(Explicacion))),
-    aggregate_all(count, justificacion_dificultad(_, _), 18).
+    aggregate_all(count, justificacion_dificultad(_, _), 22).
+
+test(cuentos_de_fantasia_con_variedad) :-
+    recomendaciones(pref(fantasia, cuento, cualquiera, cualquiera), Resultados),
+    length(Resultados, 10),
+    memberchk(recomendacion(113, 'Caperucita Roja', ['Charles Perrault'], _, _), Resultados),
+    forall(member(recomendacion(Id, _, _, _, _), Resultados),
+           libro(Id, _, cuento, _, _, _, _)).
+
+test(cuentos_para_nivel_basico_y_opcion_avanzada, [nondet]) :-
+    recomendaciones(pref(fantasia, cuento, basico, cualquiera), Resultados),
+    include(exacta(pref(fantasia, cuento, basico, cualquiera)), Resultados, Exactas),
+    length(Exactas, 7),
+    member(recomendacion(102, _, _, _, _), Resultados),
+    \+ coincidencia_total(pref(fantasia, cuento, basico, cualquiera), 102),
+    recomendaciones(pref(fantasia, cuento, avanzado, cualquiera), Avanzados),
+    include(exacta(pref(fantasia, cuento, avanzado, cualquiera)), Avanzados, ExactosAvanzados),
+    length(ExactosAvanzados, 3).
+
+test(novelas_fantasticas_y_cuentos_de_naturaleza) :-
+    recomendaciones(pref(fantasia, novela, cualquiera, cualquiera), Novelas),
+    length(Novelas, 6),
+    recomendaciones(pref(fantasia, novela, basico, cualquiera), Basicas),
+    include(exacta(pref(fantasia, novela, basico, cualquiera)), Basicas, ExactasBasicas),
+    length(ExactasBasicas, 3),
+    recomendaciones(pref(naturaleza, cuento, cualquiera, cualquiera), Cuentos),
+    length(Cuentos, 3).
 
 test(niveles_lectura_realistas) :-
     libro(26, _, novela, basico, _, _, _),
@@ -38,7 +64,7 @@ test(novelas_son_literatura_incluso_si_ambientadas_en_guerra) :-
     tema_de_libro(25, literatura, 1, _),
     tema_de_libro(71, literatura, 1, _).
 
-test(temas_secundarios_justificados) :-
+test(temas_secundarios_justificados, [nondet]) :-
     tema_de_libro(77, amor, 1, [tema_secundario(amor, Justificacion)]),
     atom(Justificacion).
 
@@ -46,15 +72,15 @@ test(no_se_inventan_temas_secundarios) :-
     \+ tema_de_libro(6, amor, _, _),
     \+ tema_de_libro(28, matematicas, _, _).
 
-test(frase_guerra) :-
+test(frase_guerra, [nondet]) :-
     analizar_frase("Quiero libros basicos digitales sobre conflictos belicos",
                    pref(guerra, cualquiera, basico, digital)).
 
-test(frase_novela_romantica) :-
+test(frase_novela_romantica, [nondet]) :-
     analizar_frase("Busco novelas romanticas de nivel intermedio",
                    pref(amor, novela, intermedio, cualquiera)).
 
-test(frase_tildes) :-
+test(frase_tildes, [nondet]) :-
     analizar_frase("Necesito un manual avanzado de tecnología",
                    pref(tecnologia, manual, avanzado, cualquiera)).
 
@@ -74,7 +100,7 @@ test(coincidencias_tienen_tema_y_genero) :-
            ( libro(Id, _, novela, _, _, _, _),
              tema_de_libro(Id, guerra, _, _) )).
 
-test(historial_referenciado) :-
+test(historial_referenciado, [nondet]) :-
     detalle_recomendacion(1, 1, 1, _, _).
 
 test(nuevos_generos_y_temas, [nondet]) :-

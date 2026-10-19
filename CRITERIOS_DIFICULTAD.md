@@ -23,9 +23,9 @@ Cada indicador puede valorarse de 0 a 2:
 - 1: exigencia moderada;
 - 2: exigencia alta.
 
-**Criterio provisional de síntesis**: 0–2 = básico; 3–5 = intermedio; 6–8 = avanzado. Estas bandas las propone el equipo como instrumento didáctico; **no provienen de Common Core ni se ha demostrado su validez**. No hay que afirmar que las 18 novelas del catálogo ya recibieron esta puntuación: actualmente tienen niveles y justificaciones narrativas, no una medición por indicadores.
+**Criterio provisional de síntesis**: 0–2 = básico; 3–5 = intermedio; 6–8 = avanzado. Estas bandas las propone el equipo como instrumento didáctico; **no provienen de Common Core ni se ha demostrado su validez**. No hay que afirmar que las 22 novelas del catálogo ya recibieron esta puntuación: actualmente tienen niveles y justificaciones narrativas, no una medición por indicadores.
 
-Para convertir la clasificación en un procedimiento verificable, el equipo tendría que evaluar las 18 obras con esta rúbrica, justificar cada puntuación con pasajes concretos y revisar discrepancias entre evaluadores. Una edición o traducción diferente puede cambiar la dificultad lingüística.
+Para convertir la clasificación en un procedimiento verificable, el equipo tendría que evaluar las 22 obras con esta rúbrica, justificar cada puntuación con pasajes concretos y revisar discrepancias entre evaluadores. Una edición o traducción diferente puede cambiar la dificultad lingüística.
 
 ## Si el docente no acepta niveles de novelas
 

@@ -2,7 +2,7 @@
 
 Cada enlace apunta a una **edición en español** de [Open Library](https://openlibrary.org/developers/api) o a la ficha de la editorial. El campo `Editorial` de `libro/7` identifica el sello de la edición citada. Las clasificaciones de tema, género y dificultad son decisiones didácticas del proyecto; estas fichas permiten contrastar título, autor y editorial, pero no prueban que una biblioteca posea esos ejemplares.
 
-El catálogo tiene **112 libros en español**. Se sustituyeron las ediciones inglesas por traducciones verificables y, en algunos casos, por otra obra del mismo tema (se actualizaron sus autores). Nombres como *Python*, *UML*, *SPQR* o *Freakonomics* pueden permanecer en el título de una edición española. El formato `fisico/digital` es didáctico y no necesariamente coincide con el formato de la edición citada.
+El catálogo tiene **132 libros en español**. Los cuentos clásicos se atribuyen al autor de la versión citada: por ejemplo, *Caperucita Roja* a Charles Perrault, no indistintamente a todas las versiones populares. Nombres como *Python*, *UML*, *SPQR* o *Freakonomics* pueden permanecer en el título de una edición española. El formato `fisico/digital` es didáctico y no necesariamente coincide con el formato de la edición citada.
 
 | ID del libro | Edición consultada |
 | ---: | --- |
@@ -118,3 +118,23 @@ El catálogo tiene **112 libros en español**. Se sustituyeron las ediciones ing
 | 110 | [Estudio en escarlata — 9788420712659](https://openlibrary.org/books/OL44870113M) |
 | 111 | [Viaje al centro de la Tierra — 9789684323155](https://openlibrary.org/books/OL13121973M) |
 | 112 | [Fahrenheit 451 — 9786125027535](https://openlibrary.org/books/OL61409301M) |
+| 113 | [Caperucita Roja — Parramón, 9788434237100](https://openlibrary.org/books/OL25620828M) |
+| 114 | [La Cenicienta — Gaviota, 9788439286288](https://openlibrary.org/books/OL35738897M) |
+| 115 | [La bella durmiente — Editorial Andrés Bello, 9789561318052](https://openlibrary.org/books/OL39793980M) |
+| 116 | [El gato con botas — Fondo de Cultura Económica, 9786071658289](https://openlibrary.org/books/OL47446057M) |
+| 117 | [Hansel y Gretel — Diario el País](https://openlibrary.org/books/OL27953464M) |
+| 118 | [Blancanieves y los siete enanitos — Ediciones Colihue, 9789505814954](https://openlibrary.org/books/OL12993048M) |
+| 119 | [Los músicos de Bremen — Diario el País](https://openlibrary.org/books/OL27953419M) |
+| 120 | [El patito feo — Ediciones Colihue, 9789505814985](https://openlibrary.org/books/OL12993051M) |
+| 121 | [Fábulas — Losada, 9789500305969](https://openlibrary.org/books/OL12952288M) |
+| 122 | [Alicia en el país de las maravillas — M. E. Editores, 9788449502910](https://openlibrary.org/books/OL47302205M) |
+| 123 | [El maravilloso mago de Oz — Anaya Infantil y Juvenil, 9788469848197](https://openlibrary.org/books/OL47208427M) |
+| 124 | [Las crónicas de Narnia. El león, la bruja y el armario — Austral, 9788408210047](https://openlibrary.org/books/OL38583668M) |
+| 125 | [Bodas de sangre — Losada](https://openlibrary.org/books/OL24385440M) |
+| 126 | [Historia de una escalera — Austral](https://openlibrary.org/books/OL26457812M) |
+| 127 | [Antígona — Ediciones Cátedra, 9788437640457](https://openlibrary.org/books/OL35634716M) |
+| 128 | [Edipo Rey — Gredos, 9788424926397](https://openlibrary.org/books/OL35628895M) |
+| 129 | [Sonetos del amor oscuro — Amistades Particulares, 9788494657535](https://openlibrary.org/books/OL44558728M) |
+| 130 | [El Aleph — Debolsillo, 9788466346832](https://openlibrary.org/books/OL35629903M) |
+| 131 | [Bestiario — Alfaguara, 9788420416571](https://openlibrary.org/books/OL47380445M) |
+| 132 | [Las aventuras de Pinocho — Alianza Editorial, 9788420683386](https://openlibrary.org/books/OL47088874M) |

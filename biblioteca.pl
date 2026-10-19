@@ -1,4 +1,7 @@
 /*
+   Ejecutar desde esta carpeta:
+   swipl -s biblioteca.pl -g iniciar -t halt
+
    Sistema experto de recomendacion de libros (SWI-Prolog).
    Seis conjuntos principales (al menos 50 hechos en cada uno):
    estudiante/2, preferencia/6, libro/7, autor/2,
@@ -192,6 +195,28 @@ libro(110, 'Estudio en escarlata', novela, intermedio, misterio, digital, 'Anaya
 libro(111, 'Viaje al centro de la Tierra', novela, intermedio, ciencia_ficcion, fisico, 'Porrúa').
 libro(112, 'Fahrenheit 451', novela, intermedio, ciencia_ficcion, digital, 'Booket').
 
+% Cuentos tradicionales, fantasia, naturaleza, teatro y poesia.
+libro(113, 'Caperucita Roja', cuento, basico, fantasia, fisico, 'Parramón').
+libro(114, 'La Cenicienta', cuento, basico, fantasia, digital, 'Gaviota').
+libro(115, 'La bella durmiente', cuento, basico, fantasia, fisico, 'Editorial Andrés Bello').
+libro(116, 'El gato con botas', cuento, basico, fantasia, digital, 'Fondo de Cultura Económica').
+libro(117, 'Hansel y Gretel', cuento, basico, fantasia, fisico, 'Diario el País').
+libro(118, 'Blancanieves y los siete enanitos', cuento, basico, fantasia, digital, 'Ediciones Colihue').
+libro(119, 'Los músicos de Bremen', cuento, basico, fantasia, fisico, 'Diario el País').
+libro(120, 'El patito feo', cuento, basico, naturaleza, digital, 'Ediciones Colihue').
+libro(121, 'Fábulas', cuento, intermedio, sociedad, fisico, 'Losada').
+libro(122, 'Alicia en el país de las maravillas', novela, intermedio, fantasia, fisico, 'M. E. Editores').
+libro(123, 'El maravilloso mago de Oz', novela, basico, fantasia, digital, 'Anaya Infantil y Juvenil').
+libro(124, 'Las crónicas de Narnia. El león, la bruja y el armario', novela, intermedio, fantasia, fisico, 'Austral').
+libro(125, 'Bodas de sangre', teatro, intermedio, amor, fisico, 'Losada').
+libro(126, 'Historia de una escalera', teatro, intermedio, sociedad, digital, 'Austral').
+libro(127, 'Antígona', teatro, intermedio, filosofia, fisico, 'Ediciones Cátedra').
+libro(128, 'Edipo Rey', teatro, avanzado, filosofia, digital, 'Gredos').
+libro(129, 'Sonetos del amor oscuro', poesia, avanzado, amor, fisico, 'Amistades Particulares').
+libro(130, 'El Aleph', cuento, avanzado, fantasia, digital, 'Debolsillo').
+libro(131, 'Bestiario', cuento, avanzado, fantasia, fisico, 'Alfaguara').
+libro(132, 'Las aventuras de Pinocho', novela, basico, fantasia, digital, 'Alianza Editorial').
+
 % autor(IdAutor, Nombre). Un autor puede aparecer en varios libros;
 % algunas obras tienen dos autores y el libro 58 tiene cuatro.
 autor(1, 'Malba Tahan').
@@ -311,6 +336,16 @@ autor(120, 'Arthur Conan Doyle').
 autor(121, 'Julio Verne').
 autor(122, 'Ray Bradbury').
 autor(123, 'Kendall Scott').
+autor(124, 'Charles Perrault').
+autor(125, 'Hermanos Grimm').
+autor(126, 'Hans Christian Andersen').
+autor(127, 'Félix María de Samaniego').
+autor(128, 'Lewis Carroll').
+autor(129, 'L. Frank Baum').
+autor(130, 'C. S. Lewis').
+autor(131, 'Antonio Buero Vallejo').
+autor(132, 'Sófocles').
+autor(133, 'Carlo Collodi').
 
 % libro_autor(IdLibro, IdAutor): tabla puente para la relacion N:M.
 libro_autor(1, 1).
@@ -436,6 +471,26 @@ libro_autor(109, 119).
 libro_autor(110, 120).
 libro_autor(111, 121).
 libro_autor(112, 122).
+libro_autor(113, 124).
+libro_autor(114, 124).
+libro_autor(115, 124).
+libro_autor(116, 124).
+libro_autor(117, 125).
+libro_autor(118, 125).
+libro_autor(119, 125).
+libro_autor(120, 126).
+libro_autor(121, 127).
+libro_autor(122, 128).
+libro_autor(123, 129).
+libro_autor(124, 130).
+libro_autor(125, 116).
+libro_autor(126, 131).
+libro_autor(127, 132).
+libro_autor(128, 132).
+libro_autor(129, 116).
+libro_autor(130, 112).
+libro_autor(131, 89).
+libro_autor(132, 133).
 
 % Vista de los autores de un libro (los nombres no se duplican en libro/7).
 autores_libro(IdLibro, Nombres) :-
@@ -647,6 +702,10 @@ relacion_tematica(108, misterio, 'La busqueda de un tesoro incluye secretos y tr
 relacion_tematica(109, aventura, 'El viaje de Bilbo articula una aventura en un mundo fantastico').
 relacion_tematica(111, aventura, 'Expedicion imaginaria al interior de la Tierra').
 relacion_tematica(112, sociedad, 'Distopia sobre censura, lectura y control social').
+relacion_tematica(121, naturaleza, 'Los animales protagonizan fabulas con finalidad moral').
+relacion_tematica(125, sociedad, 'El conflicto amoroso se enfrenta a las convenciones sociales').
+relacion_tematica(127, sociedad, 'Enfrenta la ley de la ciudad con la conciencia individual').
+relacion_tematica(26, fantasia, 'Viaja entre planetas y dialoga con seres imaginarios').
 
 % Niveles de novelas: dificultad de lectura, no dificultad academica.
 % Clasificacion humana ORIENTATIVA: lenguaje, narrativa y contexto.
@@ -668,6 +727,10 @@ justificacion_dificultad(109, 'Intermedio: vocabulario y personajes de un mundo 
 justificacion_dificultad(110, 'Intermedio: deduccion policial y cambio de escenario narrativo').
 justificacion_dificultad(111, 'Intermedio: relato de aventuras con vocabulario cientifico de epoca').
 justificacion_dificultad(112, 'Intermedio: distopia con simbolismo y critica social').
+justificacion_dificultad(122, 'Intermedio: juegos de palabras y episodios surrealistas').
+justificacion_dificultad(123, 'Basico: aventura lineal con lenguaje accesible').
+justificacion_dificultad(124, 'Intermedio: universo fantastico y referencias simbolicas').
+justificacion_dificultad(132, 'Basico: aventura lineal protagonizada por una marioneta fantastica').
 
 % Regla experta: la divulgacion de nivel intermedio puede servir como
 % alternativa introductoria al nivel basico, pero puntua menos que el basico.
@@ -850,20 +913,33 @@ detalle_recomendacion(IdRecomendacion, IdEstudiante, IdLibro, Puntos, Motivos) :
     recomendar(Perfil, IdLibro, Puntos, Motivos).
 
 % Interfaz de consola: se puede consultar sin registro o usar datos guardados.
+separador :- writeln('------------------------------------------------------------').
+
+paso(Numero, Titulo) :-
+    nl, separador,
+    format('  PASO ~d DE 4  |  ~w~n', [Numero, Titulo]),
+    separador.
+
 iniciar :-
-    writeln('=== Recomendador de libros ==='),
-    writeln('Puedes usar tildes; Enter omite preferencias opcionales; salir cancela.'),
+    nl, writeln('============================================================'),
+    writeln('             BIBLIOTECA  |  RECOMENDADOR'),
+    writeln('============================================================'),
+    writeln('  Puedes usar tildes. Enter omite filtros opcionales.'),
+    writeln('  Escribe salir para cancelar la busqueda.'),
     ( catalogo_valido -> true ; writeln('Aviso: ejecuta validar_catalogo(E).') ),
     menu.
 
 menu :-
-    nl,
-    writeln('1. Consulta guiada con filtros contextuales'),
-    writeln('2. Recomendar a un estudiante registrado'),
-    writeln('3. Ver historial de un estudiante'),
-    writeln('4. Buscar mediante una frase'),
-    writeln('0. Salir'),
-    pedir('Elige una opcion: ', ['1', '2', '3', '4', '0'], obligatorio, Opcion),
+    nl, separador,
+    writeln('                     MENU PRINCIPAL'),
+    separador,
+    writeln('  [1]  Consulta guiada por género, tema y nivel'),
+    writeln('  [2]  Recomendar a un estudiante registrado'),
+    writeln('  [3]  Ver historial de un estudiante'),
+    writeln('  [4]  Buscar mediante una frase'),
+    writeln('  [0]  Salir del programa'),
+    separador,
+    pedir('Elige una opción: ', ['1', '2', '3', '4', '0'], obligatorio, Opcion),
     ( (Opcion == '0' ; Opcion == salir) -> true
     ; Opcion == '1' -> consulta_rapida, menu
     ; Opcion == '2' -> consulta_registrada, menu
@@ -872,20 +948,24 @@ menu :-
     ).
 
 consulta_rapida :-
-    writeln('Las opciones cambian segun el catalogo. Enter omite preferencias opcionales.'),
-    writeln('Formato didactico: no garantiza disponibilidad real.'),
+    nl, writeln('CONSULTA GUIADA | Solo se ofrecen combinaciones con libros.'),
+    writeln('El formato es didáctico; no garantiza disponibilidad real.'),
     generos_disponibles(Generos),
-    pedir_opciones('¿Que genero prefieres?', Generos, opcional, Genero),
+    paso(1, 'GÉNERO'),
+    pedir_opciones('¿Qué género prefieres?', Generos, opcional, Genero),
     ( Genero == salir -> true
     ; temas_disponibles(Genero, Temas),
-      pedir_opciones('¿Que tema quieres leer o aprender?', Temas, tema, Tema),
+      paso(2, 'TEMA'),
+      pedir_opciones('¿Qué tema quieres leer o aprender?', Temas, tema, Tema),
       ( Tema == salir -> true
       ; niveles_disponibles(Genero, Tema, Niveles),
-        writeln('Nivel = dificultad de lectura, tambien para novelas.'),
-        pedir_si_hay_variedad('nivel', '¿Que nivel prefieres?', Niveles, Nivel),
+        paso(3, 'NIVEL DE LECTURA'),
+        writeln('El nivel indica dificultad de lectura, también en novelas.'),
+        pedir_si_hay_variedad('nivel', '¿Qué nivel prefieres?', Niveles, Nivel),
         ( Nivel == salir -> true
         ; formatos_disponibles(Genero, Tema, Nivel, Formatos),
-          pedir_si_hay_variedad('formato', '¿Que formato prefieres?', Formatos, Formato),
+          paso(4, 'FORMATO'),
+          pedir_si_hay_variedad('formato', '¿Qué formato prefieres?', Formatos, Formato),
           ( Formato == salir -> true
           ; Perfil = pref(Tema, Genero, Nivel, Formato),
             recomendaciones(Perfil, Resultados),
@@ -902,13 +982,20 @@ pedir_si_hay_variedad(_, Pregunta, Valores, Respuesta) :-
     pedir_opciones(Pregunta, Valores, opcional, Respuesta).
 
 pedir_opciones(Pregunta, Validos, Tipo, Respuesta) :-
-    atomic_list_concat(Validos, ', ', Opciones),
+    format('~w~n~n  Opciones disponibles:~n', [Pregunta]),
+    mostrar_opciones(Validos),
     ( Tipo == opcional ->
-        format(atom(Mensaje), '~w (~w; Enter = cualquiera): ', [Pregunta, Opciones]),
-        pedir(Mensaje, Validos, opcional, Respuesta)
-    ; format(atom(Mensaje), '~w (~w): ', [Pregunta, Opciones]),
-      pedir_tema(Mensaje, Validos, Respuesta)
+        pedir('  > Elige una opción (Enter = cualquiera): ', Validos, opcional, Respuesta)
+    ; pedir_tema('  > Escribe el tema o una frase: ', Validos, Respuesta)
     ).
+
+mostrar_opciones(Validos) :-
+    forall(nth1(Indice, Validos, Opcion),
+           (format('    - ~w', [Opcion]),
+            ( 0 is Indice mod 3 -> nl ; write('     ') ))),
+    length(Validos, Total),
+    ( 0 is Total mod 3 -> true ; nl ),
+    nl.
 
 % La pregunta guiada tambien aprovecha el analizador lexico.
 pedir_tema(Mensaje, Validos, Tema) :-
@@ -929,9 +1016,12 @@ pedir_tema(Mensaje, Validos, Tema) :-
     ), !.
 
 consulta_por_frase :-
-    writeln('Ejemplo: necesito libros basicos digitales que hablen sobre la guerra.'),
-    writeln('Formato didactico: no representa disponibilidad real.'),
-    write('Escribe tu busqueda: '), flush_output,
+    nl, separador,
+    writeln('                 BUSQUEDA POR FRASE'),
+    separador,
+    writeln('  Ejemplo: necesito cuentos basicos de fantasia.'),
+    writeln('  Formato didactico: no representa disponibilidad real.'),
+    write('  > Escribe tu busqueda: '), flush_output,
     read_line_to_string(user_input, Entrada),
     ( Entrada == end_of_file -> true
     ; normalize_space(string(Limpia), Entrada), string_lower(Limpia, "salir") -> true
@@ -1115,9 +1205,10 @@ mostrar(Perfil, Resultados) :-
     Resultados \== [],
     include(exacta(Perfil), Resultados, Exactas),
     exclude(exacta(Perfil), Resultados, Aproximadas),
-    nl,
+    nl, separador,
     ( Exactas == [] -> writeln('No hay coincidencias exactas con todos los filtros.')
     ; writeln('=== Coincidencias exactas ==='),
+      separador,
       forall(member(Resultado, Exactas), mostrar_exacta(Resultado))
     ),
     ofrecer_alternativas(Perfil, Aproximadas),
@@ -1129,12 +1220,15 @@ ofrecer_alternativas(_, []) :-
 ofrecer_alternativas(Perfil, Aproximadas) :-
     Aproximadas \== [],
     length(Aproximadas, Cantidad),
+    separador,
     format('Posibles recomendaciones adicionales: ~d.~n', [Cantidad]),
-    writeln('1. Mostrar coincidencias posibles'),
-    writeln('0. Salir de esta busqueda y volver al menu'),
+    writeln('  [1] Mostrar coincidencias posibles'),
+    writeln('  [0] Salir de esta busqueda y volver al menu'),
     pedir('Elige una opcion: ', ['1', '0'], obligatorio, Opcion),
     ( Opcion == '1' ->
-        nl, writeln('=== Posibles recomendaciones (no cumplen todos los filtros) ==='),
+        nl, separador,
+        writeln('=== Posibles recomendaciones (no cumplen todos los filtros) ==='),
+        separador,
         forall(member(Resultado, Aproximadas), mostrar_aproximada(Perfil, Resultado))
     ; true ).
 
@@ -1146,7 +1240,7 @@ mostrar_exacta(recomendacion(Id, Titulo, Autores, _, Motivos)) :-
     texto_motivos(Motivos, Explicacion),
     editorial_visible(Id, Editorial),
     informacion_dificultad(Id, Nota),
-    format('~d. ~w - ~w | editorial: ~w | ~w~w~n',
+    format('  ~d) ~w~n     Autor: ~w  |  Editorial: ~w~n     Motivo: ~w~w~n~n',
            [Id, Titulo, Nombres, Editorial, Explicacion, Nota]).
 
 mostrar_aproximada(Perfil, recomendacion(Id, Titulo, Autores, Puntos, Motivos)) :-
@@ -1155,8 +1249,8 @@ mostrar_aproximada(Perfil, recomendacion(Id, Titulo, Autores, Puntos, Motivos)) 
     diferencias(Perfil, Id, Faltantes),
     editorial_visible(Id, Editorial),
     informacion_dificultad(Id, Nota),
-    format('~d. ~w - ~w | editorial: ~w | cercania: ~d | ~w | difiere en: ~w~w~n',
-           [Id, Titulo, Nombres, Editorial, Puntos, Explicacion, Faltantes, Nota]).
+    format('  ~d) ~w~n     Autor: ~w  |  Editorial: ~w  |  Cercania: ~d~n     Motivo: ~w~w~n     difiere en: ~w~n~n',
+           [Id, Titulo, Nombres, Editorial, Puntos, Explicacion, Nota, Faltantes]).
 
 % Expone al lector el criterio de dificultad cuando se recomienda una novela.
 informacion_dificultad(Id, Nota) :-
