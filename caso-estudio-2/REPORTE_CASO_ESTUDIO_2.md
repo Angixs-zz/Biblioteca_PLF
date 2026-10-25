@@ -5,7 +5,11 @@
 - **Commit base:** `b24384c`
 - **Fecha de verificación:** 25 de octubre de 2026
 - **Entorno:** SWI-Prolog 9.0.4 para x86_64-linux
-- **Repositorio remoto:** `https://github.com/yareliyazmin16/Biblioteca_PLF.git`
+- **Repositorio original de referencia:** `https://github.com/yareliyazmin16/Biblioteca_PLF.git`
+- **Repositorio de publicación:** `https://github.com/Angixs-zz/Biblioteca_PLF`
+- **Commit de mejoras publicado:** `255a88f` (`miguel/mejoras-hw-expert`)
+- **Organización:** incorporado a `caso-estudio-2/` en la rama `miguel/organizar-casos-prolog`, sin fusionar con `main`.
+- **Nota sobre pruebas:** los resultados se registraron antes de mover los archivos; no se han repetido después de la reorganización.
 
 ---
 
@@ -27,7 +31,7 @@ Resultado real de la suite:
 % All 50 tests passed
 ```
 
-No se hizo `commit`, `push`, `merge` ni se abrió un pull request.
+Durante la fase de verificación no se hizo `commit`, `push`, `merge` ni se abrió un pull request. **Posteriormente** se publicaron las mejoras en el fork propio mediante el commit `255a88f`; la reorganización se hizo en una rama independiente, sin fusionar con `main`.
 
 ---
 
@@ -62,7 +66,7 @@ El trabajo se realizó únicamente sobre la rama `miguel/mejoras-hw-expert`. No 
 | Conservar la Regla 4 de cinco componentes | Respetada |
 | No inventar componentes, datos ni capturas | Respetado |
 | No instalar dependencias globales ni usar servicios de pago | Respetado |
-| No hacer commit, push, merge ni PR sin autorización | Respetado |
+| No publicar sin autorización durante la implementación y las pruebas | Respetado en esa etapa; después se publicó la rama de mejoras |
 
 **Nota sobre `candidato/10`:** el enunciado hace referencia a `candidato/11`, pero la implementación original y la conservada usan **`candidato/10`**. No se cambió su aridad; se documentó la diferencia para evitar confusiones.
 
@@ -409,7 +413,7 @@ Ambos terminaron con código `0`.
 | Suite | Todas las pruebas pasan | `% All 50 tests passed` |
 | Arranque con `--demo` | Ejecuta y termina | Código `0` |
 | Arranque con `--no-menu` | Carga sin menú | Código `0` |
-| Commit/push | No realizar sin autorización | No se realizó |
+| Commit/push durante la verificación inicial | No realizar sin autorización | No se realizó en esa etapa; posteriormente se publicó el commit `255a88f` |
 
 **Diferencia documentada:** la recomendación de gaming con $27,000 MXN cambió de `AMD Radeon RX 7900 XTX` de 24 GB (total $26,370) a `NVIDIA GeForce RTX 3090` de 24 GB (total $25,560) tras corregir el puntaje y el desempate por costo. Esto es consecuencia de la nueva heurística, no de un hecho nuevo ni de datos inventados: ambas GPU ya existían en la base.
 
@@ -467,7 +471,7 @@ Los tiempos no son un benchmark absoluto: dependen de la carga del equipo, la me
 | `pruebas_hw_expert.pl` | Nuevo |
 | `REPORTE_CASO_ESTUDIO_2.md` | Nuevo (este reporte) |
 
-### Estado real de Git
+### Estado local de Git durante las pruebas (histórico)
 
 ```text
 ## miguel/mejoras-hw-expert
@@ -496,16 +500,14 @@ Resultado: sin salida, código de salida `0`.
 
 ---
 
-## 13. Confirmación de no publicación
+## 13. Publicación posterior a las pruebas
 
-Se confirma explícitamente:
+Este reporte se redactó inicialmente cuando los cambios eran **locales y no estaban publicados**. El estado posterior es:
 
-- **No** se ejecutó `git commit`.
-- **No** se ejecutó `git push`.
-- **No** se ejecutó `git merge`.
-- **No** se abrió ningún pull request.
-- **No** se cambió de rama para publicar.
-- El trabajo permanece únicamente en la rama local `miguel/mejoras-hw-expert`.
+- Las mejoras se guardaron en el commit `255a88f` y se subieron a la rama `miguel/mejoras-hw-expert` del repositorio `Angixs-zz/Biblioteca_PLF`.
+- Los archivos del Caso 2 se organizaron en la carpeta `caso-estudio-2/` de la rama `miguel/organizar-casos-prolog`, junto al Caso 1 en su propia carpeta.
+- **No se ha realizado merge a `main` ni se ha abierto un pull request para esta reorganización.**
+- Las 50 pruebas descritas arriba pertenecen a la ejecución anterior a esta reorganización de carpetas; conviene repetirlas desde `caso-estudio-2/` antes de integrar los cambios.
 
 ---
 
