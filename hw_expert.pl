@@ -5,18 +5,22 @@
 %%  Caso de Estudio 2 - Prolog (probado en SWI-Prolog 9.x)
 %%
 %%  Uso:   swipl hw_expert.pl
-%%         (el MENÚ interactivo arranca solo al cargar; también: ?- menu.)
-%%         ?- demo.        % ejecuta consultas de ejemplo
-%%         ?- ayuda.       % lista de consultas disponibles
+%%         (el MENÚ interactivo arranca solo si hay una terminal; también: ?- menu.)
+%%         swipl -g demo -t halt hw_expert.pl     % demo sin abrir el menú
+%%         swipl pruebas_hw_expert.pl             % pruebas automatizadas
+%%         ?- ayuda.                              % lista de consultas disponibles
 %%
 %%  Convenciones:
 %%   - Precios en pesos mexicanos (MXN), aprox. con tipo de cambio 18.5. Consumos en Watts (TDP / consumo típico).
 %%   - Sockets y tipos de RAM son átomos: lga1700, am5, ddr4, ddr5 ...
 %%   - Cada registro de memoria_ram es un kit con la capacidad total.
+%%   - El cálculo energético y el balance CPU/GPU son heurísticos y
+%%     académicos: no sustituyen benchmarks ni la validación del fabricante.
 %% ==================================================================
 
 :- use_module(library(aggregate)).
 :- use_module(library(lists)).
+:- use_module(library(readutil)).
 
 
 % ============================================================
@@ -367,6 +371,12 @@ incompatibilidad(_, IdMb, IdRam, Motivo) :-
            'Memoria incompatible: la placa soporta ~w y la RAM es ~w',
            [TMb, TRam]).
 
+% Alcance real de la Regla 1. Los hechos de la práctica no incluyen
+% chipset, versión de BIOS, capacidad máxima, número de módulos ni
+% conectores, por lo que no es honesto afirmar compatibilidad física total.
+advertencia_compatibilidad_fisica(
+    'La validación cubre socket y tipo de RAM (DDR4/DDR5). No verifica versión de BIOS, chipset, capacidad máxima, número de módulos, velocidad soportada, conectores de la fuente, PCIe ni dimensiones físicas; confirma esos datos con el fabricante.').
+
 % ==================================================================
 %  REGLA 2: Evaluación de balance y seguridad energética
 %    1) Consumo total = W(CPU) + W(Placa) + W(GPU)
@@ -388,11 +398,44 @@ fuente_suficiente(IdCpu, IdMb, IdGpu, IdPsu) :-
     fuente_poder(IdPsu, _, _, Potencia, _, _),
     Potencia >= Requerido.
 
+% Advertencias que NO cambian el resultado de la Regla 2, pero evitan
+% presentar el cálculo simplificado como una garantía absoluta.
+% El caso límite Potencia = Requerido sí se acepta (>=), tal como pide
+% la regla; aquí solo se informa cuando la holgura es pequeña.
+advertencias_energeticas(IdCpu, IdMb, IdGpu, IdPsu, Advertencias) :-
+    consumo_con_margen(IdCpu, IdMb, IdGpu, Requerido),
+    fuente_poder(IdPsu, _, _, Potencia, Certificacion, _),
+    tarjeta_grafica(IdGpu, _, _, _, WattsGpu, _, _),
+    findall(A, advertencia_energetica(Requerido, Potencia, Certificacion, WattsGpu, A),
+            Advertencias).
+
+advertencia_energetica(Requerido, Potencia, _, _,
+        Mensaje) :-
+    Potencia >= Requerido,
+    Potencia < Requerido * 1.10,
+    Holgura is Potencia - Requerido,
+    format(atom(Mensaje),
+           'Holgura energética menor al 10% (~1f W sobre ~1f W requeridos); conviene una fuente de mayor capacidad.',
+           [Holgura, Requerido]).
+advertencia_energetica(_, _, Certificacion, WattsGpu,
+        Mensaje) :-
+    WattsGpu >= 250,
+    memberchk(Certificacion, [white, bronze]),
+    format(atom(Mensaje),
+           'GPU de ~w W con fuente 80+ ~w: revisa calidad, protecciones y conectores; el cálculo no modela picos transitorios.',
+           [WattsGpu, Certificacion]).
+advertencia_energetica(_, _, _, _,
+    'El cálculo solo suma CPU + placa + GPU; no incluye RAM, almacenamiento, ventiladores, bomba de refrigeración ni picos transitorios.').
+
 % ==================================================================
 %  REGLA 3: Diagnóstico de cuellos de botella
-%  Cuello de botella: GPU con VRAM >= 16 GB y CPU con < 8 núcleos.
-%  Equilibrada: GPU de gama alta con CPU de >= 8 núcleos (o GPU de
-%  gama media/baja, que no exige un CPU de gama alta).
+%  Criterio académico obligatorio:
+%    GPU con VRAM >= 16 GB y CPU con < 8 núcleos => cuello de botella.
+%  Criterio heurístico adicional para configuraciones equilibradas:
+%    VRAM >= 16 -> CPU >= 8 núcleos
+%    VRAM >=  8 -> CPU >= 6 núcleos
+%    VRAM <   8 -> CPU >= 4 núcleos
+%  No es un ranking de rendimiento ni sustituye benchmarks reales.
 % ==================================================================
 gpu_gama_alta(IdGpu) :-
     tarjeta_grafica(IdGpu, _, _, VRAM, _, _, _),
@@ -408,12 +451,37 @@ cuello_botella(IdCpu, IdGpu, Mensaje) :-
     Cores < 8,
     Mensaje = 'El procesador limitará el desempeño de la tarjeta gráfica en tareas pesadas'.
 
+% Mínimo de núcleos que la heurística considera coherente para cada
+% nivel de VRAM. Es una regla de proporción, no una medición de FPS.
+minimo_nucleos_equilibrio(VRAM, 8) :- VRAM >= 16, !.
+minimo_nucleos_equilibrio(VRAM, 6) :- VRAM >=  8, !.
+minimo_nucleos_equilibrio(_, 4).
+
+equilibrio_ok(Cores, VRAM) :-
+    minimo_nucleos_equilibrio(VRAM, Minimos),
+    Cores >= Minimos.
+
 configuracion_equilibrada(IdCpu, IdGpu) :-
-    gpu_gama_alta(IdGpu),
-    cpu_gama_alta(IdCpu).
-configuracion_equilibrada(IdCpu, IdGpu) :-
-    tarjeta_grafica(IdGpu, _, _, VRAM, _, _, _), VRAM < 16,
-    procesador(IdCpu, _, _, _, _, _, _, _).
+    procesador(IdCpu, _, _, _, Cores, _, _, _),
+    tarjeta_grafica(IdGpu, _, _, VRAM, _, _, _),
+    equilibrio_ok(Cores, VRAM).
+
+% Tres resultados posibles y mutuamente excluyentes:
+%   cuello_botella(Mensaje)  -> se activó el criterio obligatorio
+%   equilibrada              -> la heurística de núcleos/VRAM lo considera coherente
+%   no_concluyente(Mensaje)  -> no se puede afirmar ninguna de las dos cosas
+diagnostico_balance(IdCpu, IdGpu, cuello_botella(Mensaje)) :-
+    cuello_botella(IdCpu, IdGpu, Mensaje), !.
+diagnostico_balance(IdCpu, IdGpu, equilibrada) :-
+    configuracion_equilibrada(IdCpu, IdGpu), !.
+diagnostico_balance(IdCpu, IdGpu, no_concluyente(Mensaje)) :-
+    procesador(IdCpu, _, _, _, Cores, _, _, _),
+    tarjeta_grafica(IdGpu, _, _, VRAM, _, _, _),
+    \+ cuello_botella(IdCpu, IdGpu, _),
+    \+ configuracion_equilibrada(IdCpu, IdGpu),
+    format(atom(Mensaje),
+           'resultado no concluyente: GPU de ~w GB de VRAM con CPU de ~w núcleos; la heurística no permite afirmar equilibrio ni se activa el umbral obligatorio de cuello de botella.',
+           [VRAM, Cores]).
 
 % ------------------------------------------------------------------
 %  Perfiles de uso (carga de trabajo): requisitos mínimos y pesos.
@@ -429,7 +497,7 @@ perfil_minimo(desarrollo,   6, 16,  0).
 perfil_peso(gaming,       2, 1, 4).
 perfil_peso(ia,           2, 2, 5).
 perfil_peso(renderizado,  4, 2, 4).
-perfil_peso(servidor_web, 5, 4, 1).
+perfil_peso(servidor_web, 5, 4, 0).
 perfil_peso(desarrollo,   4, 3, 1).
 
 % Alertas según la carga de trabajo asignada.
@@ -464,19 +532,40 @@ perfil_tope(renderizado,  32, 128).
 perfil_tope(servidor_web, 32, 128).
 perfil_tope(desarrollo,   12,  32).
 
-% Puntaje de rendimiento (para elegir "la mejor" configuración).
+% Tope de VRAM que la heurística considera aprovechable por perfil.
+% perfil_tope_gpu(Perfil, MaxVRAM_GBUtil)
+perfil_tope_gpu(gaming,       16).
+perfil_tope_gpu(ia,           24).
+perfil_tope_gpu(renderizado,  24).
+perfil_tope_gpu(servidor_web,  8).
+perfil_tope_gpu(desarrollo,    8).
+
+% Puntaje heurístico de rendimiento (para elegir "la mejor" configuración).
+% No es un benchmark. Solo usa datos disponibles en los hechos:
+%   - CPU: núcleos e hilos, con rendimientos decrecientes.
+%   - RAM: capacidad y velocidad, con topes por perfil.
+%   - GPU: VRAM aprovechable por perfil. El precio solo desempata de forma
+%     mínima; el consumo NO se usa como si fuera rendimiento.
+% Un precio o un consumo altos no garantizan mejor desempeño.
 puntaje(Perfil, IdCpu, IdRam, IdGpu, Puntaje) :-
-    perfil_peso(Perfil, WC, WR, WG),
-    perfil_tope(Perfil, TopeC, TopeR),
     procesador(IdCpu, _, _, _, Cores, Hilos, _, _),
     memoria_ram(IdRam, _, _, Cap, Vel, _),
-    tarjeta_grafica(IdGpu, _, _, VRAM, Watts, _, PrecioG),
+    tarjeta_grafica(IdGpu, _, _, VRAM, _, _, PrecioG),
+    puntaje_componentes(Perfil, Cores, Hilos, Cap, Vel, VRAM, PrecioG, Puntaje).
+
+% Variante que recibe los datos ya leídos por candidato/10, para no
+% volver a recorrer los hechos de CPU, RAM y GPU en cada combinación.
+puntaje_componentes(Perfil, Cores, Hilos, Cap, Vel, VRAM, PrecioG, Puntaje) :-
+    perfil_peso(Perfil, WC, WR, WG),
+    perfil_tope(Perfil, TopeC, TopeR),
+    perfil_tope_gpu(Perfil, TopeV),
     CoresU is min(Cores, TopeC),
     HilosU is min(Hilos, 2 * TopeC),
     CapU   is min(Cap, TopeR),
+    VelU   is min(Vel, 6400),
     CpuS is 4 * sqrt(CoresU) + sqrt(HilosU),     % rendimientos decrecientes
-    RamS is 2 * sqrt(CapU) + Vel / 1000,
-    GpuS is VRAM / 2 + Watts / 15 + PrecioG / 700,   % VRAM + potencia + gama (precio)
+    RamS is 2 * sqrt(CapU) + VelU / 1000,
+    GpuS is min(VRAM, TopeV) + PrecioG / 1000000, % VRAM útil + desempate mínimo
     Puntaje is WC * CpuS + WR * RamS + WG * GpuS.
 
 % ==================================================================
@@ -528,29 +617,39 @@ filtros_por_defecto(Perfil, filtros(cualquiera, cualquiera, cualquiera, MinC, Mi
     perfil_minimo(Perfil, MinC, MinR, MinV).
 
 % Candidato que cumple perfil/filtros, sin cuello de botella y dentro del presupuesto.
+% Regla 1 se aplica unificando Socket y TipoRAM directamente, sin volver
+% a consultar los hechos; es equivalente a compatibles/3.
+% La fuente se obtiene de psu_para_watts/3, que ya garantiza Pot >= Req
+% (Regla 2) y elige la de menor precio para esa potencia requerida.
 candidato(Perfil, Presupuesto, filtros(FCpu, FGpu, FRam, MinC, MinR, MinV),
           Cpu, Mb, Ram, Gpu, Psu, Total, Puntaje) :-
-    procesador(Cpu, MarcaC, _, _, Cores, _, _, PC),
+    procesador(Cpu, MarcaC, _, Socket, Cores, Hilos, WCpu, PC),
     filtro_ok(FCpu, MarcaC), Cores >= MinC, PC =< Presupuesto,
-    placa_madre(Mb, _, _, TipoMb, _, _, PM),
+    placa_madre(Mb, _, Socket, TipoMb, _, WMb, PM),   % Regla 1: socket
     filtro_ok(FRam, TipoMb),
     P2 is PC + PM, P2 =< Presupuesto,
-    memoria_ram(Ram, _, _, Cap, _, PR),
+    memoria_ram(Ram, _, TipoMb, Cap, Vel, PR),         % Regla 1: tipo de RAM
     Cap >= MinR,
     P3 is P2 + PR, P3 =< Presupuesto,
-    compatibles(Cpu, Mb, Ram),                       % Regla 1
-    tarjeta_grafica(Gpu, MarcaG, _, VRAM, _, _, PG),
+    tarjeta_grafica(Gpu, MarcaG, _, VRAM, WGpu, _, PG),
     filtro_ok(FGpu, MarcaG), VRAM >= MinV,
     P4 is P3 + PG, P4 =< Presupuesto,
-    \+ cuello_botella(Cpu, Gpu, _),                  % Regla 3
-    psu_mas_barata(Cpu, Mb, Gpu, Psu, PP),           % Regla 2
+    equilibrio_ok(Cores, VRAM),                       % Regla 3 (incluye el umbral obligatorio)
+    Requerido is (WCpu + WMb + WGpu) * 1.25,          % Regla 2
+    WReq is ceiling(Requerido),
+    psu_para_watts(WReq, Psu, PP),
     Total is P4 + PP, Total =< Presupuesto,
-    puntaje(Perfil, Cpu, Ram, Gpu, Puntaje).
+    puntaje_componentes(Perfil, Cores, Hilos, Cap, Vel, VRAM, PG, Puntaje).
 
 % Mejor configuración (máximo puntaje) para perfil, presupuesto y filtros.
+% El desempate resta un costo total muy pequeño: así, entre dos equipos
+% con el mismo puntaje heurístico, se prefiere el más económico. No
+% convierte el precio en una medida de rendimiento.
 mejor_configuracion(Perfil, Presupuesto, Filtros, config(Cpu, Mb, Ram, Gpu, Psu, Total)) :-
-    aggregate_all(max(S, c(C, M, R, G, F, T)),
-                  candidato(Perfil, Presupuesto, Filtros, C, M, R, G, F, T, S),
+    aggregate_all(max(SA, c(C, M, R, G, F, T)),
+                  ( candidato(Perfil, Presupuesto, Filtros, C, M, R, G, F, T, S),
+                    SA is S - T / 1000000
+                  ),
                   max(_, c(Cpu, Mb, Ram, Gpu, Psu, Total))).
 
 mejor_configuracion(Perfil, Presupuesto, Config) :-
@@ -560,12 +659,21 @@ mejor_configuracion(Perfil, Presupuesto, Config) :-
 % ==================================================================
 %  DIAGNÓSTICO COMPLETO DE UNA CONFIGURACIÓN DADA
 % ==================================================================
+imprimir_balance(cuello_botella(Mensaje)) :-
+    format('[ALERTA] ~w.~n', [Mensaje]).
+imprimir_balance(equilibrada) :-
+    writeln('[OK]   Balance: configuración equilibrada según la heurística de núcleos/VRAM (no sustituye benchmarks reales).').
+imprimir_balance(no_concluyente(Mensaje)) :-
+    format('[INFO] Balance: ~w~n', [Mensaje]).
+
 diagnosticar(Cpu, Mb, Ram, Gpu, Psu, Perfil) :-
     format('~n=== DIAGNÓSTICO (perfil: ~w) ===~n', [Perfil]),
     % Regla 1
     ( compatibles(Cpu, Mb, Ram)
     -> writeln('[OK]   Compatibilidad: socket y tipo de RAM correctos.')
     ;  forall(incompatibilidad(Cpu, Mb, Ram, M), format('[FALLA] ~w~n', [M])) ),
+    advertencia_compatibilidad_fisica(AdvertenciaFisica),
+    format('[INFO] ~w~n', [AdvertenciaFisica]),
     % Regla 2
     consumo_total(Cpu, Mb, Gpu, Total),
     consumo_con_margen(Cpu, Mb, Gpu, Req),
@@ -573,12 +681,12 @@ diagnosticar(Cpu, Mb, Ram, Gpu, Psu, Perfil) :-
     ( fuente_suficiente(Cpu, Mb, Gpu, Psu)
     -> format('[OK]   Energía: consumo ~w W (+25% = ~1f W) <= fuente de ~w W.~n', [Total, Req, Pot])
     ;  format('[FALLA] Energía: se requieren ~1f W (consumo ~w W + 25%) y la fuente es de ~w W.~n', [Req, Total, Pot]) ),
+    advertencias_energeticas(Cpu, Mb, Gpu, Psu, AdvertenciasEnergia),
+    forall(member(A, AdvertenciasEnergia), format('[INFO] ~w~n', [A])),
     % Regla 3
-    ( cuello_botella(Cpu, Gpu, Msg)
-    -> format('[ALERTA] ~w.~n', [Msg])
-    ;  configuracion_equilibrada(Cpu, Gpu)
-    -> writeln('[OK]   Balance: configuración equilibrada CPU/GPU.')
-    ;  writeln('[INFO] Balance: sin datos concluyentes.') ),
+    diagnostico_balance(Cpu, Gpu, EstadoBalance),
+    imprimir_balance(EstadoBalance),
+    writeln('[INFO] El balance CPU/GPU es heurístico y no sustituye benchmarks reales.'),
     % Perfil
     findall(A, alerta_perfil(Perfil, Cpu, Ram, Gpu, A), Alertas),
     ( Alertas == []
@@ -614,6 +722,8 @@ recomendar_con_filtros(Perfil, Presupuesto, Filtros) :-
         diagnosticar(C, M, R, G, P, Perfil)
     ;   format('~nNo existe una configuración válida para ~w con $~D MXN y esas preferencias.~n',
                [Perfil, Presupuesto]),
+        writeln('Posibles causas: presupuesto insuficiente, filtros de marca demasiado estrictos,'),
+        writeln('tipo de RAM incompatible con la plataforma elegida o mínimos muy altos.'),
         writeln('Sugerencia: aumenta el presupuesto o relaja las preferencias.')
     ).
 
@@ -623,8 +733,10 @@ contar_registros :-
     aggregate_all(count, memoria_ram(_,_,_,_,_,_),     C),
     aggregate_all(count, tarjeta_grafica(_,_,_,_,_,_,_), D),
     aggregate_all(count, fuente_poder(_,_,_,_,_,_),    E),
+    Total is A + B + C + D + E,
     format('procesador: ~w | placa_madre: ~w | memoria_ram: ~w | tarjeta_grafica: ~w | fuente_poder: ~w~n',
-           [A, B, C, D, E]).
+           [A, B, C, D, E]),
+    format('TOTAL: ~w hechos~n', [Total]).
 
 % Búsqueda de Id por modelo (comodidad para consultas y demo).
 cpu_id(Modelo, Id)  :- procesador(Id, _, Modelo, _, _, _, _, _), !.
@@ -638,31 +750,44 @@ ram_id(Marca, Tipo, Cap, Vel, Id) :- memoria_ram(Id, Marca, Tipo, Cap, Vel, _), 
 % ==================================================================
 leer_linea(Prompt, Linea) :-
     format('~w', [Prompt]), flush_output,
-    read_line_to_string(user_input, L0),
+    read_line_to_string(current_input, L0),
     (   L0 == end_of_file
     ->  nl, writeln('Fin de la entrada. ¡Hasta luego!'), halt
     ;   normalize_space(string(Linea), L0)
     ).
 
+% Validación pura, separada de la lectura, para poder probarla con plunit.
+parse_entero(Texto, Min, Max, N) :-
+    number_string(N, Texto),
+    integer(N),
+    N >= Min,
+    N =< Max.
+
 % Entero entre Min y Max (repite hasta que sea válido).
 leer_entero(Prompt, Min, Max, N) :-
     repeat,
         leer_linea(Prompt, L),
-        (   number_string(N0, L), integer(N0), N0 >= Min, N0 =< Max
+        (   parse_entero(L, Min, Max, N0)
         ->  N = N0, !
         ;   format('  Entrada no válida: escribe un número entre ~w y ~w.~n', [Min, Max]),
             fail
         ).
 
 % Cantidad en pesos: acepta "25000", "25,000", "$25,000".
+parse_pesos(Texto, Monto) :-
+    string_codes(Texto, Cs),
+    exclude(simbolo_moneda, Cs, Limpios),
+    string_codes(S, Limpios),
+    number_string(N0, S),
+    number(N0),
+    N0 > 0,
+    Monto is round(N0).
+
 leer_pesos(Prompt, Monto) :-
     repeat,
         leer_linea(Prompt, L),
-        string_codes(L, Cs),
-        exclude(simbolo_moneda, Cs, Limpios),
-        string_codes(S, Limpios),
-        (   number_string(N0, S), number(N0), N0 > 0
-        ->  Monto is round(N0), !
+        (   parse_pesos(L, Monto0)
+        ->  Monto = Monto0, !
         ;   writeln('  Entrada no válida: escribe una cantidad en pesos, por ejemplo 30000.'),
             fail
         ).
@@ -796,7 +921,9 @@ opcion_compatibilidad :-
     ->  writeln('[OK] Son compatibles: mismo socket y mismo tipo de memoria RAM.')
     ;   writeln('[NO COMPATIBLES] Motivos:'),
         forall(incompatibilidad(Cpu, Mb, Ram, M), format('  - ~w~n', [M]))
-    ).
+    ),
+    advertencia_compatibilidad_fisica(Advertencia),
+    format('~n[INFO] ~w~n', [Advertencia]).
 
 % --- 3) Regla 2
 opcion_fuente :-
@@ -809,26 +936,25 @@ opcion_fuente :-
     fuente_poder(Psu, _, _, Pot, _, _),
     format('~nConsumo total: ~w W | con 25% de margen: ~1f W | tu fuente: ~w W~n', [Total, Req, Pot]),
     (   fuente_suficiente(Cpu, Mb, Gpu, Psu)
-    ->  writeln('[OK] La fuente tiene potencia suficiente.')
-    ;   writeln('[PELIGRO] La fuente NO alcanza: riesgo de apagones o daños.'),
+    ->  writeln('[OK] La fuente tiene potencia suficiente según la Regla 2.')
+    ;   writeln('[PELIGRO] La fuente NO alcanza según la Regla 2: riesgo de apagones o inestabilidad.'),
         (   psu_mas_barata(Cpu, Mb, Gpu, Rec, Precio)
         ->  fuente_poder(Rec, Ma, Mo, PotR, _, _),
             format('Sugerencia: ~w ~w de ~wW por $~D MXN.~n', [Ma, Mo, PotR, Precio])
         ;   writeln('Ninguna fuente del catálogo alcanza para esta combinación.')
         )
-    ).
+    ),
+    advertencias_energeticas(Cpu, Mb, Gpu, Psu, Advertencias),
+    forall(member(A, Advertencias), format('[INFO] ~w~n', [A])).
 
 % --- 4) Regla 3
 opcion_cuello :-
     elegir_componente(cpu, Cpu),
     elegir_componente(gpu, Gpu),
     nl,
-    (   cuello_botella(Cpu, Gpu, Msg)
-    ->  format('[ALERTA] ~w.~n', [Msg])
-    ;   configuracion_equilibrada(Cpu, Gpu)
-    ->  writeln('[OK] Configuración equilibrada: el procesador no limita a la gráfica.')
-    ;   writeln('[INFO] Sin información concluyente.')
-    ).
+    diagnostico_balance(Cpu, Gpu, Estado),
+    imprimir_balance(Estado),
+    writeln('[INFO] Este diagnóstico es heurístico y no sustituye benchmarks reales.').
 
 % --- 5) Diagnóstico completo
 opcion_diagnostico :-
@@ -882,7 +1008,7 @@ demo :-
 
     writeln('\n##### REGLA 4: recomendación por presupuesto (MXN) #####'),
     ( recomendar(18000, Cp, Mb, Rm, Gp, Ps, Tt)
-    -> format('Primera configuración válida con $18,000 MXN:~n'),
+    -> format('Ejemplo de configuración válida (no necesariamente la mejor) con $18,000 MXN:~n'),
        imprimir_configuracion(config(Cp, Mb, Rm, Gp, Ps, Tt))
     ;  writeln('Sin solución') ),
     recomendar_perfil(gaming, 27000),
@@ -895,12 +1021,36 @@ ayuda :-
     writeln('  fuente_suficiente(IdCpu, IdMb, IdGpu, IdPsu).'),
     writeln('  cuello_botella(IdCpu, IdGpu, Mensaje).'),
     writeln('  configuracion_equilibrada(IdCpu, IdGpu).'),
+    writeln('  diagnostico_balance(IdCpu, IdGpu, Estado).'),
     writeln('  recomendar(PresupuestoMXN, Cpu, Mb, Ram, Gpu, Psu, Total).'),
     writeln('  recomendar_perfil(gaming|ia|renderizado|servidor_web|desarrollo, PresupuestoMXN).'),
+    writeln('  mejor_configuracion(Perfil, PresupuestoMXN, Config).'),
     writeln('  diagnosticar(Cpu, Mb, Ram, Gpu, Psu, Perfil).'),
     writeln('  demo.').
 
-% El menú se inicia automáticamente al cargar el archivo.
-% (Al elegir 0 se regresa al prompt de Prolog; se puede volver a abrir con ?- menu.)
-:- initialization(menu).
+% ------------------------------------------------------------------
+%  CARGA, MODO INTERACTIVO Y MODO NO INTERACTIVO
+% ------------------------------------------------------------------
+% initialization(main, main) solo ejecuta main cuando este archivo es el
+% archivo principal. Al cargarlo desde pruebas (ensure_loaded/1) NO se
+% abre el menú. Así se puede consultar y probar sin bloquear la terminal.
+main :-
+    current_prolog_flag(argv, Args),
+    (   memberchk('--demo', Args)
+    ->  demo, halt
+    ;   memberchk('--no-menu', Args)
+    ->  writeln('HW-Expert cargado en modo no interactivo. Usa menu. o demo.')
+    ;   argv_con_objetivo(Args)
+    ->  true
+    ;   catch(stream_property(user_input, tty(true)), _, fail)
+    ->  menu
+    ;   writeln('HW-Expert cargado. No hay terminal interactiva; usa menu. o demo.')
+    ).
+
+argv_con_objetivo(Args) :- memberchk('-g', Args), !.
+argv_con_objetivo(Args) :- memberchk('--goal', Args), !.
+argv_con_objetivo(Args) :- memberchk('-t', Args), !.
+argv_con_objetivo(Args) :- memberchk('--toplevel', Args), !.
+
+:- initialization(main, main).
 
