@@ -1,84 +1,149 @@
-# Sistema experto de recomendación de libros
+# HW-Expert
 
-Implementación del caso práctico en SWI-Prolog. El modelo tiene **seis tablas principales** y **cuatro catálogos de clasificación**. Los seis conjuntos principales tienen al menos 50 registros cada uno; los catálogos solo tienen las categorías existentes, según la aclaración del profesor.
+Sistema experto en **Prolog** para configurar hardware y diagnosticar su rendimiento. Valida la compatibilidad entre componentes, detecta riesgos (fuente insuficiente, cuellos de botella) y recomienda un equipo completo según el perfil de uso y el presupuesto del cliente.
 
-| Tabla / predicado | Clave y campos | Registros |
-| --- | --- | ---: |
-| Estudiante `estudiante/2` | ID, nombre | 50 |
-| Preferencia `preferencia/6` | ID de preferencia, ID de estudiante, tema, género, nivel, formato | 50 |
-| Libro `libro/7` | ID, título, género, nivel, tema, formato, editorial | 50 |
-| Autor `autor/2` | ID, nombre | 55 |
-| LibroAutor `libro_autor/2` | ID de libro, ID de autor (clave compuesta) | 56 |
-| Recomendación `recomendacion_guardada/3` | ID, ID de preferencia, ID de libro | 50 |
-| Nivel `nivel/2` | Clave, nombre | 3 |
-| Género `genero/2` | Clave, nombre | 4 |
-| Tema `tema/2` | Clave, nombre | 11 |
-| Formato `formato/2` | Clave, nombre | 2 |
+Todos los precios están en **pesos mexicanos (MXN)** y son aproximados (tipo de cambio de referencia: 18 MXN por USD).
 
-```text
-Estudiante 1 ─── N Preferencia 1 ─── N Recomendación N ─── 1 Libro
-                                                         Libro 1 ─── N LibroAutor N ─── 1 Autor
-Preferencia N ─── 1 Nivel/Género/Tema/Formato 1 ─── N Libro
+## Requisitos
+
+- [SWI-Prolog](https://www.swi-prolog.org/Download.html) 9.x o superior.
+
+## Cómo ejecutarlo
+
+```bash
+swipl hw_expert.pl
 ```
 
-Cada recomendación guardada refiere a una preferencia y un libro. `recomendar/4` calcula la coincidencia entre ellos; `detalle_recomendacion/5` recupera el estudiante, puntaje y motivos de un registro guardado. Las recomendaciones guardadas son una muestra del historial: la primera opción del ranking de cada una de las 50 preferencias. Las consultas interactivas **no se guardan automáticamente**. Los estudiantes, sus preferencias y el historial son datos de ejemplo; el formato del libro no representa existencias reales de la biblioteca.
+El menú interactivo se abre automáticamente al cargar el archivo. En Windows también puedes abrir `hw_expert.pl` con SWI-Prolog (`swipl-win`).
 
-La tabla Estudiante es útil para conservar perfiles y consultar el historial de cada persona. **No hace falta ser estudiante registrado para pedir una recomendación**: la consulta rápida toma las respuestas del menú como variables y calcula el resultado sin guardarlas. La editorial depende de la edición concreta; el PDF no especifica ediciones, por lo que el campo tiene el valor `pendiente_de_verificar` hasta disponer de esos datos. No se presenta como una editorial real.
-
-Nivel (`basico`, `intermedio`, `avanzado`), género, tema y formato tienen su propio catálogo. Libro y Preferencia guardan la **clave** de cada categoría; por ejemplo, el valor `basico` referencia el hecho `nivel(basico, 'Básico')`. Las reglas validan las categorías al recomendar. No se crean niveles artificiales para completar 50 filas.
-
-## Ejecutar
-
-Desde esta carpeta:
-
-```sh
-swipl -s biblioteca.pl -g iniciar -t halt
-```
-
-El menú ofrece **1)** consulta guiada sin registro, **2)** recomendaciones para un estudiante registrado, **3)** historial guardado, **4)** búsqueda mediante una frase y **0)** salir. En la consulta guiada se pregunta primero **nivel, género y formato** (pulsa Enter para omitir cada filtro) y al final **qué quieres aprender**. Puedes responder `matematicas` o una frase que contenga esa palabra.
-
-La opción 4 usa un **analizador léxico sencillo**: normaliza mayúsculas, tildes y puntuación, separa la oración en palabras y busca términos conocidos. Por eso acepta distintas estructuras, por ejemplo:
-
-```text
-Quiero libros de guerra
-Necesito libros que hablen sobre la guerra
-Busco un manual avanzado de tecnología
-Prefiero un ebook divulgativo de física
-Necesito libros básicos digitales sobre conflictos bélicos
-```
-
-Puede extraer un tema obligatorio y, si aparecen, un género, nivel y formato. Reconoce las claves de los catálogos, plurales comunes y algunos sinónimos definidos en `alias_catalogo/3`: `principiante`, `medio`, `experto`, `ebook`, `electrónico`, `impreso`, `conflictos` y `bélicos`. Las palabras restantes se ignoran como conectores.
-
-No es inteligencia artificial ni comprende el significado general de cualquier texto. La frase debe incluir **exactamente un tema conocido** y no debe contener valores contradictorios de una misma categoría. Por ejemplo, `quiero historia y guerra` se rechaza por tener dos temas. El vocabulario aceptado puede ampliarse de forma explícita agregando hechos a `alias_catalogo/3`.
-
-Guerra tiene un libro como tema principal y dos libros de historia marcados explícitamente como relacionados. No se recomienda automáticamente todo el catálogo de historia para una búsqueda de guerra.
-
-## Consultas directas
+Si sales del menú con la opción `0`, regresas al prompt de Prolog. Para abrirlo otra vez:
 
 ```prolog
-?- [biblioteca].
-?- libro(IdLibro, Titulo, _, basico, matematicas, _, Editorial).
-?- autores_libro(7, Autores).
-?- libro_autor(IdLibro, IdAutor), autor(IdAutor, 'Stephen Hawking').
-?- perfil_preferencia(1, Perfil).
-?- recomendar(pref(matematicas, cualquiera, basico, cualquiera), IdLibro, Puntos, Motivos).
-?- coincidencia_total(pref(matematicas, divulgacion, basico, cualquiera), IdLibro).
-?- recomendaciones(pref(tecnologia, manual, intermedio, cualquiera), Resultados).
-?- recomendaciones(pref(guerra, cualquiera, basico, cualquiera), Resultados).
-?- analizar_frase("Necesito un manual avanzado de tecnología", Perfil).
-?- tema_de_libro(IdLibro, guerra, PuntosTema, MotivosTema).
-?- recomendaciones_estudiante(1, Resultados).
-?- detalle_recomendacion(1, IdEstudiante, IdLibro, Puntos, Motivos).
-?- nivel(Clave, Nombre).
-?- genero(Clave, Nombre).
-?- tema(Clave, Nombre).
-?- formato(Clave, Nombre).
-?- aggregate_all(count, libro(_, _, _, _, _, _, _), Total).
-?- aggregate_all(count, autor(_, _), Total).
-?- aggregate_all(count, libro_autor(_, _), Total).
-?- aggregate_all(count, estudiante(_, _), Total).
-?- aggregate_all(count, preferencia(_, _, _, _, _, _), Total).
-?- aggregate_all(count, recomendacion_guardada(_, _, _), Total).
+?- menu.
 ```
 
-El tema es obligatorio: debe ser el tema principal del libro o uno secundario documentado en `tema_de_libro/4`. El principal aporta 2 puntos y el secundario 1. Un género o formato coincidente aporta 1 punto cada uno; un nivel exactamente igual aporta 2. La regla `adecuacion_nivel/5` infiere que un libro **intermedio de divulgación** puede ser una alternativa para quien prefiere nivel **básico**: aporta 1 punto y un motivo explícito, menos que una coincidencia exacta. El resto de libros del tema sigue apareciendo después como alternativa, aunque no coincida en nivel o formato. `coincidencia_total/2` solo considera exactos los filtros de género, nivel y formato; el nivel inferido no cuenta como coincidencia total.
+Para cerrar Prolog:
+
+```prolog
+?- halt.
+```
+
+## Menú principal
+
+| Opción | Qué hace |
+|---|---|
+| 1 | **Recomendarme un equipo completo.** Pregunta el uso (gaming, IA, renderizado, servidor web o desarrollo), el presupuesto en pesos, la marca de procesador y de gráfica, el tipo de RAM y si se quieren cambiar los mínimos. Muestra el mejor equipo que cabe en el presupuesto, con su diagnóstico. |
+| 2 | **Validar compatibilidad** entre procesador, placa madre y RAM. Si no son compatibles, explica el motivo. |
+| 3 | **Verificar la fuente de poder.** Muestra el consumo con 25 % de margen y sugiere una fuente si la elegida no alcanza. |
+| 4 | **Revisar cuello de botella** entre procesador y tarjeta gráfica. |
+| 5 | **Diagnóstico completo** de una configuración armada por el usuario. |
+| 6 | **Ver el catálogo** de componentes con sus precios. |
+| 7 | **Ver el tamaño de la base de conocimientos** (registros por tabla). |
+| 8 | **Demostración automática** de las cuatro reglas con casos fijos. |
+| 0 | Salir del menú. |
+
+En las opciones 2 a 5 los componentes se eligen escribiendo su número (ID) del catálogo, que se muestra en pantalla.
+
+## Base de conocimientos
+
+Cada entidad tiene más de 50 registros:
+
+| Hecho | Registros |
+|---|---|
+| `procesador(Id, Marca, Modelo, Socket, Cores, Hilos, ConsumoWatts, Precio)` | 59 |
+| `placa_madre(Id, Modelo, Socket, TipoRAM, SlotsRAM, ConsumoWatts, Precio)` | 64 |
+| `memoria_ram(Id, Marca, Tipo, CapacidadGB, VelocidadMHz, Precio)` | 52 |
+| `tarjeta_grafica(Id, Marca, Modelo, VRAM_GB, ConsumoWatts, PCIeVersion, Precio)` | 53 |
+| `fuente_poder(Id, Marca, Modelo, PotenciaWatts, Certificacion, Precio)` | 57 |
+
+Notas:
+- Los sockets y tipos de RAM son átomos (`lga1700`, `am5`, `ddr4`, `ddr5`, ...).
+- Cada registro de `memoria_ram` representa un kit con la capacidad total indicada.
+
+## Reglas implementadas
+
+**Regla 1: compatibilidad.** `compatibles(IdCpu, IdMb, IdRam)` se cumple si el socket del procesador es igual al de la placa y el tipo de RAM coincide con el que soporta la placa.
+
+**Regla 2: seguridad energética.** `fuente_suficiente(IdCpu, IdMb, IdGpu, IdPsu)` suma el consumo del procesador, la placa y la gráfica, le agrega 25 % de margen y exige que la potencia de la fuente sea mayor o igual.
+
+**Regla 3: cuellos de botella.** `cuello_botella(IdCpu, IdGpu, Mensaje)` se activa cuando la gráfica tiene 16 GB de VRAM o más y el procesador tiene menos de 8 núcleos. El mensaje es: *"El procesador limitará el desempeño de la tarjeta gráfica en tareas pesadas"*. `configuracion_equilibrada/2` cubre el caso contrario.
+
+**Regla 4: recomendación por presupuesto.** `recomendar/7` arma un equipo de 5 componentes que cumple las reglas 1 y 2 y cuyo precio total no supera el presupuesto. `recomendar_perfil/2` además elige la mejor combinación para el perfil de uso, sin cuellos de botella.
+
+### Perfiles de uso
+
+Requisitos mínimos que exige el sistema para cada perfil:
+
+| Perfil | Núcleos | RAM (GB) | VRAM (GB) |
+|---|---|---|---|
+| `gaming` | 6 | 16 | 8 |
+| `ia` | 8 | 32 | 16 |
+| `renderizado` | 8 | 32 | 12 |
+| `servidor_web` | 8 | 32 | 0 |
+| `desarrollo` | 6 | 16 | 0 |
+
+La "mejor" configuración se elige con un puntaje de rendimiento ponderado según el perfil (`puntaje/5` y `perfil_peso/4`).
+
+## Consultas desde el prompt de Prolog
+
+Además del menú, se pueden hacer consultas directas:
+
+```prolog
+?- ayuda.                                          % lista de consultas disponibles
+?- contar_registros.                               % registros por tabla
+?- demo.                                           % demostración de las reglas
+
+% Regla 1
+?- compatibles(IdCpu, IdMb, IdRam).
+
+% Regla 2
+?- fuente_suficiente(IdCpu, IdMb, IdGpu, IdPsu).
+?- consumo_total(IdCpu, IdMb, IdGpu, Total).
+?- consumo_con_margen(IdCpu, IdMb, IdGpu, Requerido).
+
+% Regla 3
+?- cuello_botella(IdCpu, IdGpu, Mensaje).
+?- configuracion_equilibrada(IdCpu, IdGpu).
+
+% Regla 4
+?- recomendar(30000, Cpu, Mb, Ram, Gpu, Psu, Total).
+?- recomendar_perfil(gaming, 30000).
+?- recomendar_perfil(ia, 60000).
+
+% Diagnóstico completo de una configuración
+?- diagnosticar(Cpu, Mb, Ram, Gpu, Psu, gaming).
+```
+
+Para buscar un Id por nombre:
+
+```prolog
+?- cpu_id('Ryzen 5 5600', Id).
+?- gpu_id('GeForce RTX 4090', Id).
+```
+
+## Ejemplo de uso
+
+Recomendación para gaming con $30,000 MXN, sin preferencia de marca ni de RAM:
+
+```
+Mejor equipo para gaming con presupuesto de $30,000 MXN:
+  CPU    : Intel Core i5-12600K (lga1700, 10N/16H)  $4,500
+  Placa  : ASUS PRIME B760M-A WIFI (lga1700, ddr5)  $3,060
+  RAM    : G.Skill ddr5 32GB 7200MHz  $3,060
+  GPU    : AMD Radeon RX 7900 XTX, 24GB VRAM (PCIe 4.0)  $16,200
+  Fuente : Corsair CV650 650W 80+ bronze  $1,170
+  TOTAL  : $27,990 MXN
+```
+
+## Notas
+
+- La búsqueda de la mejor configuración revisa miles de combinaciones y puede tardar unos segundos con presupuestos altos.
+- El menú se inicia al cargar el archivo, así que ejecutar `swipl -g demo hw_expert.pl` sin teclado conectado termina el programa. Para ver la demo usa la opción 8 del menú o escribe `?- demo.` después de salir con `0`.
+- Los precios y especificaciones son aproximados y se usan con fines académicos.
+
+## Estructura
+
+```
+hw_expert.pl   % base de conocimientos, reglas y menú
+README.md      % este archivo
+```
