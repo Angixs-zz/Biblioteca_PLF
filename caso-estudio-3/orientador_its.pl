@@ -1,5 +1,6 @@
 :- encoding(utf8).
 :- use_module(library(readutil)).
+:- use_module(library(lists)).
 
 % Caso de estudio 3: orientador de puntos de deteccion de ITS en Oaxaca.
 % Corte documental: 29 de octubre de 2026. Los horarios no son datos en vivo.
@@ -64,9 +65,10 @@ opcion_sin_horario_confirmado(Id, Municipio, Prueba, Dia) :-
 
 % Ausencia de horario significa "desconocido", no "cerrado".
 estado_horario(Id, Dia, publicado(Inicio, Fin)) :-
-    horario_publicado(Id, Dia, Inicio, Fin), !.
+    horario_publicado(Id, Dia, Inicio, Fin).
 estado_horario(Id, Dia, por_confirmar) :-
-    sede(Id, _, _, _), dia(Dia).
+    sede(Id, _, _, _), dia(Dia),
+    \+ horario_publicado(Id, Dia, _, _).
 
 dia(lunes). dia(martes). dia(miercoles). dia(jueves).
 dia(viernes). dia(sabado). dia(domingo).
