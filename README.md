@@ -1,3 +1,20 @@
+# Proyecto final en parejas — Puntos de detección de ITS en Oaxaca
+
+**Proyecto principal de Miguel Ángel Hernández Pérez y Yareli para PLF.**
+
+➡️ **[Abrir el proyecto principal y sus instrucciones](caso-estudio-3/README.md)**
+
+```bash
+cd caso-estudio-3
+swipl -s orientador_its.pl -g menu -t halt
+```
+
+Verificación: 9 pruebas automáticas y recorrido del menú correctos con SWI-Prolog 9.0.4. El catálogo conserva cuatro sedes y diferencia horarios publicados de información por confirmar.
+
+Las dos alternativas están en la rama [`posibles-proyectos-parejas`](https://github.com/Angixs-zz/Biblioteca_PLF/tree/posibles-proyectos-parejas), carpeta **posibles otros proyectos**: Agua en Casa y Cuentas Claras.
+
+---
+
 # Biblioteca_PLF — Casos de estudio en Prolog
 
 Repositorio de prácticas de Programación Lógica y Funcional organizadas por caso de estudio. Cada caso tiene su propia documentación y archivos; no es necesario mezclar el código de uno con el otro.
