@@ -8,6 +8,7 @@ Repositorio de prácticas de Programación Lógica y Funcional organizadas por c
 | --- | --- | --- |
 | [caso-estudio-1/](caso-estudio-1/) | Sistema experto de recomendación de libros | `biblioteca.pl`, README, fuentes editoriales y PDF de la práctica |
 | [caso-estudio-2/](caso-estudio-2/) | HW-Expert: configuración y diagnóstico de hardware | `hw_expert.pl`, 50 pruebas documentadas, README y reporte |
+| [caso-estudio-3/](caso-estudio-3/) | Orientador de puntos de detección de ITS en Oaxaca | `orientador_its.pl`, pruebas y fuentes oficiales |
 
 ## Requisitos
 
@@ -48,6 +49,15 @@ swipl pruebas_hw_expert.pl
 
 Consulta [la documentación del caso 2](caso-estudio-2/README.md) y [su reporte](caso-estudio-2/REPORTE_CASO_ESTUDIO_2.md). Los resultados de pruebas descritos allí son los que registró el entorno de desarrollo; si cambias código, ejecútalas de nuevo.
 
+## Caso 3 — Orientador de ITS
+
+```bash
+cd caso-estudio-3
+swipl -s orientador_its.pl -g menu -t halt
+```
+
+Consulta [su documentación](caso-estudio-3/README.md) para conocer el alcance, las fuentes y las pruebas.
+
 ## Organización y conservación
 
-Esta estructura se preparó para conservar simultáneamente los dos casos de estudio. Los archivos del Caso 1 provienen de la rama `main` y los del Caso 2 de `miguel/mejoras-hw-expert`. El código original de cada caso se trasladó sin modificar su contenido. Las ramas de origen se conservan como respaldo y no se integran ni eliminan automáticamente.
+Esta estructura se preparó para conservar los casos de estudio por separado. Los archivos del Caso 1 provienen de la rama `main` y los del Caso 2 de `miguel/mejoras-hw-expert`. El código original de cada caso se trasladó sin modificar su contenido. Las ramas de origen se conservan como respaldo y no se integran ni eliminan automáticamente.
