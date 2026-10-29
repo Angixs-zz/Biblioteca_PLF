@@ -1,4 +1,6 @@
-# Caso de estudio 3: orientador de puntos de detección de ITS en Oaxaca
+# Proyecto final en parejas — Puntos de detección de ITS en Oaxaca
+
+**Proyecto principal del equipo.** Rama: `trabajo-final-parejas-its`.
 
 **Autores:** Miguel Ángel Hernández Pérez y Yareli. **Materia:** Programación Lógica y Funcional.
 
