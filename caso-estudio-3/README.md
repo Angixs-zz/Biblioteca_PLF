@@ -1,61 +1,142 @@
-# Proyecto final en parejas — Puntos de detección de ITS en Oaxaca
+# Sistema Experto: Orientador Epidemiológico y Detección de ITS en Oaxaca
 
-**Proyecto principal del equipo.** Rama: `trabajo-final-parejas-its`.
+**Caso de Estudio 3 — Programación Lógica y Funcional (Proyecto Final)**
 
-**Autores:** Miguel Ángel Hernández Pérez y Yareli. **Materia:** Programación Lógica y Funcional.
+- **Autores:** Miguel Ángel Hernández Pérez y Yareli.
+- **Materia:** Programación Lógica y Funcional.
+- **Lenguaje:** SWI-Prolog 9.x.
 
-## Problema y utilidad social
+---
 
-Una persona quiere saber dónde se ha documentado la detección de VIH, sífilis o hepatitis C en un municipio de Oaxaca, y si existe un horario publicado para el día en que piensa acudir. El programa presenta dirección, contacto y fuente. Puede usarse sin crear cuenta ni compartir síntomas, resultados o datos personales. Una consulta útil sería: «¿Dónde se ha publicado una prueba de sífilis en Huajuapan un sábado?».
+## 1. Problema, Enfoque y Utilidad Social
 
-Es un **prototipo académico de consulta**, independiente de PuntOax. Su base pequeña se extrajo del trabajo de auditoría del proyecto y se contrastó con las páginas oficiales enlazadas en cada ficha. No se conecta a la base de PuntOax. El corte de revisión es el **29 de octubre de 2026**. Los horarios publicados pueden cambiar: hay que llamar antes de desplazarse. La ausencia de un horario es información **por confirmar**, nunca una afirmación de que el lugar esté cerrado. El prototipo no da diagnósticos ni evalúa síntomas; tampoco incluye jornadas móviles ni servicios de ILE.
+La prevención, detección oportuna y tratamiento integral de las **Infecciones de Transmisión Sexual (ITS: VIH, Sífilis, Hepatitis C, Hepatitis B, VPH, Gonorrea, Clamidia, etc.)** constituyen un desafío prioritario de salud pública en el estado de Oaxaca. Muchas personas se enfrentan a dudas diagnósticas ante la aparición de lesiones o secreciones, desconocen los **periodos de ventana biológica** (arriesgándose a falsos negativos tempranos), ignoran la urgencia crítica de la **Profilaxis Post-Exposición (PEP dentro de las primeras 72 horas)** o no saben qué clínicas de los Servicios de Salud de Oaxaca (SSO) y COESIDA atienden de forma gratuita y sin cita previa.
 
-## Ejecutar
+Este sistema experto proporciona un orientador clínico, epidemiológico y geográfico automatizado que:
+1. Implementa el **Modelo de Manejo Sindrómico de las ITS** (avalado por la OPS/OMS y CENSIDA) para orientar al usuario según sus síntomas declarados (úlceras, descargas, dolor, verrugas, etc.).
+2. Evalúa los **días transcurridos** frente a la ventana inmunológica para certificar si el resultado de una prueba rápida o serológica será clínicamente concluyente o si existe riesgo de falso negativo.
+3. Alerta y canaliza casos de urgencia médica en menos de 72 horas para **PEP antirretroviral**.
+4. Dispone de un **ranking multicriterio de idoneidad** (0-100 puntos) que pondera cercanía municipal, horarios publicados, gratuidad total y consejería especializada.
+5. Permite realizar consultas mediante un **analizador léxico de lenguaje natural**.
 
-Requiere SWI-Prolog:
+---
+
+## 2. Base de Conocimientos: 10 Tablas Principales (≥ 50 registros por tabla)
+
+Siguiendo la arquitectura completa vista en `hw_expert.pl` (Caso de Estudio 2), la base cuenta con **10 tablas principales**, cada una con al menos 50 hechos:
+
+| No. | Tabla / Predicado | Aridad | Descripción y Campos | Registros |
+|:---:|---|:---:|---|:---:|
+| 1 | `sede/4` | 4 | `sede(IdSede, Nombre, Municipio, Dirección)` | **55** |
+| 2 | `municipio/2` | 2 | `municipio(IdMunicipio, NombreOficial)` | **52** |
+| 3 | `region_municipio/2` | 2 | `region_municipio(IdMunicipio, Región)` | **52** |
+| 4 | `deteccion_its/2` | 2 | `deteccion_its(IdSede, ClavePrueba)` (VIH, Sífilis, VHC, VHB, Gonorrea, VPH, PEP) | **190** |
+| 5 | `horario_semanal/4` | 4 | `horario_semanal(IdSede, Día, HoraInicio, HoraFin)` | **145** |
+| 6 | `contacto_directo/2` | 2 | `contacto_directo(IdSede, TeléfonoOExtensión)` | **55** |
+| 7 | `fuente_oficial/2` | 2 | `fuente_oficial(IdSede, URLDocumental)` | **55** |
+| 8 | `protocolo_sede/5` | 5 | `protocolo_sede(IdSede, TipoUnidad, Acceso, Gratuidad, Consejería)` | **55** |
+| 9 | `guia_clinica_its/5` | 5 | `guia_clinica_its(ClavePrueba, Categoría, Método, PeriodoVentanaDías, TiempoMinutos)` | **50** |
+| 10 | `sintoma_sindromico_its/5` | 5 | `sintoma_sindromico_its(Síntoma, Síndrome, ITSProbable, Urgencia, AcciónRecomendada)` | **50** |
+| **TOTAL** | | | **Hechos totales en las 10 tablas principales** | **709** |
+
+*Catálogos de clasificación:* `dia/1`, `nombre_dia/2`, `region/2`, `alias_palabra/3`.
+
+---
+
+## 3. Reglas Complejas e Inferencias Clínicas
+
+1. **Búsqueda Geográfico-Temporal en 3 Niveles (`mostrar_busqueda_triple/3`):**
+   - Nivel 1: Sedes en el municipio con horario publicado confirmado para ese día.
+   - Nivel 2: Sedes en el municipio que tienen la prueba pero con horario por confirmar (muestra los otros días publicados).
+   - Nivel 3: Alternativas en municipios vecinos de la misma región con horario publicado ese día.
+2. **Motor de Diagnóstico Sindrómico (`diagnostico_sindromico/5` y `requiere_atencion_urgente/1`):**
+   Clasifica el motivo de consulta según los 7 síndromes canónicos de la OMS (úlcera genital, descarga uretral, flujo vaginal, dolor pélvico, verrugas anogenitales, manifestaciones secundarias, exposición aguda) e indica la ITS más probable y su nivel de urgencia.
+3. **Evaluación de Periodo de Ventana y Urgencia PEP (`evaluar_periodo_ventana/4`):**
+   Compara los días transcurridos desde el coito de riesgo contra el tiempo biológico de seroconversión de la prueba. Si han pasado < 72h emite alerta de PEP; si está en ventana alerta sobre falso negativo; si superó la ventana valida el resultado como concluyente.
+4. **Ranking Multicriterio de Idoneidad (`mejor_recomendacion_sede/2`):**
+   Calcula un puntaje ponderado (0 a 100 puntos) con lista de motivos: proximidad territorial (40/20 pts), horario publicado ese día (30 pts), acceso sin cita previa (15 pts), gratuidad total (10 pts) y consejería integral (5 pts).
+5. **Cálculo de Jornadas y Disponibilidad en Hora Exacta (`duracion_atencion_horas/4` y `abierto_en_hora_exacta/4`):**
+   Calcula la duración en horas del servicio y verifica si la unidad está abierta a una hora específica (`HH:MM`).
+6. **Ruta Multi-Prueba y Derivación Regional (`ruta_atencion_completa/4`):**
+   Para baterías completas (ej. `[vih, sifilis, hepatitis_c, gonorrea]`); si la unidad local no dispone de todas, genera la coordinación con la sede de referencia regional.
+7. **Diagnóstico Epidemiológico Regional (`diagnostico_regional/2`):**
+   Genera métricas de cobertura por región (sedes totales, pruebas de VIH, sífilis, hepatitis C, PEP, atención en sábado y acceso sin cita).
+8. **Analizador Léxico en Lenguaje Natural (`interpretar_consulta_natural/2`):**
+   Interpreta consultas libres como *"Quiero prueba rapida de sifilis en Huajuapan el sabado"* mediante tokenización y normalización de acentos.
+
+---
+
+## 4. Ejecución del Programa
+
+Requiere **SWI-Prolog** (9.x o superior):
 
 ```bash
 cd caso-estudio-3
 swipl -s orientador_its.pl -g menu -t halt
 ```
 
-Menú: `1` busca por municipio, prueba y día; `2` muestra sedes por prueba; `3` lista sedes por municipio; `4` explica alcance y consultas; `0` sale. Acepta números completos en cada paso y repite una entrada inválida.
+### Menú Interactivo (Opciones 0 a 11)
 
-También se pueden hacer consultas lógicas:
-
-```prolog
-?- [orientador_its].
-?- ofrece_en(Id, huajuapan, sifilis).
-?- opcion_con_horario(Id, huajuapan, sifilis, sabado, Inicio, Fin).
-?- estado_horario(imedi, martes, Estado).
+```text
+=================================================================
+   SISTEMA EXPERTO DE DETECCIÓN DE ITS Y SALUD SEXUAL EN OAXACA
+   Programación Lógica y Funcional - Caso de Estudio 3
+=================================================================
+ 1. Buscar detección por Municipio, Tipo de Prueba y Día
+ 2. Evaluador Sindrómico de Síntomas (Modelo OPS/OMS y CENSIDA)
+ 3. Calculador de Periodo de Ventana y Urgencia PEP (hasta 72 hrs)
+ 4. Recomendador Multicriterio de Sedes con Puntaje de Idoneidad
+ 5. Ruta de Atención Multi-Prueba y Derivación Regional Coordinada
+ 6. Ver Sedes por Región y Diagnóstico de Cobertura Sanitaria
+ 7. Ver Sedes con Horario Publicado en Fin de Semana (Sábado)
+ 8. Búsqueda Inteligente mediante Frase en Lenguaje Natural
+ 9. Ver Ficha Técnica Detallada, Duración de Turnos y Requisitos
+10. Estadísticas de la Base de Conocimientos (las 10 Tablas)
+11. Ejecutar Demostración Automática de Todas las Reglas
+ 0. Salir
+-----------------------------------------------------------------
 ```
 
-Pruebas:
+---
+
+## 5. Pruebas Automatizadas (plunit)
+
+Para verificar la integridad de las 10 tablas y las reglas del sistema:
 
 ```bash
 swipl -q -s pruebas_orientador_its.pl -g run_tests -t halt
 ```
 
-## Modelo lógico
+La suite cubre:
+- Conteo de **≥ 50 registros** en cada una de las 10 tablas.
+- Integridad referencial entre sedes, municipios, pruebas, síntomas y guías clínicas.
+- Casos históricos de compatibilidad (Huajuapan en sábado, IMEDI por confirmar, Tlalixtac).
+- Evaluación sindrómica, cálculo de periodos de ventana y alerta de urgencia PEP.
+- Duración de jornada, ranking multicriterio y analizador léxico.
 
-| Hecho o regla | Significado |
-| --- | --- |
-| `sede/4` | Identificador, nombre, municipio y dirección. |
-| `deteccion/2` | Prueba documentada por sede. |
-| `horario_publicado/4` | Día y franja difundida por una fuente, sin afirmar disponibilidad actual. |
-| `contacto/2`, `fuente/2` | Canal para confirmar y enlace de procedencia. |
-| `ofrece_en/3` | Une municipio y prueba por identificador de sede. |
-| `opcion_con_horario/6` | Une sede, prueba y horario publicado para el día elegido. |
-| `opcion_sin_horario_confirmado/4` | Distingue un dato pendiente del horario publicado. |
-| `estado_horario/3` | Devuelve `publicado(Inicio, Fin)` o `por_confirmar`. |
+---
 
-El ejercicio usa cuatro sedes y tres pruebas. Se privilegian pocos registros trazables sobre datos inventados para llenar el catálogo. Puede ampliarse con nuevas fichas verificadas sin modificar las reglas. Para el trabajo en pareja, Miguel Ángel puede mantener hechos y referencias; Yareli puede revisar reglas, menú y casos de prueba; ambos deben validar juntos los cambios y explicar la demostración.
+## 6. Fuentes Oficiales, Normativas y Referencias Clínicas
 
-## Fuentes y decisiones sobre datos
+El diseño de la base de conocimientos, la clasificación de los 50 síntomas, los periodos de ventana y los protocolos de derivación se fundamentan en las siguientes directrices oficiales y normativas de salud pública:
 
-- Huajuapan: [boletín COESIDA del 30/10/2025](https://www.oaxaca.gob.mx/comunicacion/inaugura-coesida-modulo-para-deteccion-de-infecciones-de-transmision-sexual-en-huajuapan-de-leon/) publica dirección, pruebas y horario, incluido sábado.
-- Tlalixtac: [ficha institucional](https://www.oaxaca.gob.mx/administracion/punto-de-deteccion-de-vih-hepatitis-c-y-sifilis/) indica martes y jueves de 10:00 a 14:00. Un [boletín anterior](https://www.oaxaca.gob.mx/administracion/brindan-secretaria-de-administracion-y-coesida-taller-sobre-educacion-sexual-y-prevencion-del-vih/) mostró otro cierre; se usa la ficha del servicio y se recomienda confirmar documentos y horario.
-- IMEDI: [apertura del punto permanente](https://www.oaxaca.gob.mx/comunicacion/abre-coesida-capasits-noveno-punto-de-deteccion-permanente-en-instalaciones-de-imedi-oaxaca/) y [relación de puntos](https://www.oaxaca.gob.mx/comunicacion/inaugura-coesida-capasits-nuevo-punto-para-la-deteccion-de-vih-sifilis-y-hepatitis-c-en-la-mixteca/) respaldan pruebas y domicilio. No se afirma horario preciso.
-- COESIDA-CAPASITS: [relación de puntos](https://www.oaxaca.gob.mx/comunicacion/inaugura-coesida-capasits-nuevo-punto-para-la-deteccion-de-vih-sifilis-y-hepatitis-c-en-la-mixteca/) y [directorio oficial](https://www.oaxaca.gob.mx/detalle-portal/coesida/) respaldan sede y teléfono. No se equipara el horario administrativo con el de detección.
+1. **Organización Panamericana de la Salud (OPS) y Organización Mundial de la Salud (OMS):**
+   - *Directrices para el Tratamiento y Manejo Sindrómico de las Infecciones de Transmisión Sexual (ITS):* Clasificación clínica en síndromes clave (úlcera genital, descarga uretral, flujo vaginal, dolor abdominal bajo, etc.) para tratamiento inmediato sin esperar pruebas invasivas de laboratorio en atención primaria.
+   - [OPS - Infecciones de Transmisión Sexual](https://www.paho.org/es/temas/infecciones-transmision-sexual)
+   - [OMS - Directrices clínicas para el manejo sindrómico de ITS](https://iris.who.int/handle/10665/341991)
+   - [OMS - Datos y cifras de ITS](https://www.who.int/es/news-room/fact-sheets/detail/sexually-transmitted-infections-(stis))
 
-**Ejemplo para clase:** elegir `1 → 1 (Huajuapan) → 2 (sífilis) → 6 (sábado)` muestra el módulo, la dirección, el contacto y el horario publicado 09:00–14:00 con fuente. Elegir IMEDI para martes muestra *horario por confirmar*, sin presentarlo como cerrado ni abierto.
+2. **Secretaría de Salud de México — Centro Nacional para la Prevención y el Control del VIH y el sida (CENSIDA):**
+   - *Norma Oficial Mexicana NOM-039-SSA2-2014, Para la prevención y control de las infecciones de transmisión sexual:* Marco legal que rige el diagnóstico, tamizaje y tratamiento de ITS en todo México.
+     - [Diario Oficial de la Federación (DOF) - NOM-039-SSA2-2014](https://www.dof.gob.mx/nota_detalle.php?codigo=5391307&fecha=06/05/2015)
+   - *Guía Nacional para la Profilaxis Previa a la Exposición (PrEP) y Post-Exposición (PEP) al VIH en México:* Establece el protocolo estricto de las **primeras 72 horas** posteriores a una relación de riesgo no protegida o rotura de condón.
+     - [CENSIDA - Protocolo de Profilaxis Post-Exposición (PEP)](https://www.gob.mx/salud/censida/acciones-y-programas/profilaxis-pre-y-post-exposicion)
+
+3. **Consejo Estatal para la Prevención y Control del Sida (COESIDA) y Servicios de Salud de Oaxaca (SSO):**
+   - Red estatal de unidades médicas y CAPASITS (San Bartolo Coyotepec, Salina Cruz, Pinotepa Nacional, CESSAs y centros de salud de las 8 regiones de Oaxaca).
+   - [Portal Oficial de COESIDA Oaxaca](https://coesida.oaxaca.gob.mx/)
+   - [Directorio de Unidades Médicas - Servicios de Salud de Oaxaca](https://www.oaxaca.gob.mx/salud/)
+
+4. **CDC (Centers for Disease Control and Prevention) — STI Treatment Guidelines:**
+   - Referencia médica internacional para periodos de ventana inmunológica, seroconversión de pruebas de 4ta generación y diferenciación etiológica.
+   - [CDC STI Treatment Guidelines](https://www.cdc.gov/std/treatment-guidelines/default.htm)
