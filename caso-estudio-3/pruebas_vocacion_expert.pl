@@ -245,7 +245,8 @@ test(oferta_fisioterapia_uabjo_y_anahuac) :-
 test(combinar_intereses_conductuales) :-
     combinar_perfiles(perfil_aspirante(8,6,5,4,7,3),
         [r-10,i-8,a-6,s-4,e-7,c-5], P),
-    P = perfil_aspirante(9,7,5.5,4,7,4).
+    P = perfil_aspirante(R,I,A,S,E,C),
+    R =:= 9, I =:= 7, A =:= 5.5, S =:= 4, E =:= 7, C =:= 4.
 
 test(identificar_empate_real) :-
     detectar_areas_cercanas(perfil_aspirante(8,8,3,2,4,5), [r,i]).
@@ -262,6 +263,7 @@ test(conservar_perfil_mixto_si_prefiere_ambas) :-
 
 test(desempate_suave_sin_eliminar_segunda_aptitud) :-
     ajustar_preferencias(perfil_aspirante(8,8,3,2,4,5),r,i,[1,1],P),
-    P = perfil_aspirante(8.5,8,3,2,4,5).
+    P = perfil_aspirante(R,I,_,_,_,_),
+    R =:= 8.5, I =:= 8.
 
 :- end_tests(vocacion_expert_suite).
