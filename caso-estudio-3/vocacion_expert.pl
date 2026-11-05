@@ -1950,12 +1950,12 @@ contar_preferencias([R|Rs], N1, N2) :-
 
 diagnosticar_perfil_aspirante(perfil_aspirante(R, I, A, S, E, C)) :-
     writeln('Tus puntuaciones en las 6 dimensiones RIASEC:'),
-    format('  • Realista (R):       ~|~` t~d~2+/10~n', [R]),
-    format('  • Investigador (I):   ~|~` t~d~2+/10~n', [I]),
-    format('  • Artístico (A):      ~|~` t~d~2+/10~n', [A]),
-    format('  • Social (S):         ~|~` t~d~2+/10~n', [S]),
-    format('  • Emprendedor (E):    ~|~` t~d~2+/10~n', [E]),
-    format('  • Convencional (C):   ~|~` t~d~2+/10~n', [C]),
+    format('  • Realista (R):       ~|~` t~1f~2+/10~n', [R]),
+    format('  • Investigador (I):   ~|~` t~1f~2+/10~n', [I]),
+    format('  • Artístico (A):      ~|~` t~1f~2+/10~n', [A]),
+    format('  • Social (S):         ~|~` t~1f~2+/10~n', [S]),
+    format('  • Emprendedor (E):    ~|~` t~1f~2+/10~n', [E]),
+    format('  • Convencional (C):   ~|~` t~1f~2+/10~n', [C]),
     nl,
     Lista = [R-r, I-i, A-a, S-s, E-e, C-c],
     findall(Neg-D, (member(P-D, Lista), Neg is -P), Ordenables),
