@@ -1822,7 +1822,20 @@ opcion_test_holland :-
     nl,
     writeln('6. Tipo CONVENCIONAL (C): Organización, métodos, finanzas, contabilidad, datos, apego a normativas.'),
     leer_entero_valido('   Tu puntuación en Convencional [1-10]:', 1, 10, C),
-    Perfil = perfil_aspirante(R, I, A, S, E, C),
+    PerfilInicial = perfil_aspirante(R, I, A, S, E, C),
+    nl,
+    writeln('ETAPA 2: 12 PREGUNTAS SOBRE ACTIVIDADES REALES (1=Nunca, 5=Mucho).'),
+    writeln('Responde según lo que disfrutas hacer, no según tus notas escolares.'),
+    cuestionario_conductual(Respuestas),
+    combinar_perfiles(PerfilInicial, Respuestas, PerfilBase),
+    detectar_areas_cercanas(PerfilBase, AreasCercanas),
+    (   AreasCercanas = [Primera, Segunda | _]
+    ->  nl,
+        writeln('Tus intereses principales son muy parecidos.'),
+        writeln('ETAPA 3: Preguntas de preferencia para explorar ambas áreas.'),
+        desempate_contextual(PerfilBase, Primera, Segunda, Perfil)
+    ;   Perfil = PerfilBase
+    ),
     nl,
     writeln('================================================================='),
     writeln('        DIAGNÓSTICO DETALLADO DE TU PERFIL PSICOMÉTRICO          '),
@@ -1847,6 +1860,94 @@ opcion_test_holland :-
            )),
     writeln('=================================================================').
 
+% Preguntas conductuales: dos observaciones por cada dimensión RIASEC.
+% Estas preguntas exploran intereses declarados; NO son una prueba clínica validada.
+pregunta_conductual(r, '¿Disfrutas reparar, construir o manipular objetos?').
+pregunta_conductual(r, '¿Prefieres aprender haciendo prototipos o trabajos de campo?').
+pregunta_conductual(i, '¿Te entusiasma investigar por qué ocurre algo?').
+pregunta_conductual(i, '¿Te gusta comparar evidencias y resolver problemas abstractos?').
+pregunta_conductual(a, '¿Disfrutas crear diseños, historias, música o imágenes originales?').
+pregunta_conductual(a, '¿Prefieres experimentar con soluciones creativas sin un método fijo?').
+pregunta_conductual(s, '¿Te interesa escuchar y orientar a otras personas?').
+pregunta_conductual(s, '¿Disfrutas enseñar y colaborar para resolver necesidades humanas?').
+pregunta_conductual(e, '¿Te gusta proponer proyectos y convencer a un equipo?').
+pregunta_conductual(e, '¿Disfrutas negociar y organizar iniciativas nuevas?').
+pregunta_conductual(c, '¿Disfrutas ordenar datos y verificar detalles cuidadosamente?').
+pregunta_conductual(c, '¿Prefieres planear procedimientos y trabajar con reglas claras?').
+
+cuestionario_conductual(Puntajes) :-
+    findall(Dim-Suma,
+            ( member(Dim, [r,i,a,s,e,c]),
+              findall(Pregunta, pregunta_conductual(Dim, Pregunta), Preguntas),
+              preguntar_lista(Preguntas, Suma)
+            ), Puntajes).
+
+preguntar_lista([], 0).
+preguntar_lista([Texto|Resto], Total) :-
+    leer_entero_valido(Texto, 1, 5, Respuesta),
+    preguntar_lista(Resto, Subtotal),
+    Total is Respuesta + Subtotal.
+
+% La suma de dos respuestas de 1 a 5 está en la misma escala 2-10.
+% El promedio del autoinforme inicial y las conductas produce un perfil refinado.
+combinar_perfiles(perfil_aspirante(R,I,A,S,E,C), Respuestas,
+                 perfil_aspirante(RF,IF,AF,SF,EF,CF)) :-
+    member(r-RS, Respuestas), member(i-IS, Respuestas),
+    member(a-AS, Respuestas), member(s-SS, Respuestas),
+    member(e-ES, Respuestas), member(c-CS, Respuestas),
+    RF is (R+RS)/2, IF is (I+IS)/2, AF is (A+AS)/2,
+    SF is (S+SS)/2, EF is (E+ES)/2, CF is (C+CS)/2.
+
+valores_perfil(perfil_aspirante(R,I,A,S,E,C),
+              [r-R,i-I,a-A,s-S,e-E,c-C]).
+perfil_desde_valores(Valores, perfil_aspirante(R,I,A,S,E,C)) :-
+    member(r-R,Valores), member(i-I,Valores), member(a-A,Valores),
+    member(s-S,Valores), member(e-E,Valores), member(c-C,Valores).
+
+% Si los dos resultados principales difieren en <= 1 punto,
+% se explora su coexistencia; no se fuerza una clasificación única.
+detectar_areas_cercanas(Perfil, [D1,D2]) :-
+    valores_perfil(Perfil, Valores),
+    findall(Neg-D, (member(D-V,Valores), Neg is -V), Pares),
+    keysort(Pares, [_-D1, Neg2-D2|_]),
+    member(D1-V1, Valores),
+    V2 is -Neg2,
+    V1-V2 =< 1.0, !.
+detectar_areas_cercanas(_, []).
+
+% Respuesta 1 = primera área, 2 = segunda área, 3 = ambas por igual.
+% Se pregunta por preferencias situacionales, no por capacidad supuesta.
+desempate_contextual(Perfil, D1, D2, Refinado) :-
+    dimension_info(D1, Nom1, _, _),
+    dimension_info(D2, Nom2, _, _),
+    format('Áreas cercanas: ~w y ~w.~n', [Nom1,Nom2]),
+    writeln('Imagina elegir una actividad voluntaria para el fin de semana:'),
+    format('  1. Actividad del área ~w.~n  2. Actividad del área ~w.~n  3. Ambas.~n', [Nom1,Nom2]),
+    leer_entero_valido('¿Qué preferirías? [1-3]', 1, 3, R1),
+    writeln('Si tuvieras que empezar un proyecto sin recibir una calificación:'),
+    format('  1. Un proyecto del área ~w.~n  2. Uno del área ~w.~n  3. Mezclar ambos.~n', [Nom1,Nom2]),
+    leer_entero_valido('¿Cuál elegirías? [1-3]', 1, 3, R2),
+    ajustar_preferencias(Perfil, D1, D2, [R1,R2], Refinado).
+
+ajustar_preferencias(Perfil, D1, D2, Respuestas, Refinado) :-
+    valores_perfil(Perfil, Valores),
+    contar_preferencias(Respuestas, N1, N2),
+    (   N1 > N2 -> Bonus1 = 0.5, Bonus2 = 0
+    ;   N2 > N1 -> Bonus1 = 0, Bonus2 = 0.5
+    ;   Bonus1 = 0, Bonus2 = 0
+    ),
+    findall(D-VN, (member(D-V, Valores),
+            (D == D1 -> VN is min(10,V+Bonus1)
+            ;D == D2 -> VN is min(10,V+Bonus2)
+            ;VN = V)), Nuevos),
+    perfil_desde_valores(Nuevos, Refinado).
+
+contar_preferencias([], 0, 0).
+contar_preferencias([R|Rs], N1, N2) :-
+    contar_preferencias(Rs, A, B),
+    (R =:= 1 -> N1 is A+1 ; N1 = A),
+    (R =:= 2 -> N2 is B+1 ; N2 = B).
+
 diagnosticar_perfil_aspirante(perfil_aspirante(R, I, A, S, E, C)) :-
     writeln('Tus puntuaciones en las 6 dimensiones RIASEC:'),
     format('  • Realista (R):       ~|~` t~d~2+/10~n', [R]),
@@ -1857,16 +1958,21 @@ diagnosticar_perfil_aspirante(perfil_aspirante(R, I, A, S, E, C)) :-
     format('  • Convencional (C):   ~|~` t~d~2+/10~n', [C]),
     nl,
     Lista = [R-r, I-i, A-a, S-s, E-e, C-c],
-    sort(1, @>=, Lista, [P1-D1, P2-D2 | _]),
+    findall(Neg-D, (member(P-D, Lista), Neg is -P), Ordenables),
+    keysort(Ordenables, [Neg1-D1, Neg2-D2 | _]),
+    P1 is -Neg1, P2 is -Neg2,
     dimension_info(D1, NomD1, Letra1, DescD1),
     dimension_info(D2, NomD2, Letra2, DescD2),
     writeln('► ¿EN QUÉ SALISTE BIEN Y QUÉ SIGNIFICA TU RESULTADO?'),
-    format('  1. Tu Área Dominante Principal es: ~w (~w) con ~d/10 puntos.~n', [NomD1, Letra1, P1]),
+    format('  1. Tu Área Dominante Principal es: ~w (~w) con ~1f/10 puntos.~n', [NomD1, Letra1, P1]),
     format('     Interpretación: ~w~n', [DescD1]),
     nl,
-    format('  2. Tu Área Secundaria de Apoyo es: ~w (~w) con ~d/10 puntos.~n', [NomD2, Letra2, P2]),
+    format('  2. Tu Área Secundaria de Apoyo es: ~w (~w) con ~1f/10 puntos.~n', [NomD2, Letra2, P2]),
     format('     Interpretación: ~w~n', [DescD2]),
     nl,
+    ( P1-P2 =< 1.0 ->
+        writeln('  ► PERFIL MIXTO: ambas áreas tienen importancia similar; no hay un ganador absoluto.')
+    ;   true ),
     format('  ► Código Holland de Orientación: [~w-~w]~n', [Letra1, Letra2]),
     explicar_combinacion_holland(D1, D2, ExplicacionCombo),
     format('     Perfil Sintético: ~w~n', [ExplicacionCombo]).
