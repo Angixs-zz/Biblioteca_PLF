@@ -241,4 +241,27 @@ test(oferta_fisioterapia_uabjo_y_anahuac) :-
     assertion(oferta_academica(lasalle_oaxaca, fisioterapia, _, _)),
     assertion(oferta_academica(urse_oaxaca, fisioterapia, _, _)).
 
+% La nueva fase conductual conserva las seis dimensiones.
+test(combinar_intereses_conductuales) :-
+    combinar_perfiles(perfil_aspirante(8,6,5,4,7,3),
+        [r-10,i-8,a-6,s-4,e-7,c-5], P),
+    P = perfil_aspirante(9,7,5.5,4,7,4).
+
+test(identificar_empate_real) :-
+    detectar_areas_cercanas(perfil_aspirante(8,8,3,2,4,5), [r,i]).
+
+test(identificar_afinidad_cercana) :-
+    detectar_areas_cercanas(perfil_aspirante(8,7.5,3,2,4,5), [r,i]).
+
+test(no_desempatar_si_diferencia_amplia) :-
+    detectar_areas_cercanas(perfil_aspirante(9,5,3,2,4,5), []).
+
+test(conservar_perfil_mixto_si_prefiere_ambas) :-
+    P = perfil_aspirante(8,8,3,2,4,5),
+    ajustar_preferencias(P,r,i,[3,3],P).
+
+test(desempate_suave_sin_eliminar_segunda_aptitud) :-
+    ajustar_preferencias(perfil_aspirante(8,8,3,2,4,5),r,i,[1,1],P),
+    P = perfil_aspirante(8.5,8,3,2,4,5).
+
 :- end_tests(vocacion_expert_suite).
